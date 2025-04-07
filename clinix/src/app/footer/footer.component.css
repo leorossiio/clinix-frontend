@@ -1,0 +1,29 @@
+.footer {
+    background-color: #2d2dff; /* Azul forte */
+    color: white;
+    padding: 40px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 25px;
+  }
+  
+  .footer-left {
+    font-weight: bold;
+  }
+  
+  .footer-right {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .footer-right a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  .footer-right a:hover {
+    text-decoration: underline;
+  }
+  

@@ -1,0 +1,27 @@
+<div class="login-container">
+    <div class="login-box">
+      <h2>Bem vindo ao <span class="highlight">CLINIX</span></h2>
+      <p class="subtitle">ACESSO</p>
+  
+      <form>
+        <div class="input-group">
+          <input type="text" placeholder="Usuário" required>
+          <span class="icon">👤</span>
+        </div>
+  
+        <div class="input-group">
+          <input [type]="showPassword ? 'text' : 'password'" placeholder="Senha" required>
+          <span class="icon eye" (click)="togglePasswordVisibility()">
+            {{ showPassword ? '🙈' : '👁️' }}
+          </span>
+        </div>
+  
+        <button type="submit" class="btn-primary btn-padrao">Entrar</button>
+  
+        <!-- Botão de Cadastro agora corretamente como botão -->
+        <button type="button" [routerLink]="['/cadastro-paciente']" class="btn-secondary btn-padrao">
+            Cadastrar
+          </button>          
+      </form>
+    </div>
+  </div> 

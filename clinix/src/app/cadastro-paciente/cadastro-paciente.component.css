@@ -1,0 +1,82 @@
+/* Tela toda */
+.cadastro-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(180deg, #1b00ff, #00009c);
+  }
+  
+  /* Caixa branca central */
+  .cadastro-box {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    width: 300px;
+    text-align: center;
+  }
+  
+  /* Título */
+  .cadastro-box h2 {
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  /* Destaque CLINIX */
+  .highlight {
+    color: #1b00ff;
+  }
+  
+  /* Subtítulo */
+  .subtitle {
+    font-size: 12px;
+    color: gray;
+    margin-bottom: 20px;
+  }
+  
+  /* Grupo de inputs */
+  .input-group {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 10px 0px 10px 0px;
+    font-size: 14px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    outline: none;
+    background: transparent;
+  }
+  
+  /* Ícones */
+  .input-group .icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .input-group .eye {
+    cursor: pointer;
+  }
+  
+  /* Botão Cadastrar */
+  .btn-primary {
+    background-color: #1b00ff;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 20px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .btn-padrao{
+    height: 40px;
+  }

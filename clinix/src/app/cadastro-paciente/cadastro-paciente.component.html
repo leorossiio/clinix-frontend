@@ -1,0 +1,34 @@
+<div class="cadastro-container">
+    <div class="cadastro-box">
+      <h2>Bem vindo ao <span class="highlight">CLINIX</span></h2>
+      <p class="subtitle">CADASTRO DE PACIENTE</p>
+  
+      <form>
+        <div class="input-group">
+          <input type="text" placeholder="Nome" required>
+          <span class="icon">👤</span>
+        </div>
+  
+        <div class="input-group">
+          <input type="email" placeholder="Email" required>
+          <span class="icon">✉️</span>
+        </div>
+  
+        <div class="input-group">
+          <input [type]="showPassword ? 'text' : 'password'" placeholder="Senha" required>
+          <span class="icon eye" (click)="togglePasswordVisibility()">
+            {{ showPassword ? '🙈' : '👁️' }}
+          </span>
+        </div>
+  
+        <div class="input-group">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" placeholder="Confirme a senha" required>
+          <span class="icon eye" (click)="toggleConfirmPasswordVisibility()">
+            {{ showConfirmPassword ? '🙈' : '👁️' }}
+          </span>
+        </div>
+  
+        <button type="submit"[routerLink]="['/']" class="btn-primary btn-padrao">Cadastrar</button>
+      </form>
+    </div>
+  </div> 

@@ -1,0 +1,10 @@
+.home-container {
+    min-height: 100vh; /* Ocupar 100% da altura da tela */
+    display: flex;
+    flex-direction: column; /* Alinhar tudo em coluna (header > conteúdo > footer) */
+  }
+  
+  .home-container > .conteudo-home {
+    flex: 1;
+  }
+  
