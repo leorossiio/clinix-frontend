@@ -203,3 +203,33 @@
     color: white;
   }  
   
+  .status-tag {
+    padding: 4px 0;
+    border-radius: 8px;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 8px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .status-nao-agendado {
+    background-color: #d3d3d3; /* cinza */
+    color: black;
+  }
+  
+  .status-agendado {
+    background-color: #ffeb3b; /* amarelo */
+    color: black;
+  }
+  
+  .status-concluido {
+    background-color: #4caf50; /* verde */
+    color: white;
+  }
+  
+  .status-cancelado {
+    background-color: #f44336; /* vermelho */
+    color: white;
+  }
+  

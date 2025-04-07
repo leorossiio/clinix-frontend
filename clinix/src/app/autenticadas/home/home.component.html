@@ -44,11 +44,23 @@
     </div>
 
     <div class="grid-container">
-      <div class="card" *ngFor="let consulta of consultas">
+      <div class="card" *ngFor="let consulta of consultas" (click)="abrirModalAgendarConsulta(consulta)">
         <h3>{{ consulta.medico }}</h3>
         <p>{{ consulta.especialidade }}</p>
-        <p>Das {{ consulta.horaInicio }} até {{ consulta.horaFim }} horas</p>
-        <p>Dia {{ consulta.data }}</p>
+        <p>Descrição: {{ consulta.descricao }}</p>
+        <p>Dia: {{ consulta.data }}</p>
+        <p>Horário: {{ consulta.horaInicio }}</p>
+    
+        <span 
+          [ngClass]="{
+            'status-nao-agendado': consulta.status === 'Não agendado',
+            'status-agendado': consulta.status === 'Agendado',
+            'status-concluido': consulta.status === 'Concluído',
+            'status-cancelado': consulta.status === 'Cancelado'
+          }"
+          class="status-tag">
+          {{ consulta.status }}
+        </span>
       </div>
     </div>
 

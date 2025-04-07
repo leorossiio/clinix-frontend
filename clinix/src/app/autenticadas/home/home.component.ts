@@ -4,68 +4,103 @@ import { FooterComponent } from '../../footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../header/header.component';
 import { ModalCadastroConsultaComponent } from '../modal-cadastro-consulta/modal-cadastro-consulta.component';
+// import { ModalAgendarConsultaComponent } from '../modal-agendar-consulta/modal-agendar-consulta.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FooterComponent, HeaderComponent, FormsModule, ModalCadastroConsultaComponent],
+  imports: [
+    CommonModule, 
+    FooterComponent, 
+    HeaderComponent, 
+    FormsModule, 
+    ModalCadastroConsultaComponent, 
+    // ModalAgendarConsultaComponent
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  modalCadastroAberto = false;
+  modalCadastroAberto = false; // Controle do modal de cadastro
+  modalAgendarAberto = false; // Controle do modal de agendamento
+  consultaSelecionada: any = null; // Consulta que foi clicada
 
   dataSelecionada: string = '';
   especializacaoSelecionada: string = '';
   statusSelecionado: string = '';
+
   consultas = [
     {
       medico: 'Dr. Carlos Setoguti',
       especialidade: 'Cardiologista',
       horaInicio: '8:00',
-      horaFim: '9:00',
-      data: '06/04/2025'
+      descricao: 'Texto',
+      data: '06/04/2025',
+      status: 'Não agendado'
     },
     {
-      medico: 'Dr. Leonardo Rossi',
+      medico: 'Dr. Carla Almeida',
       especialidade: 'Pediatra',
-      horaInicio: '9:00',
-      horaFim: '10:00',
-      data: '06/04/2025'
+      horaInicio: '8:00',
+      descricao: 'Texto',
+      data: '06/04/2025',
+      status: 'Agendado'
     },
     {
-      medico: 'Dr. Leonardo Rossi',
+      medico: 'Dr. Carla Almeida',
       especialidade: 'Pediatra',
-      horaInicio: '9:00',
-      horaFim: '10:00',
-      data: '06/04/2025'
+      horaInicio: '8:00',
+      descricao: 'Texto',
+      data: '06/04/2025',
+      status: 'Concluído'
     },
     {
-      medico: 'Dr. Leonardo Rossi',
+      medico: 'Dr. Carla Almeida',
       especialidade: 'Pediatra',
-      horaInicio: '9:00',
-      horaFim: '10:00',
-      data: '06/04/2025'
+      horaInicio: '8:00',
+      descricao: 'Texto',
+      data: '06/04/2025',
+      status: 'Cancelado'
     },
-    {
-      medico: 'Dr. Leonardo Rossi',
-      especialidade: 'Pediatra',
-      horaInicio: '9:00',
-      horaFim: '10:00',
-      data: '06/04/2025'
-    },
-    // Adicione mais consultas...
   ];
 
   abrirModalCadastro() {
     this.modalCadastroAberto = true;
   }
-  salvarConsulta(dadosConsulta: any) {
-    console.log('Consulta cadastrada:', dadosConsulta);
-    // Aqui você pode chamar o service para salvar no backend
-    this.modalCadastroAberto = false;
-  }
+
   fecharModalCadastro() {
     this.modalCadastroAberto = false;
+  }
+
+  salvarConsulta(dadosConsulta: any) {
+    console.log('Consulta cadastrada:', dadosConsulta);
+    // Aqui você poderia adicionar a nova consulta à lista de consultas
+    // this.consultas.push(dadosConsulta);
+    this.modalCadastroAberto = false;
+  }
+
+  abrirModalAgendarConsulta(consulta: any) {
+    this.consultaSelecionada = consulta;
+    this.modalAgendarAberto = true;
+  }
+
+  fecharModalAgendarConsulta() {
+    this.modalAgendarAberto = false;
+  }
+
+  agendarConsultaAtualizada(dadosAtualizados: any) {
+    if (this.consultaSelecionada) {
+      this.consultaSelecionada.status = 'Agendado';
+      this.consultaSelecionada.data = dadosAtualizados.data;
+      this.consultaSelecionada.horaInicio = dadosAtualizados.horaInicio;
+    }
+    this.modalAgendarAberto = false;
+  }
+
+  excluirConsultaSelecionada() {
+    if (this.consultaSelecionada) {
+      this.consultas = this.consultas.filter(c => c !== this.consultaSelecionada);
+    }
+    this.modalAgendarAberto = false;
   }
 }
