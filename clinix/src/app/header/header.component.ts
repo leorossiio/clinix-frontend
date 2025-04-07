@@ -1,11 +1,27 @@
 import { Component } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router';
 @Component({
   selector: 'app-header',
-  imports: [],
+  standalone: true,
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrls: ['./header.component.css'],
+  imports: [CommonModule, RouterModule]
 })
 export class HeaderComponent {
+  modalCadastroAberto = false;
 
+  constructor(private router: Router) {} // <-- Injeção necessária
+
+
+  salvarConsulta(dadosConsulta: any) {
+    console.log('Consulta cadastrada:', dadosConsulta);
+    // Aqui você pode chamar o service para salvar no backend
+    this.modalCadastroAberto = false;
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/']);
+  }
 }

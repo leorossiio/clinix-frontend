@@ -27,3 +27,16 @@
     text-decoration: underline;
   }
   
+  @media (max-width: 768px) {
+    .footer {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .footer-right {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+    }
+}

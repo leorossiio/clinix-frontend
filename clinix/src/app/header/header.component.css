@@ -8,7 +8,6 @@
     font-size: 14px;
   }
   
-  /* Logo imagem */
   .header-left {
     display: flex;
     align-items: center;
@@ -36,7 +35,6 @@
     text-decoration: underline;
   }
   
-  /* Botões da direita */
   .header-right {
     display: flex;
     gap: 15px;
@@ -57,3 +55,15 @@
     background: white;
     color: #2d2dff;
   }  
+
+  @media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .header-right {
+        margin-top: 1rem;
+    }
+}
