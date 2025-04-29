@@ -1,18 +1,21 @@
-import { Injectable } from '@angular/core';
+// src/app/services/auth.service.ts
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private baseUrl = 'http://localhost:3000/auth';
 
-  private baseUrl = 'http://localhost:3000/auth'; // API local
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
+  login(credentials: { email: string, senha: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/login`, credentials);
+  }
 
-  login(email: string, senha: string): Observable<{ token: string }> {
-    const body = { email, senha };
-    return this.http.post<{ token: string }>(`${this.baseUrl}/login`, body);
+  register(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/register`, data);
   }
 }
