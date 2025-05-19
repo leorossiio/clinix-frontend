@@ -4,6 +4,7 @@ import { FooterComponent } from '../../footer/footer.component';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../../header/header.component';
 import { ModalCadastroConsultaComponent } from '../modal-cadastro-consulta/modal-cadastro-consulta.component';
+import { ModalAtualizacaoConsultaComponent } from '../modal-atualizacao-consulta/modal-atualizacao-consulta.component';
 // import { ModalAgendarConsultaComponent } from '../modal-agendar-consulta/modal-agendar-consulta.component';
 
 @Component({
@@ -14,7 +15,8 @@ import { ModalCadastroConsultaComponent } from '../modal-cadastro-consulta/modal
     FooterComponent, 
     HeaderComponent, 
     FormsModule, 
-    ModalCadastroConsultaComponent, 
+    ModalCadastroConsultaComponent,
+    ModalAtualizacaoConsultaComponent, 
     // ModalAgendarConsultaComponent
   ],
   templateUrl: './home.component.html',
@@ -24,6 +26,8 @@ export class HomeComponent {
   modalCadastroAberto = false; // Controle do modal de cadastro
   modalAgendarAberto = false; // Controle do modal de agendamento
   consultaSelecionada: any = null; // Consulta que foi clicada
+  modalAtualizacaoConsulta = false;
+  
 
   dataSelecionada: string = '';
   especializacaoSelecionada: string = '';
@@ -31,6 +35,7 @@ export class HomeComponent {
 
   consultas = [
     {
+      id: '1',
       medico: 'Dr. Carlos Setoguti',
       especialidade: 'Cardiologista',
       horaInicio: '8:00',
@@ -39,6 +44,7 @@ export class HomeComponent {
       status: 'Não agendado'
     },
     {
+      id: '2',
       medico: 'Dr. Carla Almeida',
       especialidade: 'Pediatra',
       horaInicio: '8:00',
@@ -47,6 +53,7 @@ export class HomeComponent {
       status: 'Agendado'
     },
     {
+      id: '3',  
       medico: 'Dr. Carla Almeida',
       especialidade: 'Pediatra',
       horaInicio: '8:00',
@@ -55,6 +62,7 @@ export class HomeComponent {
       status: 'Concluído'
     },
     {
+      id: '4',
       medico: 'Dr. Carla Almeida',
       especialidade: 'Pediatra',
       horaInicio: '8:00',
@@ -63,6 +71,7 @@ export class HomeComponent {
       status: 'Cancelado'
     },
   ];
+console: any;
 
   abrirModalCadastro() {
     this.modalCadastroAberto = true;
@@ -103,4 +112,34 @@ export class HomeComponent {
     }
     this.modalAgendarAberto = false;
   }
+
+  excluirConsulta(consulta: any, event: MouseEvent) {
+  event.stopPropagation(); // evita abrir o modal ao clicar no botão
+  const confirmar = confirm(`Deseja excluir a consulta com ${consulta.medico}?`);
+  if (confirmar) {
+    this.consultas = this.consultas.filter(c => c.id !== consulta.id);
+  }
+  }
+
+
+abrirModalAtualizacaoConsulta(consulta: any) {
+  console.log('clicou');
+  this.consultaSelecionada = { ...consulta }; // Faz uma cópia para evitar alterar direto
+  this.modalAtualizacaoConsulta = true;
+}
+
+fecharModalAtualizacao() {
+  this.modalAtualizacaoConsulta = false;
+  this.consultaSelecionada = null;
+}
+
+salvarConsultaAtualizada(dadosAtualizados: any) {
+  const index = this.consultas.findIndex(c => c.id === dadosAtualizados.id);
+  if (index !== -1) {
+    this.consultas[index] = dadosAtualizados;
+  }
+  this.fecharModalAtualizacao();
+}
+
+
 }

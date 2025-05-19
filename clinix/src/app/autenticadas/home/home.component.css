@@ -233,3 +233,29 @@
     color: white;
   }
   
+  .card-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.btn-warning {
+  background: #a1fdbd;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 125px;
+  height: 40px;
+}
+
+.btn-warning:hover {
+  background-color: #9fdbb2;
+}
+
+.btn-danger:hover {
+  background-color: #f56161;
+}

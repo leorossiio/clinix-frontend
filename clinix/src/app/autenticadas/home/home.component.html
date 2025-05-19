@@ -44,25 +44,30 @@
     </div>
 
     <div class="grid-container">
-      <div class="card" *ngFor="let consulta of consultas" (click)="abrirModalAgendarConsulta(consulta)">
-        <h3>{{ consulta.medico }}</h3>
-        <p>{{ consulta.especialidade }}</p>
-        <p>Descrição: {{ consulta.descricao }}</p>
-        <p>Dia: {{ consulta.data }}</p>
-        <p>Horário: {{ consulta.horaInicio }}</p>
-    
-        <span 
-          [ngClass]="{
-            'status-nao-agendado': consulta.status === 'Não agendado',
-            'status-agendado': consulta.status === 'Agendado',
-            'status-concluido': consulta.status === 'Concluído',
-            'status-cancelado': consulta.status === 'Cancelado'
-          }"
-          class="status-tag">
-          {{ consulta.status }}
-        </span>
-      </div>
+  <div class="card" *ngFor="let consulta of consultas">
+    <h3>{{ consulta.medico }}</h3>
+    <p>{{ consulta.especialidade }}</p>
+    <p>Descrição: {{ consulta.descricao }}</p>
+    <p>Dia: {{ consulta.data }}</p>
+    <p>Horário: {{ consulta.horaInicio }}</p>
+
+    <span [ngClass]="{
+        'status-nao-agendado': consulta.status === 'Não agendado',
+        'status-agendado': consulta.status === 'Agendado',
+        'status-concluido': consulta.status === 'Concluído',
+        'status-cancelado': consulta.status === 'Cancelado'
+      }" class="status-tag">
+      {{ consulta.status }}
+    </span>
+
+    <!-- Botões de ação -->
+    <div class="card-actions">
+      <button class="btn-warning" (click)="abrirModalAtualizacaoConsulta(consulta)">✏️ Atualizar</button>
+      <button class="btn-danger" (click)="excluirConsulta(consulta, $event)">🗑 Excluir</button>
     </div>
+  </div>
+</div>
+
 
     <div class="pagination">
       <button>&lt; Previous</button>
@@ -100,3 +105,9 @@
     (salvar)="salvarConsulta($event)">
   </app-modal-cadastro-consulta>
   
+  <app-modal-atualizacao-consulta
+  [show]="modalAtualizacaoConsulta"
+  [consulta]="consultaSelecionada"
+  (close)="fecharModalAtualizacao()"
+  (salvar)="salvarConsultaAtualizada($event)">
+</app-modal-atualizacao-consulta>

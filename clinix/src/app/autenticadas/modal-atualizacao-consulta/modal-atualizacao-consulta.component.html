@@ -1,0 +1,27 @@
+<div class="modal" *ngIf="show">
+  <div class="modal-content">
+    <h2>Atualizar Consulta</h2>
+
+    <label>Descrição:</label>
+    <input type="text" [(ngModel)]="consulta.descricao" />
+
+    <label>Data:</label>
+    <input type="date" [(ngModel)]="consulta.data" />
+
+    <label>Hora:</label>
+    <input type="time" [(ngModel)]="consulta.horaInicio" />
+
+    <label>Status:</label>
+    <select [(ngModel)]="consulta.status">
+      <option>Não agendado</option>
+      <option>Agendado</option>
+      <option>Concluído</option>
+      <option>Cancelado</option>
+    </select>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" (click)="fechar()">Cancelar</button>
+      <button class="btn-primary" (click)="atualizar()">Salvar</button>
+    </div>
+  </div>
+</div>

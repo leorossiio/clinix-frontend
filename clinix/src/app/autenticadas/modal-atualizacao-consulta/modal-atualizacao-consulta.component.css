@@ -1,0 +1,89 @@
+.modal-content {
+  box-sizing: border-box;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  width: 90%;
+  max-width: 420px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  color: #3a3a3a;
+  text-align: center;
+}
+
+.modal-content label {
+  font-weight: 600;
+  font-size: 14px;
+  display: block;
+  margin-top: 10px;
+  color: #555;
+}
+
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  box-sizing: border-box; /* ← isso é essencial */
+  padding: 10px 12px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+}
+
+
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn-primary {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-secondary {
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background-color: #43a047;
+}
+
+.btn-secondary:hover {
+  background-color: #d5d5d5;
+}
