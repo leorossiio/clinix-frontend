@@ -6,6 +6,8 @@ import { HeaderComponent } from '../../../shared/components/header/header.compon
 import { ModalCadastroConsultaComponent } from '../../modais/modal-cadastro-consulta/modal-cadastro-consulta.component';
 import { ModalAtualizacaoConsultaComponent } from '../../modais/modal-atualizacao-consulta/modal-atualizacao-consulta.component';
 // import { ModalAgendarConsultaComponent } from '../modal-agendar-consulta/modal-agendar-consulta.component';
+import { ConsultaService } from '../../services/consulta.service'; // ajuste o caminho conforme sua pasta
+
 
 @Component({
   selector: 'app-home',
@@ -23,6 +25,8 @@ import { ModalAtualizacaoConsultaComponent } from '../../modais/modal-atualizaca
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
+  constructor(private consultaService: ConsultaService) {}
+
   modalCadastroAberto = false; // Controle do modal de cadastro
   modalAgendarAberto = false; // Controle do modal de agendamento
   consultaSelecionada: any = null; // Consulta que foi clicada
@@ -32,45 +36,11 @@ export class HomeComponent {
   dataSelecionada: string = '';
   especializacaoSelecionada: string = '';
   statusSelecionado: string = '';
+  id_usuario = '057794e9-8130-4889-b62d-7950ff5f071d';
+  id_medico = 'ac60ecff-7634-49ec-a93d-960153ae6950';
 
-  consultas = [
-    {
-      id: '1',
-      medico: 'Dr. Carlos Setoguti',
-      especialidade: 'Cardiologista',
-      horaInicio: '8:00',
-      descricao: 'Texto',
-      data: '06/04/2025',
-      status: 'Não agendado'
-    },
-    {
-      id: '2',
-      medico: 'Dr. Carla Almeida',
-      especialidade: 'Pediatra',
-      horaInicio: '8:00',
-      descricao: 'Texto',
-      data: '06/04/2025',
-      status: 'Agendado'
-    },
-    {
-      id: '3',  
-      medico: 'Dr. Carla Almeida',
-      especialidade: 'Pediatra',
-      horaInicio: '8:00',
-      descricao: 'Texto',
-      data: '06/04/2025',
-      status: 'Concluído'
-    },
-    {
-      id: '4',
-      medico: 'Dr. Carla Almeida',
-      especialidade: 'Pediatra',
-      horaInicio: '8:00',
-      descricao: 'Texto',
-      data: '06/04/2025',
-      status: 'Cancelado'
-    },
-  ];
+  consultas: any[] = [];
+
 console: any;
 
   abrirModalCadastro() {
@@ -141,5 +111,16 @@ salvarConsultaAtualizada(dadosAtualizados: any) {
   this.fecharModalAtualizacao();
 }
 
+criarConsulta(dadosConsulta: any) {
+  this.consultaService.cadastrarConsulta(dadosConsulta).subscribe({
+    next: res => {
+      console.log('Consulta criada com sucesso:', res);
+      this.fecharModalCadastro(); // ou atualizar a lista
+    },
+    error: err => {
+      console.error('Erro ao criar consulta:', err);
+    }
+  });
+}
 
 }

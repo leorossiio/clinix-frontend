@@ -99,11 +99,15 @@
 <app-footer></app-footer>
 
   <!-- Modal de Cadastro de Consulta -->
-  <app-modal-cadastro-consulta
-    [show]="modalCadastroAberto"
-    (close)="fecharModalCadastro()"
-    (salvar)="salvarConsulta($event)">
-  </app-modal-cadastro-consulta>
+<app-modal-cadastro-consulta
+  [show]="modalCadastroAberto"
+  [id_usuario]="id_usuario"
+  [id_medico]="id_medico"
+  (close)="fecharModalCadastro()"
+  (salvar)="criarConsulta($event)">
+</app-modal-cadastro-consulta>
+
+
   
   <app-modal-atualizacao-consulta
   [show]="modalAtualizacaoConsulta"

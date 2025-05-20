@@ -13,21 +13,25 @@ export class ModalCadastroConsultaComponent {
   @Input() show: boolean = false;
   @Output() close = new EventEmitter<void>();
   @Output() salvar = new EventEmitter<any>();
+  @Input() id_usuario: string = '';
+  @Input() id_medico: string = '';
+
 
   dataHoraConsulta: string = '';
-  especialidade: string = '';
-  medicoResponsavel: string = '';
   descricaoConsulta: string = '';
 
   onSalvar() {
-    const dados = {
-      dataHoraConsulta: this.dataHoraConsulta,
-      especialidade: this.especialidade,
-      medicoResponsavel: this.medicoResponsavel
-    };
-    this.salvar.emit(dados);
-    this.resetarCampos();
+  const dados = {
+    dataHoraConsulta: this.dataHoraConsulta,
+    descricao: this.descricaoConsulta,
+    id_usuario: this.id_usuario,
+    id_medico: this.id_medico
+  };
+
+  this.salvar.emit(dados);
+  this.resetarCampos();
   }
+
 
   onClose() {
     this.close.emit();
@@ -35,8 +39,8 @@ export class ModalCadastroConsultaComponent {
   }
 
   resetarCampos() {
-    this.dataHoraConsulta = '';
-    this.especialidade = '';
-    this.medicoResponsavel = '';
-  }
+  this.dataHoraConsulta = '';
+  this.descricaoConsulta = '';
+}
+
 }
