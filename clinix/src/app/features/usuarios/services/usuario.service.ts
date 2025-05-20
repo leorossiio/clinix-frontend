@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
 export class UsuarioService {
   private baseUrl = environment.apiUrl + '/usuarios';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -20,6 +20,12 @@ export class UsuarioService {
 
   listarUsuarios(): Observable<any> {
     return this.http.get(this.baseUrl, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  listarMedicos(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/medicos`, {
       headers: this.getAuthHeaders()
     });
   }

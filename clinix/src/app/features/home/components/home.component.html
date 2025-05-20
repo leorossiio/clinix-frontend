@@ -8,11 +8,7 @@
 
     <div class="filter-selects">
       <!-- Data Picker -->
-      <input
-        type="datetime-local"
-        [(ngModel)]="dataSelecionada"
-        class="input-date"
-      />
+      <input type="datetime-local" [(ngModel)]="dataSelecionada" class="input-date" />
 
       <!-- Especialização -->
       <select [(ngModel)]="especializacaoSelecionada">
@@ -23,19 +19,19 @@
         <option value="ginecologista">Ginecologista</option>
       </select>
 
-      <!-- Médico -->
+      <!-- Status -->
       <select [(ngModel)]="statusSelecionado">
         <option value="">Status</option>
-        <option value="carlos">Não agendado</option>
-        <option value="leonardo">Agendado</option>
-        <option value="fernando">Concluída</option>
-        <option value="samara">CANCELADA</option>
+        <option value="0">Não agendado</option>
+        <option value="1">Agendado</option>
+        <option value="2">Concluída</option>
+        <option value="3">Cancelada</option>
       </select>
     </div>
 
     <div class="botoes-filtro">
-      <button class="btn-danger">Limpar</button>
-      <button class="btn-primary">Pesquisar ➔</button>
+      <button class="btn-danger" (click)="limparFiltros()">Limpar</button>
+      <button class="btn-primary" (click)="aplicarFiltros()">Pesquisar ➔</button>
     </div>
     <button class="btn-secondary" (click)="abrirModalCadastro()">
       ➕ Nova consulta
@@ -50,7 +46,7 @@
     </div>
 
     <div class="grid-container">
-      <div class="card" *ngFor="let consulta of consultas">
+      <div class="card" *ngFor="let consulta of consultasFiltradas">
         <h3>{{ consulta.medico?.nome || "Médico não informado" }}</h3>
         <p>
           {{ getEspecialidadeMedico(consulta.medico?.especialidade) || "Especialidade não informada" }}
@@ -59,53 +55,35 @@
         <p>Dia: {{ formatarData(consulta.data) }}</p>
         <p>Horário: {{ formatarHora(consulta.data) }}</p>
 
-        <span
-          [ngClass]="{
+        <span [ngClass]="{
             'status-nao-agendado': consulta.status === 0,
             'status-agendado': consulta.status === 1,
             'status-concluido': consulta.status === 2,
             'status-cancelado': consulta.status === 3
-          }"
-          class="status-tag"
-        >
+          }" class="status-tag">
           {{ getStatusDescricao(consulta.status) }}
         </span>
 
         <ng-container *ngIf="tipoUsuario === 2">
           <div class="card-actions">
-            <button
-              class="btn-warning"
-              (click)="abrirModalAtualizacaoConsulta(consulta)"
-            >
-              ✏️
+            <button class="btn-warning" (click)="abrirModalAtualizacaoConsulta(consulta)">
+              Editar
             </button>
-            <button
-              class="btn-danger"
-              (click)="excluirConsulta(consulta, $event)"
-            >
-              🗑
+            <button class="btn-danger" (click)="excluirConsulta(consulta, $event)">
+              Deletar
             </button>
           </div>
         </ng-container>
 
         <ng-container *ngIf="tipoUsuario === 0">
           <div class="card-actions">
-            <button
-              class="btn-success"
-              (click)="abrirModalAtualizacaoConsulta(consulta)"
-            >
+            <button class="btn-success" (click)="abrirModalAtualizacaoConsulta(consulta)">
               Agendar
             </button>
           </div>
         </ng-container>
       </div>
     </div>
-
-    <!-- <div class="pagination">
-      <button>&lt; Previous</button>
-      <button>1</button>
-      <button>Next &gt;</button>
-    </div> -->
   </section>
 
   <section class="vantagens">
@@ -128,21 +106,11 @@
     </div>
   </section>
 </div>
+
 <app-footer></app-footer>
 
-<app-modal-cadastro-consulta
-  [show]="modalCadastroAberto"
-  [id_usuario]="id_usuario"
-  [id_medico]="id_medico"
-  (close)="fecharModalCadastro()"
-  (salvar)="criarConsulta($event)"
->
-</app-modal-cadastro-consulta>
+<app-modal-cadastro-consulta [show]="modalCadastroAberto" (close)="fecharModalCadastro()"
+  (consultaCadastrada)="consultaCriada()"></app-modal-cadastro-consulta>
 
-<app-modal-atualizacao-consulta
-  [show]="modalAtualizacaoConsulta"
-  [consulta]="consultaSelecionada"
-  (close)="fecharModalAtualizacao()"
-  (salvar)="salvarConsultaAtualizada($event)"
->
-</app-modal-atualizacao-consulta>
+<app-modal-atualizacao-consulta [show]="modalAtualizacaoConsulta" [consulta]="consultaSelecionada"
+  (close)="fecharModalAtualizacao()" (salvar)="salvarConsultaAtualizada($event)"></app-modal-atualizacao-consulta>
