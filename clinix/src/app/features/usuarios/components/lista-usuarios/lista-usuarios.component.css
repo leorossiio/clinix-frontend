@@ -1,0 +1,154 @@
+.usuarios-wrapper {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.input-pesquisa {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+/* Inputs e selects dentro da célula devem ocupar toda a largura da célula */
+td input,
+td select {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Botões */
+td button {
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  margin-right: 5px;
+  border: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: 0.2s ease-in-out;
+}
+
+.btn {
+  font-size: 16px;
+}
+
+.btn-green {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-green:hover {
+  background-color: #45a049;
+}
+
+.btn-red {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-red:hover {
+  background-color: #d32f2f;
+}
+
+.btn-icon {
+  background-color: transparent;
+  border: 1px solid #999;
+  font-size: 18px;
+}
+
+.btn-icon:hover {
+  background-color: #eee;
+}
+td, th {
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+td input,
+td select {
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.acoes-wrapper {
+  width: 80px; /* largura fixa suficiente para os dois botões */
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn {
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+.btn-green {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-red {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-icon {
+  background-color: transparent;
+  border: 1px solid #999;
+  font-size: 18px;
+  width: 100%;
+  height: 34px;
+}
+
+.btn-icon.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .pagination button {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
