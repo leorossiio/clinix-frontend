@@ -6,7 +6,7 @@ import { HeaderComponent } from '../../../shared/components/header/header.compon
 import { ModalCadastroConsultaComponent } from '../../modais/modal-cadastro-consulta/modal-cadastro-consulta.component';
 import { ModalAtualizacaoConsultaComponent } from '../../modais/modal-atualizacao-consulta/modal-atualizacao-consulta.component';
 // import { ModalAgendarConsultaComponent } from '../modal-agendar-consulta/modal-agendar-consulta.component';
-import { ConsultaService } from '../../services/consulta.service'; // ajuste o caminho conforme sua pasta
+import { ConsultaService } from '../../consultas/services/consulta.service'; // ajuste o caminho conforme sua pasta
 
 
 @Component({
