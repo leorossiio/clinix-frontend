@@ -34,7 +34,6 @@ export class LoginComponent {
 
     this.authService.login(credenciais).subscribe({
       next: (res) => {
-        console.log('RESPOSTA LOGIN:', res); // <-- veja o nome correto da propriedade do token aqui
         this.router.navigate(['/home']);
       },
       error: () => {
@@ -42,5 +41,4 @@ export class LoginComponent {
       }
     });
   }
-
 }

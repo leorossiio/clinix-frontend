@@ -15,8 +15,6 @@ export class HeaderComponent {
 
 
   salvarConsulta(dadosConsulta: any) {
-    console.log('Consulta cadastrada:', dadosConsulta);
-    // Aqui você pode chamar o service para salvar no backend
     this.modalCadastroAberto = false;
   }
 

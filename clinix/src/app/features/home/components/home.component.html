@@ -51,47 +51,61 @@
 
     <div class="grid-container">
       <div class="card" *ngFor="let consulta of consultas">
-        <h3>{{ consulta.medico }}</h3>
-        <p>{{ consulta.especialidade }}</p>
+        <h3>{{ consulta.medico?.nome || "Médico não informado" }}</h3>
+        <p>
+          {{ getEspecialidadeMedico(consulta.medico?.especialidade) || "Especialidade não informada" }}
+        </p>
         <p>Descrição: {{ consulta.descricao }}</p>
-        <p>Dia: {{ consulta.data }}</p>
-        <p>Horário: {{ consulta.horaInicio }}</p>
+        <p>Dia: {{ formatarData(consulta.data) }}</p>
+        <p>Horário: {{ formatarHora(consulta.data) }}</p>
 
         <span
           [ngClass]="{
-            'status-nao-agendado': consulta.status === 'Não agendado',
-            'status-agendado': consulta.status === 'Agendado',
-            'status-concluido': consulta.status === 'Concluído',
-            'status-cancelado': consulta.status === 'Cancelado'
+            'status-nao-agendado': consulta.status === 0,
+            'status-agendado': consulta.status === 1,
+            'status-concluido': consulta.status === 2,
+            'status-cancelado': consulta.status === 3
           }"
           class="status-tag"
         >
-          {{ consulta.status }}
+          {{ getStatusDescricao(consulta.status) }}
         </span>
 
-        <!-- Botões de ação -->
-        <div class="card-actions">
-          <button
-            class="btn-warning"
-            (click)="abrirModalAtualizacaoConsulta(consulta)"
-          >
-            ✏️ Atualizar
-          </button>
-          <button
-            class="btn-danger"
-            (click)="excluirConsulta(consulta, $event)"
-          >
-            🗑 Excluir
-          </button>
-        </div>
+        <ng-container *ngIf="tipoUsuario === 2">
+          <div class="card-actions">
+            <button
+              class="btn-warning"
+              (click)="abrirModalAtualizacaoConsulta(consulta)"
+            >
+              ✏️
+            </button>
+            <button
+              class="btn-danger"
+              (click)="excluirConsulta(consulta, $event)"
+            >
+              🗑
+            </button>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="tipoUsuario === 0">
+          <div class="card-actions">
+            <button
+              class="btn-success"
+              (click)="abrirModalAtualizacaoConsulta(consulta)"
+            >
+              Agendar
+            </button>
+          </div>
+        </ng-container>
       </div>
     </div>
 
-    <div class="pagination">
+    <!-- <div class="pagination">
       <button>&lt; Previous</button>
       <button>1</button>
       <button>Next &gt;</button>
-    </div>
+    </div> -->
   </section>
 
   <section class="vantagens">

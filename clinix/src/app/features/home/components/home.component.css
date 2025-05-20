@@ -259,3 +259,15 @@
 .btn-danger:hover {
   background-color: #f56161;
 }
+
+.btn-success {
+  background: #039416;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 125px;
+  height: 40px;
+}
