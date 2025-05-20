@@ -1,14 +1,14 @@
 <header class="header">
-    <div class="header-left">
-      <img src="assets/imgs/logo.png" class="logo" alt="Logo Clinix">
-    </div>
-  
-    <nav class="header-center">
-      <!-- <a href="#">Agenda</a>
-      <a href="#">Médicos</a> -->
-    </nav>
-  
-    <div class="header-right">
-      <button class="btn-secondary" (click)="logout()">↩️ Log out</button>
-    </div>
-  </header>
+  <div class="header-left">
+    <img src="assets/imgs/logo.png" class="logo" alt="Logo Clinix" />
+  </div>
+
+  <nav class="header-center">
+    <a routerLink="/home">HOME</a>
+    <a routerLink="/usuarios">USUÁRIOS</a>
+  </nav>
+
+  <div class="header-right">
+    <button class="btn-secondary" (click)="logout()">Sair</button>
+  </div>
+</header>

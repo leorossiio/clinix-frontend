@@ -5,12 +5,14 @@ import { CadastroPacienteComponent } from './features/usuarios/components/cadast
 import { HomeComponent } from './features/home/components/home.component';
 import { Error403Component } from './features/errors/features/errors/components/error403/error403.component';
 import { Error404Component } from './features/errors/features/errors/components/error404/error404.component'
+import { ListaUsuariosComponent } from './features/usuarios/components/lista-usuarios/lista-usuarios.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'cadastro-paciente', component: CadastroPacienteComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'usuarios', component: ListaUsuariosComponent, canActivate: [AuthGuard] },
   { path: '403', component: Error403Component },
   { path: '**', component: Error404Component }
 ];
