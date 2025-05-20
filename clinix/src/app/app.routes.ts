@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { CadastroPacienteComponent } from './cadastro-paciente/cadastro-paciente.component';
+import { LoginComponent } from './features/usuarios/components/login/login.component';
+import { CadastroPacienteComponent } from './features/usuarios/components/cadastro-paciente/cadastro-paciente.component';
 import { HomeComponent } from './autenticadas/home/home.component'; // seu componente de Home
 
 export const routes: Routes = [
