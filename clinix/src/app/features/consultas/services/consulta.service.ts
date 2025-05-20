@@ -1,5 +1,4 @@
-// src/app/services/consulta.service.ts
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -12,24 +11,46 @@ export class ConsultaService {
 
   constructor(private http: HttpClient) {}
 
-  cadastrarConsulta(dados: any): Observable<any> {
-  return this.http.post('http://localhost:3000/consultas', dados);
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
   }
 
   listarConsultas(): Observable<any[]> {
-  return this.http.get<any[]>('http://localhost:3000/consultas');
+    return this.http.get<any[]>(this.baseUrl, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  agendarConsulta(dados: any): Observable<any> {
-    return this.http.post(this.baseUrl, dados);
+  listarConsultasUsuario(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/usuario`, {
+      headers: this.getAuthHeaders()
+    });
   }
 
-  cancelarConsulta(id: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+  cadastrarConsulta(dados: any): Observable<any> {
+    return this.http.post(this.baseUrl, dados, {
+      headers: this.getAuthHeaders()
+    });
   }
 
   atualizarConsulta(id: string, dados: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}`, dados);
+    return this.http.put(`${this.baseUrl}/${id}`, dados, {
+      headers: this.getAuthHeaders()
+    });
   }
-  
+
+  cancelarConsulta(id: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${id}`, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  agendarConsulta(dados: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/agendar`, dados, {
+      headers: this.getAuthHeaders()
+    });
+  }
 }
