@@ -115,12 +115,32 @@ criarConsulta(dadosConsulta: any) {
   this.consultaService.cadastrarConsulta(dadosConsulta).subscribe({
     next: res => {
       console.log('Consulta criada com sucesso:', res);
-      this.fecharModalCadastro(); // ou atualizar a lista
+
+      // Recarrega todas as consultas diretamente do backend
+      this.listarConsultas();
+
+      // Fecha o modal
+      this.fecharModalCadastro();
     },
     error: err => {
       console.error('Erro ao criar consulta:', err);
     }
   });
+}
+
+listarConsultas() {
+  this.consultaService.listarConsultas().subscribe({
+    next: (res) => {
+      this.consultas = res;
+    },
+    error: (err) => {
+      console.error('Erro ao carregar consultas:', err);
+    }
+  });
+}
+
+ngOnInit() {
+  this.listarConsultas();
 }
 
 }
