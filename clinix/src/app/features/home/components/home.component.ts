@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FooterComponent } from '../../shared/components/footer/footer.component';
+import { FooterComponent } from '../../../shared/components/footer/footer.component';
 import { FormsModule } from '@angular/forms';
-import { HeaderComponent } from '../../shared/components/header/header.component';
-import { ModalCadastroConsultaComponent } from '../modal-cadastro-consulta/modal-cadastro-consulta.component';
-import { ModalAtualizacaoConsultaComponent } from '../modal-atualizacao-consulta/modal-atualizacao-consulta.component';
+import { HeaderComponent } from '../../../shared/components/header/header.component';
+import { ModalCadastroConsultaComponent } from '../../modais/modal-cadastro-consulta/modal-cadastro-consulta.component';
+import { ModalAtualizacaoConsultaComponent } from '../../modais/modal-atualizacao-consulta/modal-atualizacao-consulta.component';
 // import { ModalAgendarConsultaComponent } from '../modal-agendar-consulta/modal-agendar-consulta.component';
 
 @Component({
