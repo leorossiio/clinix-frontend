@@ -26,4 +26,9 @@ export class UsuarioService {
   deletarUsuario(id: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
+
+  novoUsuario(usuario: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl, usuario);
+  }
+
 }
