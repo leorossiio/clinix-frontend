@@ -14,7 +14,7 @@ export class UsuarioService {
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({
-      Authorization: Bearer ${token}
+      Authorization: `Bearer ${token}`
     });
   }
 
@@ -25,19 +25,19 @@ export class UsuarioService {
   }
 
   buscarPorId(id: string): Observable<any> {
-    return this.http.get(${this.baseUrl}/${id}, {
+    return this.http.get(`${this.baseUrl}/${id}`, {
       headers: this.getAuthHeaders()
     });
   }
 
   atualizarUsuario(id: string, dados: any): Observable<any> {
-    return this.http.put(${this.baseUrl}/${id}, dados, {
+    return this.http.put(`${this.baseUrl}/${id}`, dados, {
       headers: this.getAuthHeaders()
     });
   }
 
   deletarUsuario(id: string): Observable<any> {
-    return this.http.delete(${this.baseUrl}/${id}, {
+    return this.http.delete(`${this.baseUrl}/${id}`, {
       headers: this.getAuthHeaders()
     });
   }
