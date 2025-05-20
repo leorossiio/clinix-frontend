@@ -1,0 +1,78 @@
+<form (ngSubmit)="cadastrar()" #formPaciente="ngForm" novalidate>
+  <div class="input-group">
+    <input
+      type="text"
+      name="nome"
+      [(ngModel)]="paciente.nome"
+      placeholder="Nome"
+      required
+      #nome="ngModel"
+    />
+    <span class="icon">👤</span>
+  </div>
+  <div *ngIf="nome.invalid && nome.touched" class="erro">
+    O nome é obrigatório.
+  </div>
+
+  <div class="input-group">
+    <input
+      type="email"
+      name="email"
+      [(ngModel)]="paciente.email"
+      placeholder="Email"
+      required
+      email
+      #email="ngModel"
+    />
+    <span class="icon">✉️</span>
+  </div>
+  <div *ngIf="email.invalid && email.touched" class="erro">
+    <span *ngIf="email.errors?.['required']">O e-mail é obrigatório.</span>
+    <span *ngIf="email.errors?.['email']">Formato de e-mail inválido.</span>
+  </div>
+
+  <div class="input-group">
+    <input
+      [type]="showPassword ? 'text' : 'password'"
+      name="senha"
+      [(ngModel)]="paciente.senha"
+      placeholder="Senha"
+      required
+      minlength="6"
+      #senha="ngModel"
+    />
+    <span class="icon eye" (click)="togglePasswordVisibility()">
+      {{ showPassword ? '🙈' : '👁️' }}
+    </span>
+  </div>
+  <div *ngIf="senha.invalid && senha.touched" class="erro">
+    <span *ngIf="senha.errors?.['required']">A senha é obrigatória.</span>
+    <span *ngIf="senha.errors?.['minlength']">A senha deve ter no mínimo 6 caracteres.</span>
+  </div>
+
+  <div class="input-group">
+    <input
+      [type]="showConfirmPassword ? 'text' : 'password'"
+      name="confirmarSenha"
+      [(ngModel)]="confirmarSenha"
+      placeholder="Confirme a senha"
+      required
+      #confirma="ngModel"
+    />
+    <span class="icon eye" (click)="toggleConfirmPasswordVisibility()">
+      {{ showConfirmPassword ? '🙈' : '👁️' }}
+    </span>
+  </div>
+  <div *ngIf="confirma.invalid && confirma.touched" class="erro">
+    A confirmação de senha é obrigatória.
+  </div>
+  <div *ngIf="senhaNaoConfere" class="erro">
+    As senhas não coincidem.
+  </div>
+
+  <button type="submit" class="btn-primary btn-padrao" [disabled]="formPaciente.invalid">
+    Cadastrar
+  </button>
+</form>
+
+<div *ngIf="mensagem" class="mensagem">{{ mensagem }}</div>
