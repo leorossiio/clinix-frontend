@@ -11,8 +11,12 @@ export class ConsultaService {
 
   constructor(private http: HttpClient) {}
 
-  listarConsultas(): Observable<any> {
-    return this.http.get(this.baseUrl);
+  cadastrarConsulta(dados: any): Observable<any> {
+  return this.http.post('http://localhost:3000/consultas', dados);
+  }
+
+  listarConsultas(): Observable<any[]> {
+  return this.http.get<any[]>('http://localhost:3000/consultas');
   }
 
   agendarConsulta(dados: any): Observable<any> {
@@ -26,4 +30,5 @@ export class ConsultaService {
   atualizarConsulta(id: string, dados: any): Observable<any> {
     return this.http.put(`${this.baseUrl}/${id}`, dados);
   }
+  
 }

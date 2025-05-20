@@ -6,14 +6,13 @@
       <h2>Nova consulta</h2>
   
       <form (ngSubmit)="onSalvar()">
-        <input type="datetime-local" [(ngModel)]="dataHoraConsulta" name="dataHoraConsulta" required [ngModelOptions]="{ standalone: true }">
-        <input type="text" [(ngModel)]="medicoResponsavel" name="medicoResponsavel" placeholder="Médico responsável" required [ngModelOptions]="{ standalone: true }">
-        <input type="text" [(ngModel)]="descricaoConsulta" name="descricaoConsulta" placeholder="Descrição" required [ngModelOptions]="{ standalone: true }">
-  
-        <div class="buttons">
-          <button type="button" class="btn-cancel" (click)="onClose()">Cancelar</button>
-          <button type="submit" class="btn-create">Criar</button>
-        </div>
-      </form>
+  <input type="datetime-local" [(ngModel)]="dataHoraConsulta" name="dataHoraConsulta" required [ngModelOptions]="{ standalone: true }">
+  <input type="text" [(ngModel)]="descricaoConsulta" name="descricaoConsulta" placeholder="Descrição" required [ngModelOptions]="{ standalone: true }">
+
+  <div class="buttons">
+    <button type="button" class="btn-cancel" (click)="onClose()">Cancelar</button>
+    <button type="submit" class="btn-create">Criar</button>
+  </div>
+</form>
     </div>
   </div>
