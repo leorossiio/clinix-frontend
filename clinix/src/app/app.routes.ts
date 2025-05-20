@@ -1,10 +1,16 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './core/guards/auth.guard';
 import { LoginComponent } from './features/usuarios/components/login/login.component';
 import { CadastroPacienteComponent } from './features/usuarios/components/cadastro-paciente/cadastro-paciente.component';
 import { HomeComponent } from './features/home/components/home.component';
+import { Error403Component } from './features/errors/features/errors/components/error403/error403.component';
+import { Error404Component } from './features/errors/features/errors/components/error404/error404.component'
 
 export const routes: Routes = [
-  { path: '', component: LoginComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
   { path: 'cadastro-paciente', component: CadastroPacienteComponent },
-  { path: 'home', component: HomeComponent }
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: '403', component: Error403Component },
+  { path: '**', component: Error404Component }
 ];

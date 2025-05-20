@@ -46,7 +46,7 @@ export class CadastroPacienteComponent {
         this.mensagem = 'Cadastro realizado com sucesso!';
         this.paciente = { nome: '', email: '', senha: '' };
         this.confirmarSenha = '';
-        setTimeout(() => this.router.navigate(['/']), 2000);
+        setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: (err) => {
         console.error(err);

@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class NotificacaoService {
-  private baseUrl = environment.apiUrl;
+  private baseUrl = environment.apiUrl + '/notificacoes';
 
   constructor(private http: HttpClient) {}
 
