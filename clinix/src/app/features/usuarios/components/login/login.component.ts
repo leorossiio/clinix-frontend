@@ -34,8 +34,7 @@ export class LoginComponent {
 
     this.authService.login(credenciais).subscribe({
       next: (res) => {
-        const token = res.token;
-        localStorage.setItem('token', token); // Salva o token
+        console.log('RESPOSTA LOGIN:', res); // <-- veja o nome correto da propriedade do token aqui
         this.router.navigate(['/home']);
       },
       error: () => {
@@ -43,4 +42,5 @@ export class LoginComponent {
       }
     });
   }
+
 }

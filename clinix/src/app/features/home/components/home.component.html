@@ -1,40 +1,46 @@
 <app-header></app-header>
 
 <div class="container">
-    <section class="search-filter-container">
-        <div class="search-box">
-          <input type="text" placeholder="Pesquisar médico..." />
-        </div>
-      
-        <div class="filter-selects">
-          <!-- Data Picker -->
-          <input type="datetime-local" [(ngModel)]="dataSelecionada" class="input-date">
-      
-          <!-- Especialização -->
-          <select [(ngModel)]="especializacaoSelecionada">
-            <option value="">Especialização</option>
-            <option value="cardiologista">Cardiologista</option>
-            <option value="pediatra">Pediatra</option>
-            <option value="oftalmologista">Oftalmologista</option>
-            <option value="ginecologista">Ginecologista</option>
-          </select>
-      
-          <!-- Médico -->
-          <select [(ngModel)]="statusSelecionado">
-            <option value="">Status</option>
-            <option value="carlos">Não agendado</option>
-            <option value="leonardo">Agendado</option>
-            <option value="fernando">Concluída</option>
-            <option value="samara">CANCELADA</option>
-          </select>
-        </div>
-
-        <div class="botoes-filtro">
-        <button class="btn-danger">Limpar</button>
-        <button class="btn-primary">Pesquisar ➔</button>
+  <section class="search-filter-container">
+    <div class="search-box">
+      <input type="text" placeholder="Pesquisar médico..." />
     </div>
-    <button class="btn-secondary" (click)="abrirModalCadastro()">➕ Nova consulta</button>  
-      </section>
+
+    <div class="filter-selects">
+      <!-- Data Picker -->
+      <input
+        type="datetime-local"
+        [(ngModel)]="dataSelecionada"
+        class="input-date"
+      />
+
+      <!-- Especialização -->
+      <select [(ngModel)]="especializacaoSelecionada">
+        <option value="">Especialização</option>
+        <option value="cardiologista">Cardiologista</option>
+        <option value="pediatra">Pediatra</option>
+        <option value="oftalmologista">Oftalmologista</option>
+        <option value="ginecologista">Ginecologista</option>
+      </select>
+
+      <!-- Médico -->
+      <select [(ngModel)]="statusSelecionado">
+        <option value="">Status</option>
+        <option value="carlos">Não agendado</option>
+        <option value="leonardo">Agendado</option>
+        <option value="fernando">Concluída</option>
+        <option value="samara">CANCELADA</option>
+      </select>
+    </div>
+
+    <div class="botoes-filtro">
+      <button class="btn-danger">Limpar</button>
+      <button class="btn-primary">Pesquisar ➔</button>
+    </div>
+    <button class="btn-secondary" (click)="abrirModalCadastro()">
+      ➕ Nova consulta
+    </button>
+  </section>
 
   <section class="consultas-section">
     <h2 class="title">CLINIX</h2>
@@ -44,30 +50,42 @@
     </div>
 
     <div class="grid-container">
-  <div class="card" *ngFor="let consulta of consultas">
-    <h3>{{ consulta.medico }}</h3>
-    <p>{{ consulta.especialidade }}</p>
-    <p>Descrição: {{ consulta.descricao }}</p>
-    <p>Dia: {{ consulta.data }}</p>
-    <p>Horário: {{ consulta.horaInicio }}</p>
+      <div class="card" *ngFor="let consulta of consultas">
+        <h3>{{ consulta.medico }}</h3>
+        <p>{{ consulta.especialidade }}</p>
+        <p>Descrição: {{ consulta.descricao }}</p>
+        <p>Dia: {{ consulta.data }}</p>
+        <p>Horário: {{ consulta.horaInicio }}</p>
 
-    <span [ngClass]="{
-        'status-nao-agendado': consulta.status === 'Não agendado',
-        'status-agendado': consulta.status === 'Agendado',
-        'status-concluido': consulta.status === 'Concluído',
-        'status-cancelado': consulta.status === 'Cancelado'
-      }" class="status-tag">
-      {{ consulta.status }}
-    </span>
+        <span
+          [ngClass]="{
+            'status-nao-agendado': consulta.status === 'Não agendado',
+            'status-agendado': consulta.status === 'Agendado',
+            'status-concluido': consulta.status === 'Concluído',
+            'status-cancelado': consulta.status === 'Cancelado'
+          }"
+          class="status-tag"
+        >
+          {{ consulta.status }}
+        </span>
 
-    <!-- Botões de ação -->
-    <div class="card-actions">
-      <button class="btn-warning" (click)="abrirModalAtualizacaoConsulta(consulta)">✏️ Atualizar</button>
-      <button class="btn-danger" (click)="excluirConsulta(consulta, $event)">🗑 Excluir</button>
+        <!-- Botões de ação -->
+        <div class="card-actions">
+          <button
+            class="btn-warning"
+            (click)="abrirModalAtualizacaoConsulta(consulta)"
+          >
+            ✏️ Atualizar
+          </button>
+          <button
+            class="btn-danger"
+            (click)="excluirConsulta(consulta, $event)"
+          >
+            🗑 Excluir
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-
 
     <div class="pagination">
       <button>&lt; Previous</button>
@@ -98,20 +116,19 @@
 </div>
 <app-footer></app-footer>
 
-  <!-- Modal de Cadastro de Consulta -->
 <app-modal-cadastro-consulta
   [show]="modalCadastroAberto"
   [id_usuario]="id_usuario"
   [id_medico]="id_medico"
   (close)="fecharModalCadastro()"
-  (salvar)="criarConsulta($event)">
+  (salvar)="criarConsulta($event)"
+>
 </app-modal-cadastro-consulta>
 
-
-  
-  <app-modal-atualizacao-consulta
+<app-modal-atualizacao-consulta
   [show]="modalAtualizacaoConsulta"
   [consulta]="consultaSelecionada"
   (close)="fecharModalAtualizacao()"
-  (salvar)="salvarConsultaAtualizada($event)">
+  (salvar)="salvarConsultaAtualizada($event)"
+>
 </app-modal-atualizacao-consulta>
