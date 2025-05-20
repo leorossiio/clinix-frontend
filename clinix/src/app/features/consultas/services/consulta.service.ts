@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class ConsultaService {
-  private baseUrl = environment.apiUrl;
+  private baseUrl = environment.apiUrl + '/consultas';
 
   constructor(private http: HttpClient) {}
 

@@ -20,7 +20,7 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -34,16 +34,13 @@ export class LoginComponent {
 
     this.authService.login(credenciais).subscribe({
       next: (res) => {
-        console.log('Login realizado com sucesso:', res);
-        // Armazenar token, se necessário
+        const token = res.token;
+        localStorage.setItem('token', token); // Salva o token
         this.router.navigate(['/home']);
       },
-      error: (err) => {
-        console.error('Erro ao fazer login:', err);
+      error: () => {
         this.erro = 'Usuário ou senha incorretos.';
       }
     });
-
-    console.log(credenciais);
   }
 }

@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class UsuarioService {
-  private baseUrl = environment.apiUrl;
+  private baseUrl = environment.apiUrl + '/usuarios';
 
   constructor(private http: HttpClient) {}
 
@@ -31,5 +31,4 @@ export class UsuarioService {
   novoUsuario(usuario: any): Observable<any> {
     return this.http.post<any>(this.baseUrl, usuario);
   }
-
 }
