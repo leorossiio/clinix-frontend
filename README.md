@@ -37,14 +37,14 @@ ng s *Acesse no navegador: http://localhost:4200
 
 ---
 
-Padrões de Projeto Implementados:
+```Padrões de Projeto Implementados:
   - Arquitetura modularizada por feature (features/usuarios, features/consultas, etc) buscando metodologia SOLID.
   - Services para chamadas HTTP centralizadas com HttpClient.
   - Guards de Rotas com base no tipo de usuário (Admin, Médico, Paciente).
   - Componentes reutilizáveis (como modais).
   - Responsividade com CSS.
   - Controle de formulários com ngModel + validações.
-
+```
 ---
 
 # Estrutura de Pastas
