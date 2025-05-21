@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 export class ModalCadastroConsultaComponent implements OnInit {
   @Input() show = false;
   @Output() close = new EventEmitter<void>();
-  @Output() consultaCadastrada = new EventEmitter<any>(); // Novo nome para mais clareza
+  @Output() consultaCadastrada = new EventEmitter<any>();
 
   medicos: any[] = [];
   filtroMedico: string = '';

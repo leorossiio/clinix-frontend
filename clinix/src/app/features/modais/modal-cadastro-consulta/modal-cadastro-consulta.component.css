@@ -70,4 +70,16 @@
     font-size: 16px;
     cursor: pointer;
   }
-  
+
+  ng-select {
+  width: 90%;
+  margin-bottom: 15px;
+}
+
+.ng-select .ng-select-container {
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  font-size: 16px;
+}
