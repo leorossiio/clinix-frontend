@@ -34,9 +34,9 @@
           <td>{{ labelStatus(u.status) }}</td>
           <td>
             <div class="acoes-wrapper">
-              <button class="btn btn-icon btn-green center, acoes-label edit" (click)="editarUsuario(u)">
-                <i class="pi pi-pencil">✏️</i>
-              </button>
+              <button (click)="abrirModalEdicao(u); console.log('CLICOU')">✏️</button>
+
+
               <button class="btn btn-icon btn-red center, acoes-label delete" (click)="deletarUsuario(u)">
                 <i class="pi pi-trash">❌</i>
               </button>
@@ -47,4 +47,8 @@
     </table>
   </div>
 </div>
+<modal-atualizacao-usuario *ngIf="modalAberto" [usuario]="usuarioSelecionado" (fechar)="fecharModal()"
+  (salvar)="atualizarUsuario($event)">
+</modal-atualizacao-usuario>
+
 <app-footer></app-footer>
