@@ -5,7 +5,7 @@
 
   <nav class="header-center">
     <a routerLink="/home">HOME</a>
-    <a routerLink="/usuarios">USUÁRIOS</a>
+    <a *ngIf="tipoUsuario === 2" routerLink="/usuarios">USUÁRIOS</a>
   </nav>
 
   <div class="header-right">

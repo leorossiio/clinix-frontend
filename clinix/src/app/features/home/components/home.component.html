@@ -45,15 +45,18 @@
         <span class="tag">LISTA DE CONSULTAS</span>
       </div>
 
-      <div class="grid-container">
-        <div class="card" *ngFor="let consulta of consultasFiltradas">
-          <h3>{{ consulta.medico?.nome || "Médico não informado" }}</h3>
-          <p>
-            {{ getEspecialidadeMedico(consulta.medico?.especialidade) || "Especialidade não informada" }}
-          </p>
-          <p>Descrição: {{ consulta.descricao }}</p>
-          <p>Dia: {{ formatarData(consulta.data) }}</p>
-          <p>Horário: {{ formatarHora(consulta.data) }}</p>
+    <div class="grid-container cards">
+      <div class="card" *ngFor="let consulta of consultasFiltradas">
+        <h3>{{ consulta.medico?.nome || "Médico não informado" }}</h3>
+        <p>
+          {{
+            getEspecialidadeMedico(consulta.medico?.especialidade) ||
+              "Especialidade não informada"
+          }}
+        </p>
+        <p>Descrição: {{ consulta.descricao }}</p>
+        <p>Dia: {{ formatarData(consulta.data) }}</p>
+        <p>Horário: {{ formatarHora(consulta.data) }}</p>
 
           <span [ngClass]="{
             'status-nao-agendado': consulta.status === 0,
@@ -64,27 +67,36 @@
             {{ getStatusDescricao(consulta.status) }}
           </span>
 
-          <ng-container *ngIf="tipoUsuario === 2">
-            <div class="card-actions">
-              <button class="btn-warning" (click)="abrirModalAtualizacaoConsulta(consulta)">
-                Editar
-              </button>
-              <button class="btn-danger" (click)="excluirConsulta(consulta, $event)">
-                Deletar
-              </button>
-            </div>
-          </ng-container>
+        <ng-container *ngIf="tipoUsuario === 2">
+          <div class="card-actions">
+            <button
+              class="btn-warning"
+              (click)="abrirModalAtualizacaoConsulta(consulta)"
+            >
+              Editar
+            </button>
+            <button
+              class="btn-danger"
+              (click)="excluirConsulta(consulta, $event)"
+            >
+              Deletar
+            </button>
+          </div>
+        </ng-container>
 
-          <ng-container *ngIf="tipoUsuario === 0">
-            <div class="card-actions">
-              <button class="btn-success" (click)="abrirModalAtualizacaoConsulta(consulta)">
-                Agendar
-              </button>
-            </div>
-          </ng-container>
-        </div>
+        <ng-container *ngIf="tipoUsuario === 0">
+          <div class="card-actions">
+            <button
+              class="btn-success"
+              (click)="agendarConsulta(consulta, $event)"
+            >
+              Agendar
+            </button>
+          </div>
+        </ng-container>
       </div>
-    </section>
+    </div>
+  </section>
 
     <section class="vantagens">
       <div class="vantagem-item">
@@ -109,8 +121,15 @@
 </div>
 <app-footer></app-footer>
 
-<app-modal-cadastro-consulta [show]="modalCadastroAberto" (close)="fecharModalCadastro()"
-  (consultaCadastrada)="consultaCriada()"></app-modal-cadastro-consulta>
+<app-modal-cadastro-consulta
+  [show]="modalCadastroAberto"
+  (close)="fecharModalCadastro()"
+  (consultaCadastrada)="consultaCriada()"
+></app-modal-cadastro-consulta>
 
-<app-modal-atualizacao-consulta [show]="modalAtualizacaoConsulta" [consulta]="consultaSelecionada"
-  (close)="fecharModalAtualizacao()" (salvar)="salvarConsultaAtualizada($event)"></app-modal-atualizacao-consulta>
+<app-modal-atualizacao-consulta
+  [show]="modalAtualizacaoConsulta"
+  [consulta]="consultaSelecionada"
+  (close)="fecharModalAtualizacao()"
+  (salvar)="salvarConsultaAtualizada($event)"
+></app-modal-atualizacao-consulta>

@@ -1,68 +1,75 @@
 .footer {
-    background-color: #2d2dff; /* Azul forte */
-    color: white;
-    padding: 40px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 25px;
-  }
-  
-  .footer-left {
-    font-weight: bold;
-  }
-  
-  .footer-right {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .footer-right a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-  }
-  
-  .footer-right a:hover {
-    text-decoration: underline;
-  }
-  
-  @media (max-width: 768px) {
-    .footer {
-        flex-direction: column;
-        text-align: center;
-        padding: 20px;
-    }
-
-    .footer-right {
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 15px;
-    }
-
-    /* --- layout para fixar footer --- */
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
-body {
+  background-color: #2d2dff;
+  color: #fff;
+  padding: 40px 20px;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15);
 }
 
-app-root, .app-wrapper {
+body:has(app-footer) {
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 120px; /* altura aproximada do footer */
+}
+
+app-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+.footer-content {
+  text-align: center;
+  max-width: 900px;
+  width: 100%;
+}
+
+.footer-logo {
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.footer-text {
+  font-size: 14px;
+  color: #e0e0e0;
+  margin-bottom: 15px;
+}
+
+.footer-links {
   display: flex;
-  flex-direction: column;
-  flex: 1 0 auto;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
 }
 
-main {
-  flex: 1 0 auto;      /* conteúdo cresce e empurra o footer */
+.footer-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
-footer {
-  flex-shrink: 0;      /* permanece colado no fim */
+.footer-links a:hover {
+  color: #b3b3ff;
+  text-decoration: underline;
 }
 
+@media (max-width: 600px) {
+  .footer-content {
+    padding: 0 10px;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-logo {
+    height: 50px;
+  }
 }

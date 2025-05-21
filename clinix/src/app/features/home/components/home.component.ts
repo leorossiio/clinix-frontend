@@ -18,7 +18,7 @@ import { forkJoin } from 'rxjs';
   standalone: true,
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  imports:[
+  imports: [
     CommonModule,
     FormsModule,
     FooterComponent,
@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
     private consultaService: ConsultaService,
     private usuarioService: UsuarioService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const payload = this.getPayloadFromToken();
@@ -70,6 +70,32 @@ export class HomeComponent implements OnInit {
       return null;
     }
   }
+
+  agendarConsulta(consulta: any, event: MouseEvent) {
+    event.stopPropagation();
+
+    const confirmar = confirm(`Deseja agendar a consulta com ${consulta.medico?.nome || 'o médico selecionado'}?`);
+    if (!confirmar) return;
+
+    const payload = this.getPayloadFromToken();
+    if (!payload?.id) return;
+
+    const dados = {
+      id_usuario: payload.id
+    };
+
+    this.consultaService.agendarConsulta(consulta.id_consulta, dados).subscribe({
+      next: () => {
+        alert('Consulta agendada com sucesso!');
+        this.listarConsultas();
+      },
+      error: err => {
+        console.error('Erro ao agendar consulta:', err);
+        alert('Erro ao agendar a consulta.');
+      }
+    });
+  }
+
 
   listarConsultas() {
     const serviceCall = this.tipoUsuario === 0

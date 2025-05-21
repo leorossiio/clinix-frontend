@@ -13,6 +13,26 @@ export class HeaderComponent {
 
   constructor(private router: Router) {} // <-- Injeção necessária
 
+  tipoUsuario: number | null = null;
+
+  ngOnInit(): void {
+    const payload = this.getPayloadFromToken();
+    if (payload) {
+      this.tipoUsuario = payload.tipo;
+    }
+  }
+
+  getPayloadFromToken(): any | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    try {
+      const payloadBase64 = token.split('.')[1];
+      return JSON.parse(atob(payloadBase64));
+    } catch {
+      return null;
+    }
+  }
 
   salvarConsulta(dadosConsulta: any) {
     this.modalCadastroAberto = false;

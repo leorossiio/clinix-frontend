@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
 export class ConsultaService {
   private baseUrl = environment.apiUrl + '/consultas';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -48,8 +48,8 @@ export class ConsultaService {
     });
   }
 
-  agendarConsulta(dados: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/agendar`, dados, {
+  agendarConsulta(id: string, dados: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}/agendar`, dados, {
       headers: this.getAuthHeaders()
     });
   }
