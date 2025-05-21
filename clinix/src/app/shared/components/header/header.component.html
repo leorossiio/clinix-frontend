@@ -5,7 +5,9 @@
 
   <nav class="header-center">
     <a routerLink="/home">HOME</a>
-    <a routerLink="/usuarios">USUÁRIOS</a>
+    @if(tipoUsuario == 2){
+     <a routerLink="/usuarios">USUÁRIOS</a>
+    }
   </nav>
 
   <div class="header-right">
