@@ -104,7 +104,7 @@ export class HomeComponent implements OnInit {
 
     serviceCall.subscribe({
       next: res => {
-        const consultasOrdenadas = res.sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
+        const consultasOrdenadas = res.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
         this.enriquecerConsultasComMedico(consultasOrdenadas);
       },
       error: err => console.error('Erro ao carregar consultas:', err)
