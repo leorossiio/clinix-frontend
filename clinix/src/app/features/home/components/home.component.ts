@@ -132,8 +132,8 @@ export class HomeComponent implements OnInit {
     switch (status) {
       case 0: return 'Não agendado';
       case 1: return 'Agendado';
-      case 2: return 'Concluída';
-      case 3: return 'Cancelada';
+      case 2: return 'ConcluídO';
+      case 3: return 'Cancelado';
       default: return 'Desconhecido';
     }
   }
@@ -194,17 +194,24 @@ export class HomeComponent implements OnInit {
         error: err => console.error('Erro ao atualizar consulta:', err)
       });
   }
-
+  
   excluirConsulta(consulta: any, event: MouseEvent) {
     event.stopPropagation();
-    const confirmar = confirm(`Deseja excluir a consulta com ${consulta.medico?.nome || 'o médico selecionado'}?`);
-    if (confirmar) {
-      this.consultaService.cancelarConsulta(consulta.id_consulta).subscribe({
-        next: () => this.listarConsultas(),
-        error: err => console.error('Erro ao excluir consulta:', err)
-      });
-    }
+    const confirmar = confirm(`Deseja excluir permanentemente a consulta com ${consulta.medico?.nome || 'o médico selecionado'}?`);
+    if (!confirmar) return;
+
+    this.consultaService.deletarConsulta(consulta.id_consulta).subscribe({
+      next: () => {
+        alert('Consulta excluída com sucesso!');
+        this.listarConsultas();
+      },
+      error: err => {
+        console.error('Erro ao excluir consulta:', err);
+        alert('Erro ao excluir a consulta.');
+      }
+    });
   }
+
 
   aplicarFiltros() {
     this.consultasFiltradas = this.consultas.filter(c => {

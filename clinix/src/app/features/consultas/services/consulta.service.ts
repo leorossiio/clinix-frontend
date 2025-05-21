@@ -42,7 +42,7 @@ export class ConsultaService {
     });
   }
 
-  cancelarConsulta(id: string): Observable<any> {
+  deletarConsulta(id: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`, {
       headers: this.getAuthHeaders()
     });
