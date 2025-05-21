@@ -71,31 +71,33 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  agendarConsulta(consulta: any, event: MouseEvent) {
+  agendarConsulta(consulta: any, event: MouseEvent): void {
     event.stopPropagation();
 
-    const confirmar = confirm(`Deseja agendar a consulta com ${consulta.medico?.nome || 'o médico selecionado'}?`);
-    if (!confirmar) return;
+    const nomeMedico = consulta.medico?.nome || 'o médico selecionado';
+    const confirmado = confirm(`Deseja agendar a consulta com ${nomeMedico}?`);
+    if (!confirmado) return;
 
     const payload = this.getPayloadFromToken();
-    if (!payload?.id) return;
+    if (!payload?.id) {
+      alert('Erro ao recuperar informações do usuário.');
+      return;
+    }
 
-    const dados = {
+    const dadosAgendamento = {
       id_usuario: payload.id
     };
 
-    this.consultaService.agendarConsulta(consulta.id_consulta, dados).subscribe({
+    this.consultaService.agendarConsulta(consulta.id_consulta, dadosAgendamento).subscribe({
       next: () => {
         alert('Consulta agendada com sucesso!');
         this.listarConsultas();
       },
-      error: err => {
-        console.error('Erro ao agendar consulta:', err);
-        alert('Erro ao agendar a consulta.');
+      error: () => {
+        alert('Erro ao agendar a consulta. Tente novamente mais tarde.');
       }
     });
   }
-
 
   listarConsultas() {
     const serviceCall = this.tipoUsuario === 0
@@ -194,7 +196,7 @@ export class HomeComponent implements OnInit {
         error: err => console.error('Erro ao atualizar consulta:', err)
       });
   }
-  
+
   excluirConsulta(consulta: any, event: MouseEvent) {
     event.stopPropagation();
     const confirmar = confirm(`Deseja excluir permanentemente a consulta com ${consulta.medico?.nome || 'o médico selecionado'}?`);
