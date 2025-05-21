@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { Usuario } from '../../../models/usuario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { environment } from '../../../../environments/environment';
 export class UsuarioService {
   private baseUrl = environment.apiUrl + '/usuarios';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
@@ -53,4 +54,11 @@ export class UsuarioService {
       headers: this.getAuthHeaders()
     });
   }
+
+  getUsuarios(): Observable<Usuario[]> {
+  return this.http.get<Usuario[]>(`${this.baseUrl}`, {
+    headers: this.getAuthHeaders()
+  });
+}
+
 }

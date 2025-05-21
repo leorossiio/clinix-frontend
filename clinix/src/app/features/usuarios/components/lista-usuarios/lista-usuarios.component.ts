@@ -1,75 +1,86 @@
-import { Component } from '@angular/core';
-import { HeaderComponent } from "../../../../shared/components/header/header.component";
-import { FooterComponent } from "../../../../shared/components/footer/footer.component";
+import { Component, OnInit } from '@angular/core';
+import { UsuarioService } from '../../services/usuario.service';
+import { Usuario } from '../../../../models/usuario.model';
+
+// módulos necessários para standalone
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-interface Usuario {
-  nome: string;
-  tipo_usuario: number; // 0: Paciente, 1: Médico, 2: Admin
-  email: string;
-  senha: string;
-  status: number; // 0: Ativo, 1: Deletado
-}
+// componentes compartilhados
+import { HeaderComponent } from '../../../../shared/components/header/header.component';
+import { FooterComponent } from '../../../../shared/components/footer/footer.component';
 
 @Component({
   selector: 'app-lista-usuarios',
-  standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
   templateUrl: './lista-usuarios.component.html',
-  styleUrls: ['./lista-usuarios.component.css']
+  styleUrls: ['./lista-usuarios.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    HeaderComponent,
+    FooterComponent
+  ]
 })
-export class ListaUsuariosComponent {
-  filtro: string = '';
+export class ListaUsuariosComponent implements OnInit {
+  usuarios: Usuario[] = [];
+  usuariosFiltrados: Usuario[] = [];
+  filtro = '';
 
-  usuarios: Usuario[] = [
-    { nome: 'João', tipo_usuario: 0, email: 'joao@gmail.com', senha: '123456', status: 0 },
-    { nome: 'Maria', tipo_usuario: 1, email: 'maria@gmail.com', senha: 'abc123', status: 0 },
-    { nome: 'Carlos', tipo_usuario: 2, email: 'admin@clinix.com', senha: 'admin', status: 1 }
-  ];
+  constructor(private usuarioService: UsuarioService) {}
 
-  get usuariosFiltrados() {
-    const filtroLower = this.filtro.toLowerCase();
-    return this.usuarios.filter(u =>
-      u.nome.toLowerCase().includes(filtroLower) ||
-      u.email.toLowerCase().includes(filtroLower) ||
-      this.tipoUsuarioToString(u.tipo_usuario).toLowerCase().includes(filtroLower) ||
-      this.statusToString(u.status).toLowerCase().includes(filtroLower)
+  ngOnInit(): void {
+    this.usuarioService.getUsuarios().subscribe({
+      next: dados => {
+        console.log('Usuários recebidos:', dados);
+        this.usuarios = dados;
+        this.aplicarFiltro(); // mostra todos inicialmente
+      },
+      error: err => console.error('Falha ao buscar usuários', err)
+    });
+  }
+
+  aplicarFiltro(): void {
+  const termo = this.filtro.toLowerCase().trim();
+
+  if (!termo) {
+    this.usuariosFiltrados = this.usuarios;
+    return;
+  }
+
+  this.usuariosFiltrados = this.usuarios.filter(usuario => {
+    const nome = usuario.nome?.toLowerCase() ?? '';
+    const email = usuario.email?.toLowerCase() ?? '';
+    const tipo = this.labelTipo(usuario.tipo_usuario).toLowerCase();
+    const crm = usuario.crm?.toLowerCase() ?? '';
+    const status = this.labelStatus(usuario.status).toLowerCase();
+
+    return (
+      nome.includes(termo) ||
+      email.includes(termo) ||
+      tipo.includes(termo) ||
+      crm.includes(termo) ||
+      status.includes(termo)
     );
+  });
   }
 
-  editandoIndex: number | null = null;
-  usuarioEditado: Usuario = {
-  nome: '',
-  tipo_usuario: 0,
-  email: '',
-  senha: '',
-  status: 0
-};
 
-editarUsuario(index: number) {
-  this.editandoIndex = index;
-  this.usuarioEditado = { ...this.usuarios[index] };
-}
 
-cancelarEdicao() {
-  this.editandoIndex = null;
-}
-
-salvarEdicao(index: number) {
-  this.usuarios[index] = { ...this.usuarioEditado };
-  this.editandoIndex = null;
-}
-
-  tipoUsuarioToString(tipo: number): string {
-    return tipo === 0 ? 'Paciente' : tipo === 1 ? 'Médico' : 'Admin';
+  labelTipo(tipo: number): string {
+    return ['Paciente', 'Médico', 'Admin'][tipo] ?? '-';
   }
 
-  statusToString(status: number): string {
+  labelStatus(status: number): string {
     return status === 0 ? 'Ativo' : 'Deletado';
   }
 
-  esconderSenha(senha: string): string {
-    return '*'.repeat(senha.length);
+    editarUsuario(usuario: Usuario): void {
+    console.log('Editar usuário:', usuario);
   }
+
+  deletarUsuario(usuario: Usuario): void {
+    console.log('Deletar usuário:', usuario);
+  }
+
 }

@@ -1,55 +1,49 @@
 <app-header></app-header>
+<div class="conteudo-esticado">
+  <div class="container">
+    <section class="search-filter-container">
+      <div class="search-box">
+        <input type="text" placeholder="Pesquisar médico..." />
+      </div>
 
-<div class="container">
-  <section class="search-filter-container">
-    <div class="search-box">
-      <input type="text" placeholder="Pesquisar médico..." />
-    </div>
+      <div class="filter-selects">
+        <!-- Data Picker -->
+        <input type="datetime-local" [(ngModel)]="dataSelecionada" class="input-date" />
 
-    <div class="filter-selects">
-      <!-- Data Picker -->
-      <input
-        type="datetime-local"
-        [(ngModel)]="dataSelecionada"
-        class="input-date"
-      />
+        <!-- Especialização -->
+        <select [(ngModel)]="especializacaoSelecionada">
+          <option value="">Especialização</option>
+          <option value="cardiologista">Cardiologista</option>
+          <option value="pediatra">Pediatra</option>
+          <option value="oftalmologista">Oftalmologista</option>
+          <option value="ginecologista">Ginecologista</option>
+        </select>
 
-      <!-- Especialização -->
-      <select [(ngModel)]="especializacaoSelecionada">
-        <option value="">Especialização</option>
-        <option value="cardiologista">Cardiologista</option>
-        <option value="pediatra">Pediatra</option>
-        <option value="oftalmologista">Oftalmologista</option>
-        <option value="ginecologista">Ginecologista</option>
-      </select>
+        <!-- Status -->
+        <select [(ngModel)]="statusSelecionado">
+          <option value="">Status</option>
+          <option value="0">Não agendado</option>
+          <option value="1">Agendado</option>
+          <option value="2">Concluída</option>
+          <option value="3">Cancelada</option>
+        </select>
+      </div>
 
-      <!-- Status -->
-      <select [(ngModel)]="statusSelecionado">
-        <option value="">Status</option>
-        <option value="0">Não agendado</option>
-        <option value="1">Agendado</option>
-        <option value="2">Concluída</option>
-        <option value="3">Cancelada</option>
-      </select>
-    </div>
-
-    <div class="botoes-filtro">
-      <button class="btn-danger" (click)="limparFiltros()">Limpar</button>
-      <button class="btn-primary" (click)="aplicarFiltros()">
-        Pesquisar ➔
+      <div class="botoes-filtro">
+        <button class="btn-danger" (click)="limparFiltros()">Limpar</button>
+        <button class="btn-primary" (click)="aplicarFiltros()">Pesquisar ➔</button>
+      </div>
+      <button class="btn-secondary" (click)="abrirModalCadastro()">
+        ➕ Nova consulta
       </button>
-    </div>
-    <button class="btn-secondary" (click)="abrirModalCadastro()">
-      ➕ Nova consulta
-    </button>
-  </section>
+    </section>
 
-  <section class="consultas-section">
-    <h2 class="title">CLINIX</h2>
+    <section class="consultas-section">
+      <h2 class="title">CLINIX</h2>
 
-    <div class="filter-tags">
-      <span class="tag">LISTA DE CONSULTAS</span>
-    </div>
+      <div class="filter-tags">
+        <span class="tag">LISTA DE CONSULTAS</span>
+      </div>
 
     <div class="grid-container cards">
       <div class="card" *ngFor="let consulta of consultasFiltradas">
@@ -64,17 +58,14 @@
         <p>Dia: {{ formatarData(consulta.data) }}</p>
         <p>Horário: {{ formatarHora(consulta.data) }}</p>
 
-        <span
-          [ngClass]="{
+          <span [ngClass]="{
             'status-nao-agendado': consulta.status === 0,
             'status-agendado': consulta.status === 1,
             'status-concluido': consulta.status === 2,
             'status-cancelado': consulta.status === 3
-          }"
-          class="status-tag"
-        >
-          {{ getStatusDescricao(consulta.status) }}
-        </span>
+          }" class="status-tag">
+            {{ getStatusDescricao(consulta.status) }}
+          </span>
 
         <ng-container *ngIf="tipoUsuario === 2">
           <div class="card-actions">
@@ -107,27 +98,27 @@
     </div>
   </section>
 
-  <section class="vantagens">
-    <div class="vantagem-item">
-      <img src="assets/imgs/relogio.png" alt="Relógio 24h" />
-      <h4>Agendamento disponível 24h por dia</h4>
-      <p>Agende sua consulta a qualquer hora e de qualquer lugar.</p>
-    </div>
+    <section class="vantagens">
+      <div class="vantagem-item">
+        <img src="assets/imgs/relogio.png" alt="Relógio 24h" />
+        <h4>Agendamento disponível 24h por dia</h4>
+        <p>Agende sua consulta a qualquer hora e de qualquer lugar.</p>
+      </div>
 
-    <div class="vantagem-item">
-      <img src="assets/imgs/celular.png" alt="Agendamento Celular" />
-      <h4>Agendamento de consultas simples e prático</h4>
-      <p>Encontre um especialista com poucos cliques.</p>
-    </div>
+      <div class="vantagem-item">
+        <img src="assets/imgs/celular.png" alt="Agendamento Celular" />
+        <h4>Agendamento de consultas simples e prático</h4>
+        <p>Encontre um especialista com poucos cliques.</p>
+      </div>
 
-    <div class="vantagem-item">
-      <img src="assets/imgs/calendario.png" alt="Calendário de Agendamento" />
-      <h4>Agende no horário ideal pra você</h4>
-      <p>Busque especialistas no melhor horário para você.</p>
-    </div>
-  </section>
+      <div class="vantagem-item">
+        <img src="assets/imgs/calendario.png" alt="Calendário de Agendamento" />
+        <h4>Agende no horário ideal pra você</h4>
+        <p>Busque especialistas no melhor horário para você.</p>
+      </div>
+    </section>
+  </div>
 </div>
-
 <app-footer></app-footer>
 
 <app-modal-cadastro-consulta

@@ -7,7 +7,8 @@
 
 .input-pesquisa {
   width: 100%;
-  padding: 10px;
+  padding: 2px 9px;
+  padding: 9px;
   margin-bottom: 20px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -152,3 +153,85 @@ td select {
     cursor: pointer;
     margin-bottom: 20px;
   }
+  .usuarios-wrapper { max-width: 800px; margin: auto; }
+
+
+  .input-pesquisa-wrapper {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.input-pesquisa-wrapper .input-pesquisa {
+  flex: 1;
+}
+
+.input-pesquisa-wrapper button {
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+
+.acoes-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+.btn-icon.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 34px;
+  width: 34px;
+}
+.acoes-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  font-size: 18px;
+  border-radius: 6px;
+  margin: 2px;
+  border: 1px solid #ccc;
+  transition: background-color 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+/* Editar - fundo branco */
+.acoes-label.edit {
+  background-color: white;
+  color: black;
+}
+
+/* Deletar - fundo branco com ícone branco */
+.acoes-label.delete {
+  background-color: white;
+  color: white;
+}
+
+/* Hover geral */
+.acoes-label:hover {
+  background-color: #b0b0b0; /* cinza médio/escuro */
+}
+
+.search-btn {
+  background-color: #61b864;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-btn:hover {
+  background-color: #45a049;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.acao{
+  padding-inline-start: 30px;
+}
