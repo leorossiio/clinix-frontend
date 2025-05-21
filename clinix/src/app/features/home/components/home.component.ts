@@ -206,7 +206,6 @@ export class HomeComponent implements OnInit {
         this.listarConsultas();
       },
       error: err => {
-        console.error('Erro ao excluir consulta:', err);
         alert('Erro ao excluir a consulta.');
       }
     });
