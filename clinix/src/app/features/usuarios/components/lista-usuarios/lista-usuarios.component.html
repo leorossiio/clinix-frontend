@@ -1,95 +1,50 @@
 <app-header></app-header>
+<div class="conteudo-esticado">
+  <div class="usuarios-wrapper">
+    <h2>Lista de Usuários</h2>
 
-<div class="usuarios-wrapper">
-  <h2>Lista de Usuários</h2>
+    <div class="input-pesquisa-wrapper">
+      <input class="input-pesquisa" type="text" placeholder="Pesquisar usuário..." [(ngModel)]="filtro"
+        (input)="aplicarFiltro()" />
 
-  <input type="text" [(ngModel)]="filtro" placeholder="Pesquisar usuário..." class="input-pesquisa" />
+      <button class="search-btn" (click)="aplicarFiltro()">
+        🔍 Pesquisar
+      </button>
 
-  <table>
-    <!-- Colunas com larguras fixas -->
-    <colgroup>
-      <col style="width: 20%">
-      <col style="width: 15%">
-      <col style="width: 25%">
-      <col style="width: 15%">
-      <col style="width: 15%">
-      <col style="width: 10%">
-    </colgroup>
-
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th>Tipo</th>
-        <th>Email</th>
-        <th>Senha</th>
-        <th>Status</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let usuario of usuariosFiltrados; let i = index">
-        <td>
-          <ng-container *ngIf="editandoIndex === i; else nomeView">
-            <input [(ngModel)]="usuarioEditado.nome" />
-          </ng-container>
-          <ng-template #nomeView>{{ usuario.nome }}</ng-template>
-        </td>
-
-        <td>
-          <ng-container *ngIf="editandoIndex === i; else tipoView">
-            <select [(ngModel)]="usuarioEditado.tipo_usuario">
-              <option [value]="0">Paciente</option>
-              <option [value]="1">Médico</option>
-              <option [value]="2">Admin</option>
-            </select>
-          </ng-container>
-          <ng-template #tipoView>{{ tipoUsuarioToString(usuario.tipo_usuario) }}</ng-template>
-        </td>
-
-        <td>
-          <ng-container *ngIf="editandoIndex === i; else emailView">
-            <input [(ngModel)]="usuarioEditado.email" />
-          </ng-container>
-          <ng-template #emailView>{{ usuario.email }}</ng-template>
-        </td>
-
-        <td>
-          <ng-container *ngIf="editandoIndex === i; else senhaView">
-            <input [(ngModel)]="usuarioEditado.senha" type="text" />
-          </ng-container>
-          <ng-template #senhaView>{{ esconderSenha(usuario.senha) }}</ng-template>
-        </td>
-
-        <td>
-          <ng-container *ngIf="editandoIndex === i; else statusView">
-            <select [(ngModel)]="usuarioEditado.status">
-              <option [value]="0">Ativo</option>
-              <option [value]="1">Deletado</option>
-            </select>
-          </ng-container>
-          <ng-template #statusView>{{ statusToString(usuario.status) }}</ng-template>
-        </td>
-
-        <td>
-  <div class="acoes-wrapper">
-    <ng-container *ngIf="editandoIndex === i; else editarBotao">
-      <button class="btn btn-green" (click)="salvarEdicao(i)">✔</button>
-      <button class="btn btn-red" (click)="cancelarEdicao()">✖</button>
-    </ng-container>
-    <ng-template #editarBotao>
-      <button class="btn btn-icon center" (click)="editarUsuario(i)">🖉</button>
-    </ng-template>
-  </div>
-</td>
-
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div class="pagination">
-      <button>&lt; Previous</button>
-      <button>1</button>
-      <button>Next &gt;</button>
     </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th>Email</th>
+          <th>CRM</th>
+          <th>Status</th>
+          <th class="acao"> Ações</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let u of usuariosFiltrados">
+          <td>{{ u.nome }}</td>
+          <td>{{ labelTipo(u.tipo_usuario) }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ u.tipo_usuario === 1 ? u.crm : '-' }}</td>
+          <td>{{ labelStatus(u.status) }}</td>
+          <td>
+            <div class="acoes-wrapper">
+              <button class="btn btn-icon btn-green center, acoes-label edit" (click)="editarUsuario(u)">
+                <i class="pi pi-pencil">✏️</i>
+              </button>
+              <button class="btn btn-icon btn-red center, acoes-label delete" (click)="deletarUsuario(u)">
+                <i class="pi pi-trash">❌</i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 <app-footer></app-footer>

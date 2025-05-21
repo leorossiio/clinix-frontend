@@ -39,4 +39,30 @@
         gap: 10px;
         margin-top: 15px;
     }
+
+    /* --- layout para fixar footer --- */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+app-root, .app-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+}
+
+main {
+  flex: 1 0 auto;      /* conteúdo cresce e empurra o footer */
+}
+
+footer {
+  flex-shrink: 0;      /* permanece colado no fim */
+}
+
 }
