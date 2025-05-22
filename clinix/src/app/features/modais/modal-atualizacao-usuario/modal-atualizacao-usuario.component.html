@@ -1,0 +1,21 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+    <h2>Atualizar Usuário</h2>
+
+    <form (ngSubmit)="salvarAlteracoes()" class="form-usuario">
+      <label for="nome">Nome:</label>
+      <input type="text" [(ngModel)]="usuario!.nome" name="nome" required />
+
+      <label for="email">Email:</label>
+      <input type="email" [(ngModel)]="usuario!.email" name="email" required />
+
+      <label for="senha">Senha (nova):</label>
+      <input type="password" [(ngModel)]="usuario!.senha" name="senha" />
+
+      <div class="botoes">
+        <button type="button" class="btn-cancelar" (click)="fechar.emit()">Cancelar</button>
+        <button type="submit" class="btn-salvar">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>

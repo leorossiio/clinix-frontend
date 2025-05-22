@@ -1,54 +1,78 @@
 <app-header></app-header>
+
 <div class="conteudo-esticado">
   <div class="usuarios-wrapper">
     <h2>Lista de Usuários</h2>
 
     <div class="input-pesquisa-wrapper">
-      <input class="input-pesquisa" type="text" placeholder="Pesquisar usuário..." [(ngModel)]="filtro"
-        (input)="aplicarFiltro()" />
-
-      <button class="search-btn" (click)="aplicarFiltro()">
-        🔍 Pesquisar
-      </button>
-
+      <input
+        class="input-pesquisa"
+        type="text"
+        placeholder="Pesquisar usuário..."
+        [(ngModel)]="filtro"
+      />
+      <button class="search-btn" (click)="aplicarFiltro()">Pesquisar</button>
     </div>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Tipo</th>
-          <th>Email</th>
-          <th>CRM</th>
-          <th>Status</th>
-          <th class="acao"> Ações</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let u of usuariosFiltrados">
-          <td>{{ u.nome }}</td>
-          <td>{{ labelTipo(u.tipo_usuario) }}</td>
-          <td>{{ u.email }}</td>
-          <td>{{ u.tipo_usuario === 1 ? u.crm : '-' }}</td>
-          <td>{{ labelStatus(u.status) }}</td>
-          <td>
-            <div class="acoes-wrapper">
-              <button (click)="abrirModalEdicao(u); console.log('CLICOU')">✏️</button>
-
-
-              <button class="btn btn-icon btn-red center, acoes-label delete" (click)="deletarUsuario(u)">
-                <i class="pi pi-trash">❌</i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="tabela-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Tipo</th>
+            <th>Email</th>
+            <th>CRM</th>
+            <th>Especialidade</th>
+            <th>Status</th>
+            <th class="acao">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of usuariosFiltrados">
+            <td>{{ u.nome }}</td>
+            <td>{{ labelTipo(u.tipo_usuario) }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.tipo_usuario === 1 ? u.crm : "-" }}</td>
+            <td>
+              {{
+                u.tipo_usuario === 1 &&
+                u.especialidade !== null &&
+                u.especialidade !== undefined
+                  ? especialidades[u.especialidade]
+                  : "-"
+              }}
+            </td>
+            <td>{{ labelStatus(u.status) }}</td>
+            <td>
+              <div class="acoes-wrapper">
+                <button
+                  title="Editar usuário"
+                  class="btn-icon btn-green"
+                  (click)="abrirModalEdicao(u)"
+                >
+                  ✏️
+                </button>
+                <button
+                  title="Excluir usuário"
+                  class="btn-icon btn-red"
+                  (click)="deletarUsuario(u)"
+                >
+                  ❌
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
-<modal-atualizacao-usuario *ngIf="modalAberto" [usuario]="usuarioSelecionado" (fechar)="fecharModal()"
-  (salvar)="atualizarUsuario($event)">
-</modal-atualizacao-usuario>
+
+<modal-atualizacao-usuario
+  *ngIf="modalAberto"
+  [usuario]="usuarioSelecionado"
+  (fechar)="fecharModal()"
+  (salvar)="atualizarUsuario($event)"
+></modal-atualizacao-usuario>
 
 <app-footer></app-footer>

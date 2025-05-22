@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../../../models/usuario.model';
-
-// módulos necessários para standalone
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-// componentes compartilhados
 import { HeaderComponent } from '../../../../shared/components/header/header.component';
 import { FooterComponent } from '../../../../shared/components/footer/footer.component';
+import { ModalAtualizacaoUsuarioComponent } from '../../../modais/modal-atualizacao-usuario/modal-atualizacao-usuario.component';
 
-import { ModalAtualizacaoUsuarioComponent } from '../modal-atualizacao-usuario/modal-atualizacao-usuario.component';
-
+const EspecialidadeMedica: { [key: number]: string } = {
+  0: 'Cardiologia',
+  1: 'Pediatria',
+  2: 'Ortopedia',
+  3: 'Dermatologia',
+  4: 'Neurologia'
+};
 
 @Component({
   selector: 'app-lista-usuarios',
@@ -29,21 +31,27 @@ import { ModalAtualizacaoUsuarioComponent } from '../modal-atualizacao-usuario/m
 export class ListaUsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];
   usuariosFiltrados: Usuario[] = [];
-  filtro = '';
+  filtro: string = '';
   usuarioSelecionado: Usuario | null = null;
   modalAberto: boolean = false;
-console: any;
+  especialidades = EspecialidadeMedica;
 
-  constructor(private usuarioService: UsuarioService) { }
+  constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
+    this.listarUsuarios();
+  }
+
+  listarUsuarios(): void {
     this.usuarioService.getUsuarios().subscribe({
       next: dados => {
-        console.log('Usuários recebidos:', dados);
         this.usuarios = dados;
-        this.aplicarFiltro(); // mostra todos inicialmente
+        this.usuariosFiltrados = dados;
       },
-      error: err => console.error('Falha ao buscar usuários', err)
+      error: err => {
+        console.error('Erro ao buscar usuários:', err);
+        alert('Erro ao carregar usuários.');
+      }
     });
   }
 
@@ -60,6 +68,9 @@ console: any;
       const email = usuario.email?.toLowerCase() ?? '';
       const tipo = this.labelTipo(usuario.tipo_usuario).toLowerCase();
       const crm = usuario.crm?.toLowerCase() ?? '';
+      const especialidade = usuario.tipo_usuario === 1
+        ? this.especialidades[usuario.especialidade as number]?.toLowerCase() ?? ''
+        : '';
       const status = this.labelStatus(usuario.status).toLowerCase();
 
       return (
@@ -67,12 +78,11 @@ console: any;
         email.includes(termo) ||
         tipo.includes(termo) ||
         crm.includes(termo) ||
+        especialidade.includes(termo) ||
         status.includes(termo)
       );
     });
   }
-
-
 
   labelTipo(tipo: number): string {
     return ['Paciente', 'Médico', 'Admin'][tipo] ?? '-';
@@ -82,17 +92,8 @@ console: any;
     return status === 0 ? 'Ativo' : 'Deletado';
   }
 
-  editarUsuario(usuario: Usuario): void {
-    console.log('Editar usuário:', usuario);
-  }
-
-  deletarUsuario(usuario: Usuario): void {
-    console.log('Deletar usuário:', usuario);
-  }
-
   abrirModalEdicao(usuario: Usuario): void {
-    console.log('Abrindo modal para:', usuario.nome);
-    this.usuarioSelecionado = { ...usuario }; // clone para edição
+    this.usuarioSelecionado = { ...usuario };
     this.modalAberto = true;
   }
 
@@ -100,23 +101,44 @@ console: any;
     this.modalAberto = false;
     this.usuarioSelecionado = null;
   }
-  atualizarUsuario(usuarioEditado: Usuario): void {
-    this.usuarioService.atualizarUsuario(usuarioEditado.id_usuario, usuarioEditado).subscribe({
+
+  atualizarUsuario(usuarioEditado: Partial<Usuario> & { id_usuario: string }): void {
+    const { id_usuario, nome, email, senha } = usuarioEditado;
+
+    this.usuarioService.atualizarUsuario(id_usuario, { nome, email, senha }).subscribe({
       next: () => {
-        // Atualiza na lista local
-        const index = this.usuarios.findIndex(u => u.id_usuario === usuarioEditado.id_usuario);
+        const index = this.usuarios.findIndex(u => u.id_usuario === id_usuario);
         if (index !== -1) {
-          this.usuarios[index] = { ...usuarioEditado };
+          this.usuarios[index] = {
+            ...this.usuarios[index],
+            nome: nome ?? this.usuarios[index].nome,
+            email: email ?? this.usuarios[index].email
+          };
           this.aplicarFiltro();
         }
         alert('Usuário atualizado com sucesso!');
+        this.fecharModal();
       },
       error: err => {
-        console.log('Enviando para o backend:', usuarioEditado);
         console.error('Erro ao atualizar usuário:', err);
         alert('Erro ao atualizar usuário.');
       }
     });
   }
 
+  deletarUsuario(usuario: Usuario): void {
+    const confirmado = confirm(`Tem certeza que deseja excluir o usuário ${usuario.nome}?`);
+    if (!confirmado) return;
+
+    this.usuarioService.deletarUsuario(usuario.id_usuario!).subscribe({
+      next: () => {
+        alert('Usuário deletado com sucesso!');
+        this.listarUsuarios();
+      },
+      error: err => {
+        console.error('Erro ao deletar usuário:', err);
+        alert('Erro ao deletar o usuário.');
+      }
+    });
+  }
 }

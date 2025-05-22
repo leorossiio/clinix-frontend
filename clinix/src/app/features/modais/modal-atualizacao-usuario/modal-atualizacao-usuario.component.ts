@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Usuario } from '../../../../models/usuario.model';
+import { Usuario } from '../../../models/usuario.model';
 
 @Component({
   selector: 'modal-atualizacao-usuario',
@@ -13,11 +13,13 @@ import { Usuario } from '../../../../models/usuario.model';
 export class ModalAtualizacaoUsuarioComponent {
   @Input() usuario: Usuario | null = null;
   @Output() fechar = new EventEmitter<void>();
-  @Output() salvar = new EventEmitter<Usuario>();
+  @Output() salvar = new EventEmitter<Partial<Usuario> & { id_usuario: string }>();
 
   salvarAlteracoes(): void {
     if (this.usuario) {
-      this.salvar.emit(this.usuario);
+      const { id_usuario, nome, email, senha } = this.usuario;
+
+      this.salvar.emit({ id_usuario, nome, email, senha });
       this.fechar.emit();
     }
   }
