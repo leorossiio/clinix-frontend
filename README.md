@@ -17,7 +17,6 @@ Este projeto é responsável pela interação dos usuários com o sistema, inclu
 - Angular Router
 - Tailwind CSS
 - JWT para autenticação de rotas
-- NgModel / FormsModule para formulários
 
 ---
 
