@@ -2,8 +2,19 @@
 <div class="conteudo-esticado">
   <div class="container">
     <section class="search-filter-container">
-      <div class="search-box">
-        <input type="text" placeholder="Pesquisar médico..." />
+      <div class="search-group">
+        <input
+          type="text"
+          class="input-search"
+          placeholder="Pesquisar médico..."
+          [(ngModel)]="nomeMedicoFiltro"
+        />
+        <input
+          type="text"
+          class="input-search"
+          placeholder="Filtrar por descrição..."
+          [(ngModel)]="descricaoFiltro"
+        />
       </div>
 
       <div class="filter-selects">
@@ -15,10 +26,11 @@
 
         <select [(ngModel)]="especializacaoSelecionada">
           <option value="">Especialização</option>
-          <option value="cardiologista">Cardiologista</option>
-          <option value="pediatra">Pediatra</option>
-          <option value="oftalmologista">Oftalmologista</option>
-          <option value="ginecologista">Ginecologista</option>
+          <option value="Cardiologia">Cardiologia</option>
+          <option value="Pediatria">Pediatria</option>
+          <option value="Ortopedia">Ortopedia</option>
+          <option value="Dermatologia">Dermatologia</option>
+          <option value="Neurologia">Neurologia</option>
         </select>
 
         <select [(ngModel)]="statusSelecionado">
@@ -40,7 +52,6 @@
         ➕ Nova consulta
       </button>
     </section>
-
     <section class="consultas-section">
       <h2 class="title">CLINIX</h2>
 
@@ -49,71 +60,83 @@
       </div>
 
       <div class="grid-container cards">
-        <div class="card" *ngFor="let consulta of consultasFiltradas">
-          <span
-            [ngClass]="{
-              'status-nao-agendado': consulta.status === 0,
-              'status-agendado': consulta.status === 1,
-              'status-concluido': consulta.status === 2,
-              'status-cancelado': consulta.status === 3
-            }"
-            class="status-tag"
-            title="{{ getStatusDescricao(consulta.status) }}"
-          >
-            {{ getStatusDescricao(consulta.status) }}
-          </span>
-          <h3 title="{{ consulta.medico?.nome }}">
-            {{ consulta.medico?.nome || "Médico não informado" }}
-          </h3>
+        <ng-container
+          *ngIf="consultasFiltradas.length > 0; else nenhumaConsulta"
+        >
+          <div class="card" *ngFor="let consulta of consultasFiltradas">
+            <span
+              [ngClass]="{
+                'status-nao-agendado': consulta.status === 0,
+                'status-agendado': consulta.status === 1,
+                'status-concluido': consulta.status === 2,
+                'status-cancelado': consulta.status === 3
+              }"
+              class="status-tag"
+              title="{{ getStatusDescricao(consulta.status) }}"
+            >
+              {{ getStatusDescricao(consulta.status) }}
+            </span>
 
-          <p
-            title="{{ getEspecialidadeMedico(consulta.medico?.especialidade) }}"
-          >
-            {{
-              getEspecialidadeMedico(consulta.medico?.especialidade) ||
-                "Especialidade não informada"
-            }}
-          </p>
+            <h3 title="{{ consulta.medico?.nome }}">
+              {{ consulta.medico?.nome || "Médico não informado" }}
+            </h3>
 
-          <p class="descricao-limitada" title="{{ consulta.descricao }}">
-            <strong>Descrição:</strong> {{ consulta.descricao }}
-          </p>
+            <p
+              title="{{
+                getEspecialidadeMedico(consulta.medico?.especialidade)
+              }}"
+            >
+              {{
+                getEspecialidadeMedico(consulta.medico?.especialidade) ||
+                  "Especialidade não informada"
+              }}
+            </p>
 
-          <p title="{{ formatarData(consulta.data) }}">
-            <strong>Dia:</strong> {{ formatarData(consulta.data) }}
-          </p>
+            <p class="descricao-limitada" title="{{ consulta.descricao }}">
+              <strong>Descrição:</strong> {{ consulta.descricao }}
+            </p>
 
-          <p title="{{ formatarHora(consulta.data) }}">
-            <strong>Horário:</strong> {{ formatarHora(consulta.data) }}
-          </p>
+            <p title="{{ formatarData(consulta.data) }}">
+              <strong>Dia:</strong> {{ formatarData(consulta.data) }}
+            </p>
 
-          <ng-container *ngIf="tipoUsuario === 1 || tipoUsuario === 2">
-            <div class="card-actions">
-              <button
-                class="btn-warning"
-                (click)="abrirModalAtualizacaoConsulta(consulta)"
-              >
-                Editar
-              </button>
-              <button
-                class="btn-danger"
-                (click)="excluirConsulta(consulta, $event)"
-              >
-                Deletar
-              </button>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="tipoUsuario === 0">
-            <div class="card-actions">
-              <button
-                class="btn-success"
-                (click)="agendarConsulta(consulta, $event)"
-              >
-                Agendar
-              </button>
-            </div>
-          </ng-container>
-        </div>
+            <p title="{{ formatarHora(consulta.data) }}">
+              <strong>Horário:</strong> {{ formatarHora(consulta.data) }}
+            </p>
+
+            <ng-container *ngIf="tipoUsuario === 1 || tipoUsuario === 2">
+              <div class="card-actions">
+                <button
+                  class="btn-warning"
+                  (click)="abrirModalAtualizacaoConsulta(consulta)"
+                >
+                  Editar
+                </button>
+                <button
+                  class="btn-danger"
+                  (click)="excluirConsulta(consulta, $event)"
+                >
+                  Deletar
+                </button>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="tipoUsuario === 0">
+              <div class="card-actions">
+                <button
+                  class="btn-success"
+                  (click)="agendarConsulta(consulta, $event)"
+                >
+                  Agendar
+                </button>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+
+        <ng-template #nenhumaConsulta>
+          <p class="nenhuma-consulta">Nenhuma consulta encontrada.</p>
+        </ng-template>
       </div>
     </section>
 
