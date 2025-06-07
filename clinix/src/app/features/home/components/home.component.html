@@ -52,6 +52,7 @@
         ➕ Nova consulta
       </button>
     </section>
+
     <section class="consultas-section">
       <h2 class="title">CLINIX</h2>
 
@@ -59,85 +60,93 @@
         <span class="tag">LISTA DE CONSULTAS</span>
       </div>
 
-      <div class="grid-container cards">
-        <ng-container
-          *ngIf="consultasFiltradas.length > 0; else nenhumaConsulta"
-        >
-          <div class="card" *ngFor="let consulta of consultasFiltradas">
-            <span
-              [ngClass]="{
-                'status-nao-agendado': consulta.status === 0,
-                'status-agendado': consulta.status === 1,
-                'status-concluido': consulta.status === 2,
-                'status-cancelado': consulta.status === 3
-              }"
-              class="status-tag"
-              title="{{ getStatusDescricao(consulta.status) }}"
-            >
-              {{ getStatusDescricao(consulta.status) }}
-            </span>
+      <!-- LOADING -->
+      <ng-container *ngIf="loading; else resultadoCarregado">
+        <div class="loading-container">
+          <div class="spinner"></div>
+          <p>Carregando resultados...</p>
+        </div>
+      </ng-container>
 
-            <h3 title="{{ consulta.medico?.nome }}">
-              {{ consulta.medico?.nome || "Médico não informado" }}
-            </h3>
+      <!-- RESULTADO CARREGADO -->
+      <ng-template #resultadoCarregado>
+        <ng-container *ngIf="consultasFiltradas.length > 0; else nenhumaConsulta">
+          <div class="grid-container cards">
+            <div class="card" *ngFor="let consulta of consultasFiltradas">
+              <span
+                [ngClass]="{
+                  'status-nao-agendado': consulta.status === 0,
+                  'status-agendado': consulta.status === 1,
+                  'status-concluido': consulta.status === 2,
+                  'status-cancelado': consulta.status === 3
+                }"
+                class="status-tag"
+                title="{{ getStatusDescricao(consulta.status) }}"
+              >
+                {{ getStatusDescricao(consulta.status) }}
+              </span>
 
-            <p
-              title="{{
-                getEspecialidadeMedico(consulta.medico?.especialidade)
-              }}"
-            >
-              {{
-                getEspecialidadeMedico(consulta.medico?.especialidade) ||
-                  "Especialidade não informada"
-              }}
-            </p>
+              <h3 title="{{ consulta.medico?.nome }}">
+                {{ consulta.medico?.nome || "Médico não informado" }}
+              </h3>
 
-            <p class="descricao-limitada" title="{{ consulta.descricao }}">
-              <strong>Descrição:</strong> {{ consulta.descricao }}
-            </p>
+              <p
+                title="{{ getEspecialidadeMedico(consulta.medico?.especialidade) }}"
+              >
+                {{
+                  getEspecialidadeMedico(consulta.medico?.especialidade) ||
+                    "Especialidade não informada"
+                }}
+              </p>
 
-            <p title="{{ formatarData(consulta.data) }}">
-              <strong>Dia:</strong> {{ formatarData(consulta.data) }}
-            </p>
+              <p class="descricao-limitada" title="{{ consulta.descricao }}">
+                <strong>Descrição:</strong> {{ consulta.descricao }}
+              </p>
 
-            <p title="{{ formatarHora(consulta.data) }}">
-              <strong>Horário:</strong> {{ formatarHora(consulta.data) }}
-            </p>
+              <p title="{{ formatarData(consulta.data) }}">
+                <strong>Dia:</strong> {{ formatarData(consulta.data) }}
+              </p>
 
-            <ng-container *ngIf="tipoUsuario === 1 || tipoUsuario === 2">
-              <div class="card-actions">
-                <button
-                  class="btn-warning"
-                  (click)="abrirModalAtualizacaoConsulta(consulta)"
-                >
-                  Editar
-                </button>
-                <button
-                  class="btn-danger"
-                  (click)="excluirConsulta(consulta, $event)"
-                >
-                  Deletar
-                </button>
-              </div>
-            </ng-container>
+              <p title="{{ formatarHora(consulta.data) }}">
+                <strong>Horário:</strong> {{ formatarHora(consulta.data) }}
+              </p>
 
-            <ng-container *ngIf="tipoUsuario === 0">
-              <div class="card-actions">
-                <button
-                  class="btn-success"
-                  (click)="agendarConsulta(consulta, $event)"
-                >
-                  Agendar
-                </button>
-              </div>
-            </ng-container>
+              <ng-container *ngIf="tipoUsuario === 1 || tipoUsuario === 2">
+                <div class="card-actions">
+                  <button
+                    class="btn-warning"
+                    (click)="abrirModalAtualizacaoConsulta(consulta)"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    class="btn-danger"
+                    (click)="excluirConsulta(consulta, $event)"
+                  >
+                    Deletar
+                  </button>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="tipoUsuario === 0">
+                <div class="card-actions">
+                  <button
+                    class="btn-success"
+                    (click)="agendarConsulta(consulta, $event)"
+                  >
+                    Agendar
+                  </button>
+                </div>
+              </ng-container>
+            </div>
           </div>
         </ng-container>
+      </ng-template>
 
-        <ng-template #nenhumaConsulta>
-          <p class="nenhuma-consulta">Nenhuma consulta encontrada.</p>
-        </ng-template>
-      </div>
+      <!-- NENHUMA CONSULTA -->
+      <ng-template #nenhumaConsulta>
+        <p class="nenhuma-consulta">Nenhuma consulta encontrada.</p>
+      </ng-template>
     </section>
 
     <section class="vantagens">

@@ -47,6 +47,8 @@ export class HomeComponent implements OnInit {
   id_medico: string = '';
   tipoUsuario: number | null = null;
 
+  loading: boolean = false;
+
   constructor(
     private consultaService: ConsultaService,
     private usuarioService: UsuarioService,
@@ -201,38 +203,43 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  aplicarFiltros() {
-    const termoNome = this.nomeMedicoFiltro.toLowerCase().trim();
-    const termoDescricao = this.descricaoFiltro.toLowerCase().trim();
-    const termoEspecialidade = this.especializacaoSelecionada.toLowerCase().trim();
-    const termoStatus = this.statusSelecionado;
-    const termoData = this.dataSelecionada;
+  aplicarFiltros(): void {
+    this.loading = true;
 
-    this.consultasFiltradas = this.consultas.filter(c => {
-      const nomeMedicoOk = termoNome
-        ? (c.medico?.nome?.toLowerCase().includes(termoNome) ?? false)
-        : true;
+    setTimeout(() => {
+      const termoNome = this.nomeMedicoFiltro.toLowerCase().trim();
+      const termoDescricao = this.descricaoFiltro.toLowerCase().trim();
+      const termoEspecialidade = this.especializacaoSelecionada.toLowerCase().trim();
+      const termoStatus = this.statusSelecionado;
+      const termoData = this.dataSelecionada;
 
-      const descricaoOk = termoDescricao
-        ? (c.descricao?.toLowerCase().includes(termoDescricao) ?? false)
-        : true;
+      this.consultasFiltradas = this.consultas.filter(c => {
+        const nomeMedicoOk = termoNome
+          ? (c.medico?.nome?.toLowerCase().includes(termoNome) ?? false)
+          : true;
 
-      const especialidadeOk = termoEspecialidade
-        ? this.getEspecialidadeMedico(c.medico?.especialidade).toLowerCase() === termoEspecialidade
-        : true;
+        const descricaoOk = termoDescricao
+          ? (c.descricao?.toLowerCase().includes(termoDescricao) ?? false)
+          : true;
 
-      const statusOk = termoStatus !== ''
-        ? c.status?.toString() === termoStatus
-        : true;
+        const especialidadeOk = termoEspecialidade
+          ? this.getEspecialidadeMedico(c.medico?.especialidade).toLowerCase() === termoEspecialidade
+          : true;
 
-      const dataOk = termoData
-        ? new Date(c.data).toISOString().startsWith(termoData)
-        : true;
+        const statusOk = termoStatus !== ''
+          ? c.status?.toString() === termoStatus
+          : true;
 
-      return nomeMedicoOk && descricaoOk && especialidadeOk && statusOk && dataOk;
-    });
+        const dataOk = termoData
+          ? new Date(c.data).toISOString().startsWith(termoData)
+          : true;
+
+        return nomeMedicoOk && descricaoOk && especialidadeOk && statusOk && dataOk;
+      });
+
+      this.loading = false;
+    }, 600);
   }
-
 
   excluirConsulta(consulta: any, event: MouseEvent) {
     event.stopPropagation();
