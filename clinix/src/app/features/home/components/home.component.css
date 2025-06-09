@@ -18,6 +18,13 @@ html {
   align-items: center;
   gap: 20px;
   padding: 30px 20px;
+
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  margin: 0 auto 40px auto;
+  box-sizing: border-box;
 }
 
 .search-group {
@@ -25,7 +32,7 @@ html {
   flex-direction: column;
   gap: 12px;
   width: 100%;
-  max-width: 600px;
+  max-width: 900px;
 }
 
 .input-search {
@@ -37,22 +44,46 @@ html {
   box-sizing: border-box;
 }
 
-.filter-selects {
+/* --- NOVA PARTE DOS FILTROS --- */
+.filter-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 1.5rem;
   justify-content: center;
+  width: 100%;
+  max-width: 900px;
 }
 
-.filter-selects select,
-.input-date {
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  min-width: 160px;
-  background: white;
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
 }
+
+.filter-item label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 0.3rem;
+}
+
+.input-date,
+select {
+  padding: 6px 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.input-date:focus,
+select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* --- FIM DA PARTE DOS FILTROS --- */
 
 .botoes-filtro {
   display: flex;

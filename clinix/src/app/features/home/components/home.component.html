@@ -1,7 +1,9 @@
 <app-header></app-header>
 <div class="conteudo-esticado">
   <div class="container">
+    <h2 class="title">CLINIX</h2>
     <section class="search-filter-container">
+        <span class="tag" style="font-weight: bold;">FILTROS</span>
       <div class="search-group">
         <input
           type="text"
@@ -17,29 +19,47 @@
         />
       </div>
 
-      <div class="filter-selects">
-        <input
-          type="datetime-local"
-          [(ngModel)]="dataSelecionada"
-          class="input-date"
-        />
+      <div class="filter-row">
+        <div class="filter-item">
+          <label for="dataInicio">Data início:</label>
+          <input
+            id="dataInicio"
+            type="datetime-local"
+            [(ngModel)]="dataInicio"
+            class="input-date"
+          />
+        </div>
 
-        <select [(ngModel)]="especializacaoSelecionada">
-          <option value="">Especialização</option>
-          <option value="Cardiologia">Cardiologia</option>
-          <option value="Pediatria">Pediatria</option>
-          <option value="Ortopedia">Ortopedia</option>
-          <option value="Dermatologia">Dermatologia</option>
-          <option value="Neurologia">Neurologia</option>
-        </select>
+        <div class="filter-item">
+          <label for="dataFim">Data fim:</label>
+          <input
+            id="dataFim"
+            type="datetime-local"
+            [(ngModel)]="dataFim"
+            class="input-date"
+          />
+        </div>
 
-        <select [(ngModel)]="statusSelecionado">
-          <option value="">Status</option>
-          <option value="0">Não agendado</option>
-          <option value="1">Agendado</option>
-          <option value="2">Concluída</option>
-          <option value="3">Cancelada</option>
-        </select>
+        <div class="filter-item">
+          <label for="especializacao">Especialização:</label>
+          <select id="especializacao" [(ngModel)]="especializacaoSelecionada">
+            <option value="Cardiologia">Cardiologia</option>
+            <option value="Pediatria">Pediatria</option>
+            <option value="Ortopedia">Ortopedia</option>
+            <option value="Dermatologia">Dermatologia</option>
+            <option value="Neurologia">Neurologia</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="status">Status:</label>
+          <select id="status" [(ngModel)]="statusSelecionado">
+            <option value="0">Não agendada</option>
+            <option value="1">Agendada</option>
+            <option value="2">Concluída</option>
+            <option value="3">Cancelada</option>
+          </select>
+        </div>
       </div>
 
       <div class="botoes-filtro">
@@ -48,6 +68,7 @@
           Pesquisar ➔
         </button>
       </div>
+
       <ng-container *ngIf="tipoUsuario === 1 || tipoUsuario === 2">
         <button class="btn-secondary" (click)="abrirModalCadastro()">
           ➕ Nova consulta
@@ -56,8 +77,6 @@
     </section>
 
     <section class="consultas-section">
-      <h2 class="title">CLINIX</h2>
-
       <div class="filter-tags">
         <span class="tag">LISTA DE CONSULTAS</span>
       </div>
@@ -233,7 +252,6 @@
   (close)="fecharModalAtualizacao()"
   (salvar)="salvarConsultaAtualizada($event)"
 ></app-modal-atualizacao-consulta>
-
 
 <app-modal-cancelar-consulta
   [show]="showModalCancelar"

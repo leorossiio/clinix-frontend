@@ -36,6 +36,8 @@ export class HomeComponent implements OnInit {
   nomeMedicoFiltro: string = '';
   descricaoFiltro: string = '';
 
+  dataInicio: string = '';
+  dataFim: string = '';
 
   dataSelecionada: string = '';
   especializacaoSelecionada: string = '';
@@ -67,7 +69,26 @@ export class HomeComponent implements OnInit {
       if (payload.tipo === 0) this.id_usuario = payload.id;
       if (payload.tipo === 1) this.id_medico = payload.id;
     }
+
+    const hoje = new Date();
+    const trintaDiasAtras = new Date();
+    trintaDiasAtras.setDate(hoje.getDate() - 30);
+
+    this.dataFim = this.toDateTimeLocalBrasilia(hoje);
+    this.dataInicio = this.toDateTimeLocalBrasilia(trintaDiasAtras);
+
     this.listarConsultas();
+    this.aplicarFiltros();
+  }
+
+  toDateTimeLocalBrasilia(date: Date): string {
+    const utc = date.getUTCFullYear();
+    const mes = ('0' + (date.getUTCMonth() + 1)).slice(-2);
+    const dia = ('0' + date.getUTCDate()).slice(-2);
+    const hora = ('0' + (date.getUTCHours() - 3)).slice(-2);
+    const min = ('0' + date.getUTCMinutes()).slice(-2);
+
+    return `${utc}-${mes}-${dia}T${hora}:${min}`;
   }
 
   getPayloadFromToken(): any | null {
@@ -197,10 +218,14 @@ export class HomeComponent implements OnInit {
           usuario: usuarios[index]
         }));
         this.consultasFiltradas = [...this.consultas];
+
+        // Aplica filtro logo após carregar e enriquecer as consultas
+        this.aplicarFiltros();
       },
       error: err => console.error('Erro ao buscar médicos/usuários:', err)
     });
   }
+
 
 
   getStatusDescricao(status: number): string {
@@ -278,7 +303,8 @@ export class HomeComponent implements OnInit {
       const termoDescricao = this.descricaoFiltro.toLowerCase().trim();
       const termoEspecialidade = this.especializacaoSelecionada.toLowerCase().trim();
       const termoStatus = this.statusSelecionado;
-      const termoData = this.dataSelecionada;
+      const dataInicio = this.dataInicio ? new Date(this.dataInicio) : null;
+      const dataFim = this.dataFim ? new Date(this.dataFim) : null;
 
       this.consultasFiltradas = this.consultas.filter(c => {
         const nomeMedicoOk = termoNome
@@ -297,9 +323,9 @@ export class HomeComponent implements OnInit {
           ? c.status?.toString() === termoStatus
           : true;
 
-        const dataOk = termoData
-          ? new Date(c.data).toISOString().startsWith(termoData)
-          : true;
+        const dataConsulta = new Date(c.data);
+        const dataOk = (dataInicio ? dataConsulta >= dataInicio : true)
+          && (dataFim ? dataConsulta <= dataFim : true);
 
         return nomeMedicoOk && descricaoOk && especialidadeOk && statusOk && dataOk;
       });
@@ -307,6 +333,7 @@ export class HomeComponent implements OnInit {
       this.loading = false;
     }, 600);
   }
+
 
   excluirConsulta(consulta: any, event: MouseEvent) {
     event.stopPropagation();
