@@ -60,8 +60,15 @@ export class ConsultaService {
     });
   }
 
-  cancelarConsulta(id: number, dados: { motivo_cancelamento: string }) {
+  cancelarConsulta(id: string, dados: { motivo_cancelamento: string }): Observable<any> {
     return this.http.put(`${this.baseUrl}/${id}/cancelar`, dados, {
+      headers: this.getAuthHeaders()
+    });
+  }
+  
+  // NOVA FUNÇÃO
+  verificarConsultaParaReagendar(id_usuario: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id_usuario}/autenticar-consulta`, {
       headers: this.getAuthHeaders()
     });
   }

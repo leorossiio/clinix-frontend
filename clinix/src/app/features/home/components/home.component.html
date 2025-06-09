@@ -3,7 +3,7 @@
   <div class="container">
     <h2 class="title">CLINIX</h2>
     <section class="search-filter-container">
-        <span class="tag" style="font-weight: bold;">FILTROS</span>
+      <span class="tag" style="font-weight: bold;">FILTROS</span>
       <div class="search-group">
         <input
           type="text"
@@ -81,7 +81,6 @@
         <span class="tag">LISTA DE CONSULTAS</span>
       </div>
 
-      <!-- LOADING -->
       <ng-container *ngIf="loading; else resultadoCarregado">
         <div class="loading-container">
           <div class="spinner"></div>
@@ -89,7 +88,6 @@
         </div>
       </ng-container>
 
-      <!-- RESULTADO CARREGADO -->
       <ng-template #resultadoCarregado>
         <ng-container
           *ngIf="consultasFiltradas.length > 0; else nenhumaConsulta"
@@ -159,59 +157,38 @@
                 </p>
               </ng-container>
 
-              <ng-container *ngIf="tipoUsuario === 1 || tipoUsuario === 2">
-                <div class="card-actions">
-                  <button
-                    class="btn-warning"
-                    (click)="abrirModalAtualizacaoConsulta(consulta)"
-                  >
+              <div class="card-actions">
+                
+                <ng-container *ngIf="tipoUsuario === 1 || tipoUsuario === 2">
+                  <button *ngIf="consulta.status !== 3" class="btn-warning" (click)="abrirModalAtualizacaoConsulta(consulta)">
                     Editar
                   </button>
-                  <button
-                    class="btn-danger"
-                    (click)="excluirConsulta(consulta, $event)"
-                  >
+                  <button *ngIf="consulta.status !== 3" class="btn-danger" (click)="excluirConsulta(consulta, $event)">
                     Deletar
                   </button>
-                </div>
-              </ng-container>
+                </ng-container>
 
-              <ng-container *ngIf="tipoUsuario === 0 && consulta.status !== 1">
-                <div class="card-actions">
-                  <button
-                    class="btn-success"
-                    (click)="agendarConsulta(consulta, $event)"
-                  >
+                <ng-container *ngIf="tipoUsuario === 0">
+                  <button *ngIf="consulta.status === 0" class="btn-success" (click)="agendarConsulta(consulta, $event)">
                     Agendar
                   </button>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="tipoUsuario === 0 && consulta.status != 3">
-                <div class="card-actions">
-                  <button
-                    class="btn-danger"
-                    (click)="cancelarConsulta(consulta, $event)"
-                  >
+                  
+                  <button *ngIf="consulta.status === 1" class="btn-danger" (click)="cancelarConsulta(consulta, $event)">
                     Cancelar
                   </button>
-                </div>
-              </ng-container>
-              <ng-container *ngIf="consulta.status === 3">
-                <div class="card-actions">
-                  <button
-                    class="btn-success"
-                    (click)="reagendarConsulta(consulta, $event)"
-                  >
-                    Re-agendar
+
+                  <button *ngIf="consulta.status === 3 && consulta.id_consulta === idConsultaReagendavel" class="btn-success" (click)="reagendarConsulta(consulta, $event)">
+                    Reagendar
                   </button>
-                </div>
-              </ng-container>
+                </ng-container>
+
+              </div>
+
             </div>
           </div>
         </ng-container>
       </ng-template>
 
-      <!-- NENHUMA CONSULTA -->
       <ng-template #nenhumaConsulta>
         <p class="nenhuma-consulta">Nenhuma consulta encontrada.</p>
       </ng-template>
@@ -257,4 +234,5 @@
   [show]="showModalCancelar"
   [consulta]="consultaParaCancelar"
   (close)="showModalCancelar = false"
+  (confirmar)="confirmarCancelamento($event)"
 ></app-modal-cancelar-consulta>
