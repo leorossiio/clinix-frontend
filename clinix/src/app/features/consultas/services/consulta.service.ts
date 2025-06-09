@@ -53,4 +53,16 @@ export class ConsultaService {
       headers: this.getAuthHeaders()
     });
   }
+
+  reagendarConsulta(id: string, dados: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}/reagendar`, dados, {
+      headers: this.getAuthHeaders()
+    });
+  }
+
+  cancelarConsulta(id: number, dados: { motivo_cancelamento: string }) {
+    return this.http.put(`${this.baseUrl}/${id}/cancelar`, dados, {
+      headers: this.getAuthHeaders()
+    });
+  }
 }

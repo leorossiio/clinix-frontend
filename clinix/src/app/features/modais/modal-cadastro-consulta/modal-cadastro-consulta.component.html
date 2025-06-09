@@ -13,7 +13,7 @@
         <option *ngFor="let medico of medicos" [value]="medico.nome"></option>
       </datalist>
 
-      <input type="datetime-local" [(ngModel)]="dataHoraConsulta" name="dataHoraConsulta" required
+      <input type="datetime-local" [(ngModel)]="dataHoraConsulta" min="minDateTime" name="dataHoraConsulta" required
         [ngModelOptions]="{ standalone: true }" />
 
       <input type="text" [(ngModel)]="descricaoConsulta" name="descricaoConsulta" placeholder="Descrição" required

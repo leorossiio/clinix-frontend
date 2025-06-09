@@ -12,6 +12,7 @@ import { ConsultaService } from '../../consultas/services/consulta.service';
 import { UsuarioService } from '../../usuarios/services/usuario.service';
 import { AuthService } from '../../usuarios/services/auth.service';
 import { forkJoin } from 'rxjs';
+import { ModalCancelarConsultaComponent } from '../../modais/modal-cancelar-consulta/modal-cancelar-consulta.component';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,8 @@ import { forkJoin } from 'rxjs';
     FooterComponent,
     HeaderComponent,
     ModalCadastroConsultaComponent,
-    ModalAtualizacaoConsultaComponent
+    ModalAtualizacaoConsultaComponent,
+    ModalCancelarConsultaComponent
   ]
 })
 export class HomeComponent implements OnInit {
@@ -46,6 +48,9 @@ export class HomeComponent implements OnInit {
   id_usuario: string = '';
   id_medico: string = '';
   tipoUsuario: number | null = null;
+
+  showModalCancelar = false;
+  consultaParaCancelar: any = null;
 
   loading: boolean = false;
 
@@ -105,6 +110,58 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  reagendarConsulta(consulta: any, event: MouseEvent): void {
+    event.stopPropagation();
+
+    const nomeMedico = consulta.medico?.nome || 'o médico selecionado';
+    const confirmado = confirm(`Deseja re-agendar a consulta com ${nomeMedico}?`);
+    if (!confirmado) return;
+
+    const payload = this.getPayloadFromToken();
+    if (!payload?.id) {
+      alert('Erro ao recuperar informações do usuário.');
+      return;
+    }
+
+    const dadosAgendamento = {
+      id_usuario: payload.id
+    };
+
+    this.consultaService.reagendarConsulta(consulta.id_consulta, dadosAgendamento).subscribe({
+      next: () => {
+        alert('Consulta re-agendada com sucesso!');
+        this.listarConsultas();
+      },
+      error: () => {
+        alert('Erro ao reagendar a consulta. Tente novamente mais tarde.');
+      }
+    });
+  }
+
+  cancelarConsulta(consulta: any, event: MouseEvent) {
+    event.stopPropagation();
+    this.consultaParaCancelar = consulta;
+    this.showModalCancelar = true;
+  }
+
+  confirmarCancelamento(motivo: string) {
+    if (!this.consultaParaCancelar?.id_consulta) return;
+
+    this.consultaService.cancelarConsulta(this.consultaParaCancelar.id_consulta, { motivo_cancelamento: motivo })
+      .subscribe({
+        next: () => {
+          alert('Consulta cancelada com sucesso.');
+          this.listarConsultas();
+        },
+        error: () => {
+          alert('Erro ao cancelar consulta.');
+        }
+      });
+
+    this.showModalCancelar = false;
+    this.consultaParaCancelar = null;
+  }
+
   listarConsultas() {
     const serviceCall = this.tipoUsuario === 0
       ? this.consultaService.listarConsultasUsuario()
@@ -113,36 +170,46 @@ export class HomeComponent implements OnInit {
     serviceCall.subscribe({
       next: res => {
         const consultasOrdenadas = res.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
-        this.enriquecerConsultasComMedico(consultasOrdenadas);
+        this.enriquecerConsultasComNomes(consultasOrdenadas);
       },
       error: err => console.error('Erro ao carregar consultas:', err)
     });
   }
 
-  enriquecerConsultasComMedico(consultas: any[]) {
-    const requisicoes = consultas.map(consulta =>
-      this.usuarioService.buscarPorId(consulta.id_medico)
+  enriquecerConsultasComNomes(consultas: any[]) {
+    const requisicoesMedicos = consultas.map(c =>
+      this.usuarioService.buscarPorId(c.id_medico)
     );
 
-    forkJoin(requisicoes).subscribe({
-      next: medicos => {
+    const requisicoesUsuarios = consultas.map(c =>
+      c.id_usuario ? this.usuarioService.buscarPorId(c.id_usuario) : null
+    );
+
+    const usuariosObservables = requisicoesUsuarios.map(req =>
+      req ? req : Promise.resolve(null)
+    );
+
+    forkJoin([forkJoin(requisicoesMedicos), forkJoin(usuariosObservables)]).subscribe({
+      next: ([medicos, usuarios]) => {
         this.consultas = consultas.map((consulta, index) => ({
           ...consulta,
-          medico: medicos[index]
+          medico: medicos[index],
+          usuario: usuarios[index]
         }));
         this.consultasFiltradas = [...this.consultas];
       },
-      error: err => console.error('Erro ao buscar médicos:', err)
+      error: err => console.error('Erro ao buscar médicos/usuários:', err)
     });
   }
 
+
   getStatusDescricao(status: number): string {
     switch (status) {
-      case 0: return 'Não agendado';
-      case 1: return 'Agendado';
-      case 2: return 'ConcluídO';
-      case 3: return 'Cancelado';
-      default: return 'Desconhecido';
+      case 0: return 'Não agendada';
+      case 1: return 'Agendada';
+      case 2: return 'Concluída';
+      case 3: return 'Cancelada';
+      default: return 'Desconhecida';
     }
   }
 

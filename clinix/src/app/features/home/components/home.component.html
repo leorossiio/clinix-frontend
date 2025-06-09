@@ -48,9 +48,11 @@
           Pesquisar ➔
         </button>
       </div>
-      <button class="btn-secondary" (click)="abrirModalCadastro()">
-        ➕ Nova consulta
-      </button>
+      <ng-container *ngIf="tipoUsuario === 1 || tipoUsuario === 2">
+        <button class="btn-secondary" (click)="abrirModalCadastro()">
+          ➕ Nova consulta
+        </button>
+      </ng-container>
     </section>
 
     <section class="consultas-section">
@@ -70,7 +72,9 @@
 
       <!-- RESULTADO CARREGADO -->
       <ng-template #resultadoCarregado>
-        <ng-container *ngIf="consultasFiltradas.length > 0; else nenhumaConsulta">
+        <ng-container
+          *ngIf="consultasFiltradas.length > 0; else nenhumaConsulta"
+        >
           <div class="grid-container cards">
             <div class="card" *ngFor="let consulta of consultasFiltradas">
               <span
@@ -91,7 +95,9 @@
               </h3>
 
               <p
-                title="{{ getEspecialidadeMedico(consulta.medico?.especialidade) }}"
+                title="{{
+                  getEspecialidadeMedico(consulta.medico?.especialidade)
+                }}"
               >
                 {{
                   getEspecialidadeMedico(consulta.medico?.especialidade) ||
@@ -110,6 +116,29 @@
               <p title="{{ formatarHora(consulta.data) }}">
                 <strong>Horário:</strong> {{ formatarHora(consulta.data) }}
               </p>
+              <ng-container
+                *ngIf="consulta.status != 0 && consulta.usuario?.nome"
+              >
+                <p title="{{ consulta.usuario.nome }}">
+                  <strong>Agendada por:</strong> {{ consulta.usuario.nome }}
+                </p>
+              </ng-container>
+              <ng-container *ngIf="consulta.status === 3">
+                <p
+                  title="{{
+                    consulta.motivo_cancelamento
+                      ? consulta.motivo_cancelamento
+                      : 'Não informado'
+                  }}"
+                >
+                  <strong>Motivo do cancelamento:</strong>
+                  {{
+                    consulta.motivo_cancelamento
+                      ? consulta.motivo_cancelamento
+                      : "Não informado"
+                  }}
+                </p>
+              </ng-container>
 
               <ng-container *ngIf="tipoUsuario === 1 || tipoUsuario === 2">
                 <div class="card-actions">
@@ -128,13 +157,33 @@
                 </div>
               </ng-container>
 
-              <ng-container *ngIf="tipoUsuario === 0">
+              <ng-container *ngIf="tipoUsuario === 0 && consulta.status !== 1">
                 <div class="card-actions">
                   <button
                     class="btn-success"
                     (click)="agendarConsulta(consulta, $event)"
                   >
                     Agendar
+                  </button>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="tipoUsuario === 0 && consulta.status != 3">
+                <div class="card-actions">
+                  <button
+                    class="btn-danger"
+                    (click)="cancelarConsulta(consulta, $event)"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="consulta.status === 3">
+                <div class="card-actions">
+                  <button
+                    class="btn-success"
+                    (click)="reagendarConsulta(consulta, $event)"
+                  >
+                    Re-agendar
                   </button>
                 </div>
               </ng-container>
@@ -184,3 +233,10 @@
   (close)="fecharModalAtualizacao()"
   (salvar)="salvarConsultaAtualizada($event)"
 ></app-modal-atualizacao-consulta>
+
+
+<app-modal-cancelar-consulta
+  [show]="showModalCancelar"
+  [consulta]="consultaParaCancelar"
+  (close)="showModalCancelar = false"
+></app-modal-cancelar-consulta>

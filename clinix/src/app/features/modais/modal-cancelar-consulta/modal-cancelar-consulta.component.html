@@ -1,0 +1,24 @@
+<div class="modal-overlay" *ngIf="show">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="icon-container">
+      <img src="../../../assets/imgs/cancelar.png" alt="Cancel Icon" />
+    </div>
+    <h2>Cancelar Consulta</h2>
+
+    <form (ngSubmit)="onConfirmar()">
+      <textarea
+        [(ngModel)]="motivoCancelamento"
+        name="motivoCancelamento"
+        placeholder="Informe o motivo do cancelamento"
+        required
+        rows="4"
+        [ngModelOptions]="{ standalone: true }"
+      ></textarea>
+
+      <div class="buttons">
+        <button type="button" class="btn-cancel" (click)="onCancelar()">Fechar</button>
+        <button type="submit" class="btn-create">Confirmar</button>
+      </div>
+    </form>
+  </div>
+</div>

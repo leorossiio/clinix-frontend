@@ -37,7 +37,7 @@ export class ModalCadastroConsultaComponent implements OnInit {
     const selecionado = this.medicos.find(m => m.nome === this.nomeMedicoSelecionado);
     this.idMedicoSelecionado = selecionado ? selecionado.id_usuario : '';
   }
-  
+
   medicosFiltrados() {
     const filtro = this.filtroMedico.toLowerCase();
     return this.medicos.filter(medico =>
@@ -46,6 +46,14 @@ export class ModalCadastroConsultaComponent implements OnInit {
   }
 
   onSalvar() {
+    const dataSelecionada = new Date(this.dataHoraConsulta);
+    const agora = new Date();
+
+    if (dataSelecionada < agora) {
+      alert('A data da consulta não pode ser anterior ao momento atual.');
+      return;
+    }
+
     const dados = {
       id_medico: this.idMedicoSelecionado,
       data: this.dataHoraConsulta,
@@ -63,6 +71,7 @@ export class ModalCadastroConsultaComponent implements OnInit {
       }
     });
   }
+
 
   onClose() {
     this.close.emit();
