@@ -66,7 +66,6 @@ export class ConsultaService {
     });
   }
   
-  // NOVA FUNÇÃO
   verificarConsultaParaReagendar(id_usuario: string): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/${id_usuario}/autenticar-consulta`, {
       headers: this.getAuthHeaders()

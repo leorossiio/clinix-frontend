@@ -66,14 +66,8 @@ export class HomeComponent implements OnInit {
       if (payload.tipo === 1) this.id_medico = payload.id;
     }
 
-    const hoje = new Date();
-    const trintaDiasAtras = new Date();
-    trintaDiasAtras.setDate(hoje.getDate() - 30);
-
-    this.dataFim = this.toDateTimeLocalBrasilia(hoje);
-    this.dataInicio = this.toDateTimeLocalBrasilia(trintaDiasAtras);
-
     this.listarConsultas();
+    this.verificarReagendamento();
   }
 
   // NOVA FUNÇÃO
