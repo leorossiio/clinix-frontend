@@ -1,0 +1,92 @@
+<article class="cartao" [attr.aria-label]="'Consulta com ' + (consulta().medico?.nome ?? 'médico')">
+  <span class="status" [class]="classeDoStatus()">{{ rotuloDoStatus() }}</span>
+
+  <h3>{{ consulta().medico?.nome ?? 'Médico não informado' }}</h3>
+  <p class="especialidade">{{ especialidade() }}</p>
+
+  <dl>
+    <div>
+      <dt>Dia</dt>
+      <dd>{{ consulta().data | date: 'EEE, dd/MM/yyyy' }}</dd>
+    </div>
+    <div>
+      <dt>Horário</dt>
+      <dd>{{ consulta().data | date: 'HH:mm' }}</dd>
+    </div>
+    @if (consulta().descricao) {
+      <div>
+        <dt>Descrição</dt>
+        <dd class="descricao" [title]="consulta().descricao">{{ consulta().descricao }}</dd>
+      </div>
+    }
+    @if (consulta().paciente; as paciente) {
+      <div>
+        <dt>Paciente</dt>
+        <dd>{{ paciente.nome }}</dd>
+      </div>
+    }
+    @if (cancelada()) {
+      <div>
+        <dt>Motivo do cancelamento</dt>
+        <dd>{{ consulta().motivo_cancelamento ?? 'Não informado' }}</dd>
+      </div>
+    }
+  </dl>
+
+  @if (acoes().aviso) {
+    <p class="aviso">{{ acoes().aviso }}</p>
+  }
+
+  <div class="acoes">
+    @if (acoes().agendar) {
+      <button
+        type="button"
+        class="botao botao--sucesso"
+        [disabled]="ocupado()"
+        (click)="agendar.emit()"
+      >
+        Agendar
+      </button>
+    }
+    @if (acoes().cancelar) {
+      <button
+        type="button"
+        class="botao botao--perigo"
+        [disabled]="ocupado()"
+        (click)="cancelar.emit()"
+      >
+        Cancelar
+      </button>
+    }
+    @if (acoes().reagendar) {
+      <button
+        type="button"
+        class="botao botao--sucesso"
+        [disabled]="ocupado()"
+        (click)="reagendar.emit()"
+      >
+        Reagendar
+      </button>
+    }
+    @if (acoes().editar) {
+      <button
+        type="button"
+        class="botao botao--neutro"
+        [disabled]="ocupado()"
+        (click)="editar.emit()"
+      >
+        Editar
+      </button>
+    }
+    @if (acoes().remover) {
+      <button
+        type="button"
+        class="botao botao--perigo"
+        [disabled]="ocupado()"
+        (click)="remover.emit()"
+      >
+        Remover
+      </button>
+    }
+  </div>
+</article>

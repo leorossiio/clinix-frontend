@@ -1,0 +1,176 @@
+<h1 class="titulo-de-pagina">{{ ehPaciente() ? 'Agende sua consulta' : 'Agenda de consultas' }}</h1>
+
+<section class="painel filtros" aria-labelledby="titulo-filtros">
+  <div class="filtros__topo">
+    <h2 id="titulo-filtros">Filtros</h2>
+    @if (!ehPaciente()) {
+      <button type="button" class="botao botao--primario" (click)="modal.set({ tipo: 'nova' })">
+        + Novo horário
+      </button>
+    }
+  </div>
+
+  <div class="filtros__grade">
+    <div class="campo">
+      <label for="filtro-medico">Médico</label>
+      <input
+        id="filtro-medico"
+        type="search"
+        placeholder="Nome do médico"
+        [ngModel]="filtros.filtro().medico"
+        (ngModelChange)="filtros.atualizar({ medico: $event })"
+      />
+    </div>
+    <div class="campo">
+      <label for="filtro-descricao">Descrição</label>
+      <input
+        id="filtro-descricao"
+        type="search"
+        placeholder="Ex.: retorno"
+        [ngModel]="filtros.filtro().descricao"
+        (ngModelChange)="filtros.atualizar({ descricao: $event })"
+      />
+    </div>
+    <div class="campo">
+      <label for="filtro-especialidade">Especialidade</label>
+      <select
+        id="filtro-especialidade"
+        [ngModel]="filtros.filtro().especialidade"
+        (ngModelChange)="filtros.atualizar({ especialidade: $event })"
+      >
+        <option [ngValue]="null">Todas</option>
+        @for (especialidade of especialidades; track especialidade.codigo) {
+          <option [ngValue]="especialidade.codigo">{{ especialidade.nome }}</option>
+        }
+      </select>
+    </div>
+    <div class="campo">
+      <label for="filtro-status">Situação</label>
+      <select
+        id="filtro-status"
+        [ngModel]="filtros.filtro().status"
+        (ngModelChange)="filtros.atualizar({ status: $event })"
+      >
+        <option [ngValue]="null">Todas</option>
+        @for (item of status; track item.valor) {
+          <option [ngValue]="item.valor">{{ item.rotulo }}</option>
+        }
+      </select>
+    </div>
+    <div class="campo">
+      <label for="filtro-inicio">De</label>
+      <input
+        id="filtro-inicio"
+        type="date"
+        [ngModel]="filtros.filtro().dataInicio"
+        (ngModelChange)="filtros.atualizar({ dataInicio: $event ?? '' })"
+      />
+    </div>
+    <div class="campo">
+      <label for="filtro-fim">Até</label>
+      <input
+        id="filtro-fim"
+        type="date"
+        [ngModel]="filtros.filtro().dataFim"
+        (ngModelChange)="filtros.atualizar({ dataFim: $event ?? '' })"
+      />
+    </div>
+  </div>
+
+  @if (filtros.algumAtivo()) {
+    <button type="button" class="botao botao--secundario" (click)="filtros.limpar()">
+      Limpar filtros
+    </button>
+  }
+</section>
+
+<section class="resultados" aria-labelledby="titulo-resultados" aria-live="polite">
+  <h2 id="titulo-resultados" class="resultados__titulo">
+    Consultas
+    @if (!carregando()) {
+      <small>({{ visiveis().length }})</small>
+    }
+  </h2>
+
+  @if (carregando()) {
+    <div class="carregando" role="status">Carregando consultas…</div>
+  } @else if (falhouAoCarregar()) {
+    <div class="vazio">
+      <p>Não foi possível carregar as consultas.</p>
+      <button type="button" class="botao botao--primario" (click)="carregar()">
+        Tentar novamente
+      </button>
+    </div>
+  } @else if (visiveis().length === 0) {
+    <p class="vazio">
+      @if (filtros.algumAtivo()) {
+        Nenhuma consulta corresponde aos filtros.
+      } @else if (ehPaciente()) {
+        Nenhum horário disponível no momento.
+      } @else {
+        Nenhuma consulta na agenda. Use "Novo horário" para abrir um.
+      }
+    </p>
+  } @else {
+    <div class="grade">
+      @for (item of visiveis(); track item.consulta.id_consulta) {
+        @let consulta = item.consulta;
+        <app-cartao-de-consulta
+          [consulta]="consulta"
+          [acoes]="item.acoes"
+          [ocupado]="emAndamento() === consulta.id_consulta"
+          (agendar)="agendar(consulta)"
+          (cancelar)="modal.set({ tipo: 'cancelar', consulta })"
+          (reagendar)="reagendar(consulta)"
+          (editar)="modal.set({ tipo: 'editar', consulta })"
+          (remover)="remover(consulta)"
+        />
+      }
+    </div>
+  }
+</section>
+
+@if (ehPaciente()) {
+  <section class="vantagens" aria-label="Vantagens do Clinix">
+    <div>
+      <img src="assets/imgs/relogio.png" alt="" />
+      <h3>Disponível 24h por dia</h3>
+      <p>Agende sua consulta a qualquer hora e de qualquer lugar.</p>
+    </div>
+    <div>
+      <img src="assets/imgs/celular.png" alt="" />
+      <h3>Simples e prático</h3>
+      <p>Encontre um especialista com poucos cliques.</p>
+    </div>
+    <div>
+      <img src="assets/imgs/calendario.png" alt="" />
+      <h3>No horário ideal</h3>
+      <p>Escolha o melhor horário para você.</p>
+    </div>
+  </section>
+}
+
+@if (abrindoHorario()) {
+  <app-modal-nova-consulta
+    [escolherMedico]="ehAdmin()"
+    [enviando]="emAndamento() === 'nova'"
+    (salvar)="abrirHorario($event)"
+    (fechar)="modal.set(null)"
+  />
+}
+@if (consultaEmEdicao(); as consulta) {
+  <app-modal-editar-consulta
+    [consulta]="consulta"
+    [enviando]="emAndamento() === consulta.id_consulta"
+    (salvar)="salvarEdicao(consulta, $event)"
+    (fechar)="modal.set(null)"
+  />
+}
+@if (consultaEmCancelamento(); as consulta) {
+  <app-modal-cancelar-consulta
+    [consulta]="consulta"
+    [enviando]="emAndamento() === consulta.id_consulta"
+    (confirmar)="confirmarCancelamento(consulta, $event)"
+    (fechar)="modal.set(null)"
+  />
+}
