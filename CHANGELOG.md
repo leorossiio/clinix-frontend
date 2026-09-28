@@ -1,5 +1,10 @@
 # Changelog
 
+## Não publicado
+
+- Imagem Docker de produção (build do Angular + nginx), com proxy `/api` para a API na mesma origem e `x-request-id` gerado na borda.
+- Configuração de build `docker` (`ng build --configuration docker`).
+
 ## 2.0.0
 
 Reescrita da interface com arquitetura por features, signals, testes automatizados e atualização para o Angular 22. **Requer o backend 2.0.0** (o contrato da API mudou — ver o CHANGELOG do backend).
