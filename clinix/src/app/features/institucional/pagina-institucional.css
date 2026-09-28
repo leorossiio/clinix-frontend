@@ -1,0 +1,22 @@
+/* Estilo compartilhado pelas páginas institucionais. */
+
+:host {
+  display: block;
+  max-width: 800px;
+  margin: 24px auto;
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 1.75rem;
+  color: var(--cor-primaria);
+}
+
+p,
+li {
+  line-height: 1.7;
+}
+
+li {
+  margin-bottom: 8px;
+}

@@ -1,0 +1,26 @@
+.erro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 100vh;
+  padding: 24px;
+  text-align: center;
+}
+
+.codigo {
+  margin: 0;
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--cor-primaria);
+}
+
+h1 {
+  margin: 0;
+}
+
+p {
+  color: var(--cor-texto-suave);
+}
