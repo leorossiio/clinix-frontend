@@ -1,0 +1,37 @@
+# Processado pelo entrypoint da imagem oficial do nginx: ${API_URL} vem do
+# ambiente; variáveis do nginx como $uri ficam intactas.
+server {
+  listen 80;
+  server_name _;
+  root /usr/share/nginx/html;
+  server_tokens off;
+
+  gzip on;
+  gzip_types text/css application/javascript application/json image/svg+xml;
+
+  add_header X-Content-Type-Options nosniff always;
+  add_header X-Frame-Options DENY always;
+  add_header Referrer-Policy strict-origin-when-cross-origin always;
+
+  # API na mesma origem. O $request_id do nginx segue como x-request-id e é
+  # reaproveitado pela API: o mesmo id aparece no log da borda e nos logs/traces.
+  location /api/ {
+    proxy_pass ${API_URL}/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Request-Id $request_id;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+
+  # Arquivos com hash no nome podem ficar em cache para sempre.
+  location ~* \.(?:js|css|woff2?|svg|ico)$ {
+    add_header Cache-Control "public, max-age=31536000, immutable";
+    try_files $uri =404;
+  }
+
+  # SPA: rotas do Angular caem no index.html, que nunca é cacheado.
+  location / {
+    add_header Cache-Control "no-cache";
+    try_files $uri $uri/ /index.html;
+  }
+}
