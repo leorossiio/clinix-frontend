@@ -23,6 +23,15 @@ Reescrita da interface com arquitetura por features, signals, testes automatizad
 - O token é enviado só para a API do Clinix, nunca para outros domínios.
 - O parâmetro de retorno do login só aceita caminhos internos (evita redirecionamento para sites maliciosos).
 
+### Identidade visual
+
+- Nova linguagem visual a partir da marca: paleta tinta, anil e hortelã; tipografia Bricolage Grotesque e Figtree; marca redesenhada em SVG (o logo original tinha brilho e fundo embutidos e perdia nitidez).
+- A tela de consultas virou uma agenda agrupada por dia ("Hoje", "Amanhã", "Quarta-feira, 30 de setembro"). O paciente vê primeiro as próprias consultas, em bilhetes com folha de calendário, e depois os horários livres.
+- Na agenda do médico, cada linha destaca o paciente; na do administrador, o médico e a situação.
+- Busca única por médico, paciente, especialidade ou descrição; filtros exibidos conforme o perfil.
+- Cabeçalho claro com avatar, rodapé discreto, tabela de usuários com avatares e ícones no lugar de emojis.
+- Removidas as ilustrações PNG da tela inicial: a página baixava quase 7 MB de imagens.
+
 ### Experiência
 
 - Avisos não bloqueantes (toasts) no lugar de `alert()`.

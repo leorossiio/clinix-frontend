@@ -51,7 +51,7 @@ src/app/
 │   └── erros/               403 e 404
 ├── shared/                  Reutilizáveis sem regra de negócio
 │   ├── layout/              Cabeçalho, rodapé e moldura das páginas internas
-│   ├── ui/                  Modal acessível e toasts
+│   ├── ui/                  Marca, ícones, folha de calendário, modal e avisos
 │   └── utils/               Datas e texto
 └── testing/                 Fábricas de dados para os testes
 ```
@@ -64,7 +64,24 @@ Convenções:
 - **HTTP centralizado.** O `autenticacaoInterceptor` anexa o token apenas às chamadas para a nossa API e, se ela responder 401, encerra a sessão e volta ao login. Os services não montam cabeçalhos.
 - **Guards controlam navegação, não segurança.** Quem garante permissões é o backend, em toda requisição.
 - **Formulários reativos**, com validação declarativa e mensagens associadas aos campos (`aria-invalid`, `aria-describedby`).
-- **Estilos:** tokens de design (cores, raios, sombras) e componentes visuais comuns (`.botao`, `.campo`, `.status`) em `src/styles.css`; os componentes definem só o próprio layout.
+- **Estilos:** tokens de design e componentes visuais comuns (`.botao`, `.campo`, `.chip`, `.especialidade`) em `src/styles.css`; os componentes definem só o próprio layout.
+
+## Identidade visual
+
+| Token   | Cor       | Uso                                     |
+| ------- | --------- | --------------------------------------- |
+| Tinta   | `#16233F` | Textos e painel do login                |
+| Anil    | `#3444D1` | Ação principal de cada contexto e links |
+| Hortelã | `#2E9E90` | Marca e horários livres                 |
+| Névoa   | `#F4F6FA` | Fundo                                   |
+| Linha   | `#E2E6EE` | Bordas                                  |
+
+- **Tipografia:** Bricolage Grotesque em títulos, dias e horários; Figtree na interface.
+- **Elemento de identidade:** a folha de calendário (`app-folha-de-calendario`), nos bilhetes do paciente e no login. O resto da interface é propositalmente sóbrio.
+- **Agenda por dia** em vez de grade de cartões: o horário é o dado principal de cada linha.
+- **Cada especialidade tem uma cor** (`.especialidade--0` a `--4`), usada só como marcador.
+- **Botões:** um primário por contexto; ações destrutivas são discretas nas listas e cheias só na confirmação.
+- **Marca em SVG** (`app-marca`, `public/favicon.svg`), redesenhada a partir do logo original em `docs/marca/`.
 
 ## O que cada perfil faz
 
