@@ -1,0 +1,84 @@
+<h1 class="titulo-de-pagina">Usuários</h1>
+
+<section class="painel">
+  <div class="campo busca">
+    <label for="busca">Buscar</label>
+    <input
+      id="busca"
+      type="search"
+      placeholder="Nome, e-mail, perfil, especialidade ou CRM"
+      [ngModel]="busca()"
+      (ngModelChange)="busca.set($event)"
+    />
+  </div>
+
+  @if (carregando()) {
+    <div class="carregando" role="status">Carregando usuários…</div>
+  } @else {
+    <div class="tabela-rolavel">
+      <table>
+        <caption class="somente-leitor-de-tela">
+          Usuários ativos ({{
+            visiveis().length
+          }})
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Perfil</th>
+            <th scope="col">E-mail</th>
+            <th scope="col">CRM</th>
+            <th scope="col">Especialidade</th>
+            <th scope="col" class="coluna-acoes">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (usuario of visiveis(); track usuario.id_usuario) {
+            <tr>
+              <td>{{ usuario.nome }}</td>
+              <td>{{ perfil(usuario) }}</td>
+              <td>{{ usuario.email }}</td>
+              <td>{{ usuario.crm ?? '—' }}</td>
+              <td>{{ especialidade(usuario) }}</td>
+              <td class="coluna-acoes">
+                <div class="acoes">
+                  <button
+                    type="button"
+                    class="botao botao--neutro botao--icone"
+                    [attr.aria-label]="'Editar ' + usuario.nome"
+                    (click)="emEdicao.set(usuario)"
+                  >
+                    ✏️
+                  </button>
+                  @if (usuario.id_usuario !== idDoAdminLogado) {
+                    <button
+                      type="button"
+                      class="botao botao--perigo botao--icone"
+                      [attr.aria-label]="'Excluir ' + usuario.nome"
+                      (click)="excluir(usuario)"
+                    >
+                      🗑️
+                    </button>
+                  }
+                </div>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="vazio">Nenhum usuário encontrado.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
+
+@if (emEdicao(); as usuario) {
+  <app-modal-editar-usuario
+    [usuario]="usuario"
+    [enviando]="salvando()"
+    (salvar)="salvar(usuario, $event)"
+    (fechar)="emEdicao.set(null)"
+  />
+}

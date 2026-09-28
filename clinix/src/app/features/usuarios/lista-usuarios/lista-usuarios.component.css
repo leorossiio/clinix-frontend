@@ -1,0 +1,53 @@
+.busca {
+  max-width: 480px;
+}
+
+.tabela-rolavel {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th,
+td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--cor-borda);
+  white-space: nowrap;
+}
+
+th {
+  background: var(--cor-primaria);
+  color: #fff;
+  font-weight: 600;
+}
+
+th:first-child {
+  border-top-left-radius: var(--raio-pequeno);
+}
+
+th:last-child {
+  border-top-right-radius: var(--raio-pequeno);
+}
+
+tbody tr:hover {
+  background: var(--cor-primaria-suave);
+}
+
+.coluna-acoes {
+  text-align: center;
+}
+
+.acoes {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.vazio {
+  text-align: center;
+  color: var(--cor-texto-suave);
+}
