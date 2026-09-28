@@ -1,84 +1,94 @@
 .cabecalho {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 12px 40px;
-  background: var(--cor-primaria);
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(1.4) blur(8px);
+  border-bottom: 1px solid var(--linha);
 }
 
-.marca img {
-  display: block;
+.interno {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  max-width: 1120px;
   height: 64px;
-  width: auto;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.inicio {
+  display: flex;
+  text-decoration: none;
 }
 
 nav {
   display: flex;
-  gap: 24px;
+  align-self: stretch;
+  gap: 28px;
 }
 
 nav a {
-  color: #fff;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--tinta-suave);
   font-weight: 600;
   text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  padding-bottom: 2px;
-  border-bottom: 2px solid transparent;
+  transition:
+    color var(--transicao),
+    border-color var(--transicao);
 }
 
-nav a:hover,
+nav a:hover {
+  color: var(--tinta);
+}
+
 nav a.ativo {
-  border-bottom-color: #fff;
+  color: var(--tinta);
+  border-bottom-color: var(--anil);
 }
 
 .conta {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  margin-left: auto;
 }
 
-.saudacao {
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--hortela-clara);
+  color: var(--hortela-escura);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.identidade {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   line-height: 1.2;
 }
 
-.saudacao small {
-  opacity: 0.85;
+.identidade small {
+  color: var(--tinta-fraca);
+  font-size: 0.78rem;
 }
 
-.sair {
-  padding: 8px 18px;
-  border: 2px solid #fff;
-  border-radius: 20px;
-  background: transparent;
-  color: #fff;
-  font: inherit;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    background var(--transicao),
-    color var(--transicao);
-}
-
-.sair:hover {
-  background: #fff;
-  color: var(--cor-primaria);
-}
-
-@media (max-width: 768px) {
-  .cabecalho {
-    flex-direction: column;
-    padding: 16px;
-    gap: 12px;
+@media (max-width: 720px) {
+  .interno {
+    gap: 16px;
+    padding: 0 16px;
   }
-  .saudacao {
-    align-items: center;
+  nav {
+    gap: 16px;
+  }
+  .identidade {
+    display: none;
   }
 }

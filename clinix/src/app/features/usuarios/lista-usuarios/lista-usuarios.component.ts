@@ -12,12 +12,13 @@ import {
 } from '../../../core/modelos/usuario';
 import { ModalEditarUsuarioComponent } from '../modal-editar-usuario/modal-editar-usuario.component';
 import { UsuarioService } from '../usuario.service';
-import { normalizarParaBusca } from '../../../shared/utils/texto';
+import { IconeComponent } from '../../../shared/ui/icone/icone.component';
+import { iniciais, normalizarParaBusca } from '../../../shared/utils/texto';
 
 /** Administração de usuários (rota restrita a administradores). */
 @Component({
   selector: 'app-lista-usuarios',
-  imports: [FormsModule, ModalEditarUsuarioComponent],
+  imports: [FormsModule, IconeComponent, ModalEditarUsuarioComponent],
   templateUrl: './lista-usuarios.component.html',
   styleUrl: './lista-usuarios.component.css',
 })
@@ -51,6 +52,14 @@ export class ListaUsuariosComponent implements OnInit {
 
   protected perfil(usuario: Usuario): string {
     return ROTULO_DO_TIPO[usuario.tipo_usuario];
+  }
+
+  protected ehMedico(usuario: Usuario): boolean {
+    return usuario.tipo_usuario === TipoUsuario.MEDICO;
+  }
+
+  protected iniciaisDe(usuario: Usuario): string {
+    return iniciais(usuario.nome);
   }
 
   protected especialidade(usuario: Usuario): string {

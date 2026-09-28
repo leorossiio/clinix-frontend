@@ -29,7 +29,7 @@ import { RodapeComponent } from '../rodape/rodape.component';
       z-index: 10;
       padding: 8px 12px;
       background: #fff;
-      border-radius: var(--raio-pequeno);
+      border-radius: var(--raio-controle);
     }
     .pular-para-conteudo:focus {
       top: 8px;

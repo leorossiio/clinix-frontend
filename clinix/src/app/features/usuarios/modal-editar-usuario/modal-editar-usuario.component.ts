@@ -46,7 +46,9 @@ import { ModalComponent } from '../../../shared/ui/modal/modal.component';
           }
         </div>
         <div class="acoes">
-          <button type="button" class="botao botao--neutro" (click)="fechar.emit()">Voltar</button>
+          <button type="button" class="botao botao--secundario" (click)="fechar.emit()">
+            Voltar
+          </button>
           <button type="submit" class="botao botao--primario" [disabled]="enviando()">
             Salvar
           </button>

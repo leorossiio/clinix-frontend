@@ -1,24 +1,34 @@
 <header class="cabecalho">
-  <a routerLink="/consultas" class="marca">
-    <img src="assets/imgs/logo.png" alt="Clinix — página inicial" />
-  </a>
+  <div class="interno">
+    <a routerLink="/consultas" class="inicio" aria-label="Clinix, página inicial">
+      <app-marca />
+    </a>
 
-  @if (usuario()) {
-    <nav aria-label="Navegação principal">
-      <a routerLink="/consultas" routerLinkActive="ativo" ariaCurrentWhenActive="page">Consultas</a>
-      @if (ehAdmin()) {
-        <a routerLink="/usuarios" routerLinkActive="ativo" ariaCurrentWhenActive="page">Usuários</a>
-      }
-    </nav>
+    @if (usuario()) {
+      <nav aria-label="Navegação principal">
+        <a routerLink="/consultas" routerLinkActive="ativo" ariaCurrentWhenActive="page">
+          Consultas
+        </a>
+        @if (ehAdmin()) {
+          <a routerLink="/usuarios" routerLinkActive="ativo" ariaCurrentWhenActive="page">
+            Usuários
+          </a>
+        }
+      </nav>
 
-    <div class="conta">
-      <span class="saudacao">
-        Olá, <strong>{{ primeiroNome() }}</strong>
-        <small>{{ perfil() }}</small>
-      </span>
-      <button type="button" class="sair" (click)="sair()">Sair</button>
-    </div>
-  } @else {
-    <a routerLink="/login" class="sair">Entrar</a>
-  }
+      <div class="conta">
+        <span class="avatar" aria-hidden="true">{{ iniciais() }}</span>
+        <span class="identidade">
+          <strong>{{ primeiroNome() }}</strong>
+          <small>{{ perfil() }}</small>
+        </span>
+        <button type="button" class="botao botao--discreto botao--pequeno" (click)="sair()">
+          <app-icone nome="sair" [tamanho]="16" />
+          Sair
+        </button>
+      </div>
+    } @else {
+      <a routerLink="/login" class="botao botao--secundario botao--pequeno">Entrar</a>
+    }
+  </div>
 </header>

@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, input, output, viewChild } from '@angular/core';
+import { IconeComponent } from '../icone/icone.component';
 
 let contador = 0;
 
@@ -11,6 +12,7 @@ let contador = 0;
  */
 @Component({
   selector: 'app-modal',
+  imports: [IconeComponent],
   template: `
     <div class="fundo" aria-hidden="true" (click)="fechar.emit()"></div>
     <div
@@ -23,7 +25,14 @@ let contador = 0;
     >
       <header>
         <h2 [id]="idDoTitulo">{{ titulo() }}</h2>
-        <button type="button" class="fechar" aria-label="Fechar" (click)="fechar.emit()">×</button>
+        <button
+          type="button"
+          class="fechar botao botao--discreto botao--icone"
+          aria-label="Fechar"
+          (click)="fechar.emit()"
+        >
+          <app-icone nome="fechar" />
+        </button>
       </header>
       <ng-content />
     </div>

@@ -4,10 +4,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AutenticacaoService } from '../../../core/autenticacao/autenticacao.service';
 import { mensagemDeErro } from '../../../core/feedback/mensagem-de-erro';
+import { IconeComponent } from '../../../shared/ui/icone/icone.component';
+import { PainelDeAcessoComponent } from '../painel-de-acesso/painel-de-acesso.component';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, IconeComponent, PainelDeAcessoComponent],
   templateUrl: './login.component.html',
   styleUrl: '../pagina-de-acesso.css',
 })

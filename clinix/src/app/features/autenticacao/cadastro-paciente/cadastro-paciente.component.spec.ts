@@ -50,7 +50,7 @@ describe('CadastroPacienteComponent', () => {
     });
     requisicao.flush(umUsuario());
 
-    expect(TestBed.inject(FeedbackService).mensagens()[0].texto).toContain('Cadastro realizado');
+    expect(TestBed.inject(FeedbackService).mensagens()[0].texto).toContain('Conta criada');
     expect(navegar).toHaveBeenCalledWith(['/login']);
   });
 

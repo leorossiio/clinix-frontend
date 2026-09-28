@@ -11,8 +11,11 @@ import {
   StatusConsulta,
 } from '../../../core/modelos/consulta';
 import { ESPECIALIDADES, TipoUsuario } from '../../../core/modelos/usuario';
-import { SEM_ACOES, acoesDaConsulta } from '../acoes-da-consulta';
-import { CartaoDeConsultaComponent } from '../cartao-de-consulta/cartao-de-consulta.component';
+import { IconeComponent } from '../../../shared/ui/icone/icone.component';
+import { primeiroNome } from '../../../shared/utils/texto';
+import { AcoesDaConsulta, SEM_ACOES, acoesDaConsulta } from '../acoes-da-consulta';
+import { agruparPorDia, separarParaPaciente } from '../agenda';
+import { ConsultaComponent } from '../consulta/consulta.component';
 import { ConsultaService } from '../consulta.service';
 import { filtrarConsultas } from '../filtro-de-consultas';
 import { FiltrosDeConsultasStore } from '../filtros-de-consultas.store';
@@ -27,14 +30,18 @@ type ModalAberto =
 
 /**
  * Tela principal. A API já devolve o recorte do perfil (paciente: horários
- * livres + próprias consultas; médico: a própria agenda; admin: tudo), então
- * aqui só se filtra, exibe e dispara ações.
+ * livres + próprias consultas; médico: a própria agenda; admin: tudo); aqui
+ * elas são organizadas como agenda, filtradas e recebem as ações.
+ *
+ * - Paciente: "Suas consultas" em destaque, depois os horários livres por dia.
+ * - Médico e administrador: a agenda inteira por dia, com a situação de cada horário.
  */
 @Component({
   selector: 'app-pagina-consultas',
   imports: [
     FormsModule,
-    CartaoDeConsultaComponent,
+    IconeComponent,
+    ConsultaComponent,
     ModalNovaConsultaComponent,
     ModalEditarConsultaComponent,
     ModalCancelarConsultaComponent,
@@ -49,7 +56,7 @@ export class PaginaConsultasComponent implements OnInit {
 
   protected readonly filtros = inject(FiltrosDeConsultasStore);
   protected readonly especialidades = ESPECIALIDADES;
-  protected readonly status = Object.values(StatusConsulta).map((valor) => ({
+  protected readonly situacoes = Object.values(StatusConsulta).map((valor) => ({
     valor,
     rotulo: ROTULO_DO_STATUS[valor],
   }));
@@ -61,24 +68,68 @@ export class PaginaConsultasComponent implements OnInit {
   protected readonly emAndamento = signal<string | null>(null);
   protected readonly modal = signal<ModalAberto | null>(null);
 
-  /**
-   * Consultas filtradas já com as ações de cada uma, calculadas uma vez por
-   * mudança de estado (e não a cada ciclo de renderização). Sem sessão — por
-   * um instante, ao clicar em "Sair" — nenhuma ação é oferecida.
-   */
-  protected readonly visiveis = computed(() => {
+  protected readonly ehPaciente = computed(() => this.usuario()?.tipo === TipoUsuario.PACIENTE);
+  protected readonly ehAdmin = computed(() => this.usuario()?.tipo === TipoUsuario.ADMIN);
+  protected readonly ehMedico = computed(() => this.usuario()?.tipo === TipoUsuario.MEDICO);
+  /** Médicos veem só a própria agenda: filtrar por especialidade não faz sentido para eles. */
+  protected readonly filtraEspecialidade = computed(() => !this.ehMedico());
+  protected readonly dicaDaBusca = computed(() => {
+    if (this.ehPaciente()) return 'Médico, especialidade ou descrição';
+    return this.ehAdmin() ? 'Médico, paciente ou descrição' : 'Paciente ou descrição';
+  });
+
+  private readonly separacao = computed(() =>
+    separarParaPaciente(this.consultas(), this.usuario()?.id ?? ''),
+  );
+
+  /** Consultas do paciente logado (qualquer situação). Não passam pelos filtros. */
+  protected readonly proprias = computed(() =>
+    this.ehPaciente() ? this.separacao().proprias : [],
+  );
+
+  /** Horários livres (paciente) ou agenda completa (clínica), filtrados e agrupados por dia. */
+  protected readonly dias = computed(() => {
+    const base = this.ehPaciente() ? this.separacao().livres : this.consultas();
+    return agruparPorDia(filtrarConsultas(base, this.filtros.filtro()), new Date());
+  });
+  protected readonly totalNaAgenda = computed(() =>
+    this.dias().reduce((total, dia) => total + dia.consultas.length, 0),
+  );
+
+  /** Ações de cada consulta, recalculadas só quando a lista ou a sessão mudam. */
+  private readonly acoesPorConsulta = computed(() => {
     const usuario = this.usuario();
     const agora = new Date();
-    return filtrarConsultas(this.consultas(), this.filtros.filtro()).map((consulta) => ({
-      consulta,
-      acoes: usuario ? acoesDaConsulta(consulta, usuario, agora) : SEM_ACOES,
-    }));
+    return new Map(
+      this.consultas().map((c) => [
+        c.id_consulta,
+        usuario ? acoesDaConsulta(c, usuario, agora) : SEM_ACOES,
+      ]),
+    );
   });
+
+  protected readonly titulo = computed(() =>
+    this.ehPaciente() ? `Olá, ${primeiroNome(this.usuario()?.nome ?? '')}` : 'Agenda',
+  );
+  protected readonly subtitulo = computed(() => {
+    if (!this.ehPaciente()) {
+      // Total da agenda, não o filtrado: o subtítulo descreve a agenda, não a busca.
+      const total = this.consultas().length;
+      const horarios = total === 1 ? '1 horário' : `${total} horários`;
+      return this.ehAdmin()
+        ? `${horarios} na agenda de todos os médicos.`
+        : `${horarios} na sua agenda.`;
+    }
+    const agendadas = this.proprias().filter((c) => c.status === StatusConsulta.AGENDADA).length;
+    if (agendadas === 0) return 'Escolha um horário para agendar sua consulta.';
+    return agendadas === 1
+      ? 'Você tem uma consulta agendada.'
+      : `Você tem ${agendadas} consultas agendadas.`;
+  });
+
   protected readonly abrindoHorario = computed(() => this.modal()?.tipo === 'nova');
   protected readonly consultaEmEdicao = computed(() => this.consultaDoModal('editar'));
   protected readonly consultaEmCancelamento = computed(() => this.consultaDoModal('cancelar'));
-  protected readonly ehPaciente = computed(() => this.usuario()?.tipo === TipoUsuario.PACIENTE);
-  protected readonly ehAdmin = computed(() => this.usuario()?.tipo === TipoUsuario.ADMIN);
 
   ngOnInit(): void {
     this.carregar();
@@ -98,22 +149,27 @@ export class PaginaConsultasComponent implements OnInit {
       });
   }
 
+  protected acoesDe(consulta: Consulta): AcoesDaConsulta {
+    return this.acoesPorConsulta().get(consulta.id_consulta) ?? SEM_ACOES;
+  }
+
   protected agendar(consulta: Consulta): void {
     if (!this.feedback.confirmar(`Agendar a consulta com ${this.nomeDoMedico(consulta)}?`)) return;
     this.executar(
       consulta.id_consulta,
       this.service.agendar(consulta.id_consulta),
-      'Consulta agendada!',
+      'Consulta agendada.',
     );
   }
 
   protected reagendar(consulta: Consulta): void {
-    if (!this.feedback.confirmar(`Reagendar a consulta com ${this.nomeDoMedico(consulta)}?`))
+    if (!this.feedback.confirmar(`Reagendar a consulta com ${this.nomeDoMedico(consulta)}?`)) {
       return;
+    }
     this.executar(
       consulta.id_consulta,
       this.service.reagendar(consulta.id_consulta),
-      'Consulta reagendada!',
+      'Consulta reagendada.',
     );
   }
 
@@ -123,7 +179,7 @@ export class PaginaConsultasComponent implements OnInit {
     this.executar(
       consulta.id_consulta,
       this.service.remover(consulta.id_consulta),
-      'Consulta removida.',
+      'Consulta removida da agenda.',
     );
   }
 

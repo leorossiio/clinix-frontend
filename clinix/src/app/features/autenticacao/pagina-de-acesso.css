@@ -1,39 +1,30 @@
-/* Estilo compartilhado pelas telas de login e cadastro. */
+/* Estilo compartilhado pelas telas de login e cadastro: painel da marca + formulário. */
 
 :host {
   display: grid;
-  place-items: center;
+  grid-template-columns: minmax(360px, 5fr) 7fr;
   min-height: 100vh;
-  padding: 16px;
-  background: linear-gradient(180deg, #1b00ff, var(--cor-primaria-profunda));
+  background: var(--papel);
+}
+
+main {
+  display: grid;
+  place-items: center;
+  padding: 48px 24px;
 }
 
 .caixa {
   width: 100%;
   max-width: 380px;
-  padding: 36px 28px;
-  background: var(--cor-superficie);
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
 }
 
 h1 {
-  margin: 0 0 4px;
-  font-size: 1.5rem;
-  text-align: center;
-}
-
-.destaque {
-  color: #1b00ff;
+  margin-bottom: 6px;
 }
 
 .subtitulo {
-  margin: 0 0 24px;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-align: center;
-  color: var(--cor-texto-suave);
+  margin-bottom: 28px;
+  color: var(--tinta-suave);
 }
 
 .campo-senha {
@@ -41,34 +32,52 @@ h1 {
 }
 
 .campo-senha input {
-  padding-right: 44px;
+  padding-right: 48px;
 }
 
 .mostrar-senha {
   position: absolute;
-  right: 6px;
-  bottom: 6px;
-  padding: 4px 6px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 1.1rem;
+  right: 4px;
+  top: 29px;
+  color: var(--tinta-fraca);
 }
 
-.acoes {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 8px;
+.campo-senha .campo__erro,
+.campo-senha .campo__ajuda {
+  margin-top: 0;
 }
 
-.acoes .botao {
-  border-radius: 20px;
+form .botao--primario {
+  height: 44px;
+  margin-top: 6px;
 }
 
-.rodape-da-caixa {
-  margin: 20px 0 0;
-  font-size: 0.8rem;
-  text-align: center;
-  color: var(--cor-texto-suave);
+.alternativa {
+  margin-top: 24px;
+  color: var(--tinta-suave);
+}
+
+.alternativa a {
+  font-weight: 600;
+}
+
+.legal {
+  margin-top: 40px;
+  font-size: 0.82rem;
+  color: var(--tinta-fraca);
+}
+
+.legal a {
+  color: var(--tinta-suave);
+}
+
+@media (max-width: 900px) {
+  :host {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  main {
+    place-items: start center;
+    padding-top: 36px;
+  }
 }

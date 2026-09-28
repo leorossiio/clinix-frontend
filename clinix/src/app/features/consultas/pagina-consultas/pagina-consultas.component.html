@@ -1,152 +1,195 @@
-<h1 class="titulo-de-pagina">{{ ehPaciente() ? 'Agende sua consulta' : 'Agenda de consultas' }}</h1>
-
-<section class="painel filtros" aria-labelledby="titulo-filtros">
-  <div class="filtros__topo">
-    <h2 id="titulo-filtros">Filtros</h2>
-    @if (!ehPaciente()) {
-      <button type="button" class="botao botao--primario" (click)="modal.set({ tipo: 'nova' })">
-        + Novo horário
-      </button>
-    }
+<header class="cabecalho-de-pagina">
+  <div>
+    <h1>{{ titulo() }}</h1>
+    <p>{{ subtitulo() }}</p>
   </div>
-
-  <div class="filtros__grade">
-    <div class="campo">
-      <label for="filtro-medico">Médico</label>
-      <input
-        id="filtro-medico"
-        type="search"
-        placeholder="Nome do médico"
-        [ngModel]="filtros.filtro().medico"
-        (ngModelChange)="filtros.atualizar({ medico: $event })"
-      />
-    </div>
-    <div class="campo">
-      <label for="filtro-descricao">Descrição</label>
-      <input
-        id="filtro-descricao"
-        type="search"
-        placeholder="Ex.: retorno"
-        [ngModel]="filtros.filtro().descricao"
-        (ngModelChange)="filtros.atualizar({ descricao: $event })"
-      />
-    </div>
-    <div class="campo">
-      <label for="filtro-especialidade">Especialidade</label>
-      <select
-        id="filtro-especialidade"
-        [ngModel]="filtros.filtro().especialidade"
-        (ngModelChange)="filtros.atualizar({ especialidade: $event })"
-      >
-        <option [ngValue]="null">Todas</option>
-        @for (especialidade of especialidades; track especialidade.codigo) {
-          <option [ngValue]="especialidade.codigo">{{ especialidade.nome }}</option>
-        }
-      </select>
-    </div>
-    <div class="campo">
-      <label for="filtro-status">Situação</label>
-      <select
-        id="filtro-status"
-        [ngModel]="filtros.filtro().status"
-        (ngModelChange)="filtros.atualizar({ status: $event })"
-      >
-        <option [ngValue]="null">Todas</option>
-        @for (item of status; track item.valor) {
-          <option [ngValue]="item.valor">{{ item.rotulo }}</option>
-        }
-      </select>
-    </div>
-    <div class="campo">
-      <label for="filtro-inicio">De</label>
-      <input
-        id="filtro-inicio"
-        type="date"
-        [ngModel]="filtros.filtro().dataInicio"
-        (ngModelChange)="filtros.atualizar({ dataInicio: $event ?? '' })"
-      />
-    </div>
-    <div class="campo">
-      <label for="filtro-fim">Até</label>
-      <input
-        id="filtro-fim"
-        type="date"
-        [ngModel]="filtros.filtro().dataFim"
-        (ngModelChange)="filtros.atualizar({ dataFim: $event ?? '' })"
-      />
-    </div>
-  </div>
-
-  @if (filtros.algumAtivo()) {
-    <button type="button" class="botao botao--secundario" (click)="filtros.limpar()">
-      Limpar filtros
+  @if (!ehPaciente()) {
+    <button type="button" class="botao botao--primario" (click)="modal.set({ tipo: 'nova' })">
+      <app-icone nome="mais" />
+      Novo horário
     </button>
   }
-</section>
+</header>
 
-<section class="resultados" aria-labelledby="titulo-resultados" aria-live="polite">
-  <h2 id="titulo-resultados" class="resultados__titulo">
-    Consultas
-    @if (!carregando()) {
-      <small>({{ visiveis().length }})</small>
+@if (carregando()) {
+  <div class="carregando" role="status" aria-label="Carregando consultas">
+    @for (item of [1, 2, 3]; track item) {
+      <div class="superficie linha-esqueleto">
+        <span class="esqueleto" style="width: 48px"></span>
+        <span class="esqueleto" style="width: 38%"></span>
+        <span class="esqueleto" style="width: 22%"></span>
+      </div>
     }
-  </h2>
-
-  @if (carregando()) {
-    <div class="carregando" role="status">Carregando consultas…</div>
-  } @else if (falhouAoCarregar()) {
-    <div class="vazio">
-      <p>Não foi possível carregar as consultas.</p>
-      <button type="button" class="botao botao--primario" (click)="carregar()">
-        Tentar novamente
-      </button>
-    </div>
-  } @else if (visiveis().length === 0) {
-    <p class="vazio">
-      @if (filtros.algumAtivo()) {
-        Nenhuma consulta corresponde aos filtros.
-      } @else if (ehPaciente()) {
-        Nenhum horário disponível no momento.
+  </div>
+} @else if (falhouAoCarregar()) {
+  <div class="superficie vazio">
+    <strong>Não foi possível carregar as consultas.</strong>
+    <p>Verifique sua conexão e tente de novo.</p>
+    <button type="button" class="botao botao--secundario" (click)="carregar()">
+      Tentar novamente
+    </button>
+  </div>
+} @else {
+  @if (ehPaciente()) {
+    <section class="secao" aria-labelledby="titulo-suas-consultas">
+      <h2 id="titulo-suas-consultas">Suas consultas</h2>
+      @if (proprias().length > 0) {
+        <ul class="bilhetes">
+          @for (consulta of proprias(); track consulta.id_consulta) {
+            <li>
+              <app-consulta
+                modo="bilhete"
+                [consulta]="consulta"
+                [acoes]="acoesDe(consulta)"
+                [ocupado]="emAndamento() === consulta.id_consulta"
+                (cancelar)="modal.set({ tipo: 'cancelar', consulta })"
+                (reagendar)="reagendar(consulta)"
+              />
+            </li>
+          }
+        </ul>
       } @else {
-        Nenhuma consulta na agenda. Use "Novo horário" para abrir um.
+        <p class="dica">
+          Você ainda não tem consultas. Escolha um dos horários disponíveis abaixo.
+        </p>
       }
-    </p>
-  } @else {
-    <div class="grade">
-      @for (item of visiveis(); track item.consulta.id_consulta) {
-        @let consulta = item.consulta;
-        <app-cartao-de-consulta
-          [consulta]="consulta"
-          [acoes]="item.acoes"
-          [ocupado]="emAndamento() === consulta.id_consulta"
-          (agendar)="agendar(consulta)"
-          (cancelar)="modal.set({ tipo: 'cancelar', consulta })"
-          (reagendar)="reagendar(consulta)"
-          (editar)="modal.set({ tipo: 'editar', consulta })"
-          (remover)="remover(consulta)"
-        />
-      }
-    </div>
+    </section>
   }
-</section>
 
-@if (ehPaciente()) {
-  <section class="vantagens" aria-label="Vantagens do Clinix">
-    <div>
-      <img src="assets/imgs/relogio.png" alt="" />
-      <h3>Disponível 24h por dia</h3>
-      <p>Agende sua consulta a qualquer hora e de qualquer lugar.</p>
+  <section class="secao" aria-labelledby="titulo-agenda">
+    @if (ehPaciente()) {
+      <div class="secao__topo">
+        <h2 id="titulo-agenda">Horários disponíveis</h2>
+        <span class="contagem" aria-live="polite">
+          {{ totalNaAgenda() }} {{ totalNaAgenda() === 1 ? 'horário' : 'horários' }}
+        </span>
+      </div>
+    } @else {
+      <h2 id="titulo-agenda" class="somente-leitor-de-tela">Consultas da agenda</h2>
+    }
+
+    <div class="filtros" role="search" aria-label="Filtrar consultas">
+      <label class="busca">
+        <span class="somente-leitor-de-tela">Buscar</span>
+        <app-icone nome="busca" [tamanho]="17" />
+        <input
+          class="controle"
+          type="search"
+          [placeholder]="dicaDaBusca()"
+          [ngModel]="filtros.filtro().busca"
+          (ngModelChange)="filtros.atualizar({ busca: $event })"
+        />
+      </label>
+
+      @if (filtraEspecialidade()) {
+        <select
+          class="controle"
+          aria-label="Especialidade"
+          [ngModel]="filtros.filtro().especialidade"
+          (ngModelChange)="filtros.atualizar({ especialidade: $event })"
+        >
+          <option [ngValue]="null">Todas as especialidades</option>
+          @for (especialidade of especialidades; track especialidade.codigo) {
+            <option [ngValue]="especialidade.codigo">{{ especialidade.nome }}</option>
+          }
+        </select>
+      }
+
+      @if (!ehPaciente()) {
+        <select
+          class="controle"
+          aria-label="Situação"
+          [ngModel]="filtros.filtro().status"
+          (ngModelChange)="filtros.atualizar({ status: $event })"
+        >
+          <option [ngValue]="null">Todas as situações</option>
+          @for (situacao of situacoes; track situacao.valor) {
+            <option [ngValue]="situacao.valor">{{ situacao.rotulo }}</option>
+          }
+        </select>
+      }
+
+      <div class="periodo">
+        <label>
+          <span>De</span>
+          <input
+            class="controle"
+            type="date"
+            [ngModel]="filtros.filtro().dataInicio"
+            (ngModelChange)="filtros.atualizar({ dataInicio: $event ?? '' })"
+          />
+        </label>
+        <label>
+          <span>até</span>
+          <input
+            class="controle"
+            type="date"
+            [ngModel]="filtros.filtro().dataFim"
+            (ngModelChange)="filtros.atualizar({ dataFim: $event ?? '' })"
+          />
+        </label>
+      </div>
+
+      @if (filtros.algumAtivo()) {
+        <button
+          type="button"
+          class="botao botao--discreto botao--pequeno"
+          (click)="filtros.limpar()"
+        >
+          Limpar filtros
+        </button>
+      }
     </div>
-    <div>
-      <img src="assets/imgs/celular.png" alt="" />
-      <h3>Simples e prático</h3>
-      <p>Encontre um especialista com poucos cliques.</p>
-    </div>
-    <div>
-      <img src="assets/imgs/calendario.png" alt="" />
-      <h3>No horário ideal</h3>
-      <p>Escolha o melhor horário para você.</p>
-    </div>
+
+    @if (dias().length === 0) {
+      <div class="superficie vazio">
+        @if (filtros.algumAtivo()) {
+          <strong>Nenhuma consulta corresponde aos filtros.</strong>
+          <button
+            type="button"
+            class="botao botao--secundario botao--pequeno"
+            (click)="filtros.limpar()"
+          >
+            Limpar filtros
+          </button>
+        } @else if (ehPaciente()) {
+          <strong>Nenhum horário disponível no momento.</strong>
+          <p>Os novos horários aparecem aqui assim que a clínica abrir a agenda.</p>
+        } @else {
+          <strong>A agenda está vazia.</strong>
+          <p>Use "Novo horário" para abrir o primeiro.</p>
+        }
+      </div>
+    } @else {
+      @for (dia of dias(); track dia.chave) {
+        <section class="dia" [attr.aria-label]="dia.rotulo">
+          <h3 class="dia__titulo">
+            {{ dia.rotulo }}
+            @if (dia.relativo) {
+              <span class="chip chip--destaque">{{ dia.relativo }}</span>
+            }
+          </h3>
+          <ul class="superficie linhas">
+            @for (consulta of dia.consultas; track consulta.id_consulta) {
+              <li>
+                <app-consulta
+                  [consulta]="consulta"
+                  [acoes]="acoesDe(consulta)"
+                  [mostrarPaciente]="!ehPaciente()"
+                  [destacarPaciente]="ehMedico()"
+                  [ocupado]="emAndamento() === consulta.id_consulta"
+                  (agendar)="agendar(consulta)"
+                  (cancelar)="modal.set({ tipo: 'cancelar', consulta })"
+                  (reagendar)="reagendar(consulta)"
+                  (editar)="modal.set({ tipo: 'editar', consulta })"
+                  (remover)="remover(consulta)"
+                />
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    }
   </section>
 }
 

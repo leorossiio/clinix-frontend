@@ -4,13 +4,15 @@ import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { FeedbackService } from '../../../core/feedback/feedback.service';
 import { mensagemDeErro } from '../../../core/feedback/mensagem-de-erro';
+import { IconeComponent } from '../../../shared/ui/icone/icone.component';
+import { PainelDeAcessoComponent } from '../painel-de-acesso/painel-de-acesso.component';
 import { UsuarioService } from '../../usuarios/usuario.service';
 import { senhasIguais } from './senhas-iguais.validator';
 
 /** Auto-cadastro público. Sempre cria um paciente (médicos são cadastrados pela clínica). */
 @Component({
   selector: 'app-cadastro-paciente',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, IconeComponent, PainelDeAcessoComponent],
   templateUrl: './cadastro-paciente.component.html',
   styleUrl: '../pagina-de-acesso.css',
 })
@@ -46,7 +48,7 @@ export class CadastroPacienteComponent {
       .pipe(finalize(() => this.enviando.set(false)))
       .subscribe({
         next: () => {
-          this.feedback.sucesso('Cadastro realizado! Entre com seu e-mail e senha.');
+          this.feedback.sucesso('Conta criada. Entre com seu e-mail e senha.');
           void this.router.navigate(['/login']);
         },
         error: (erro) =>

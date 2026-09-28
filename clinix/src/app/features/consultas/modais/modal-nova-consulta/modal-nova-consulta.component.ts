@@ -28,7 +28,7 @@ import { UsuarioService } from '../../../usuarios/usuario.service';
               <option value="" disabled>Selecione…</option>
               @for (medico of medicos(); track medico.id_usuario) {
                 <option [value]="medico.id_usuario">
-                  {{ medico.nome }} — {{ especialidade(medico.especialidade) }}
+                  {{ medico.nome }} ({{ especialidade(medico.especialidade) }})
                 </option>
               }
             </select>
@@ -55,7 +55,9 @@ import { UsuarioService } from '../../../usuarios/usuario.service';
           <input id="descricao" formControlName="descricao" maxlength="255" />
         </div>
         <div class="acoes-do-modal">
-          <button type="button" class="botao botao--neutro" (click)="fechar.emit()">Voltar</button>
+          <button type="button" class="botao botao--secundario" (click)="fechar.emit()">
+            Voltar
+          </button>
           <button type="submit" class="botao botao--primario" [disabled]="enviando()">
             Abrir horário
           </button>

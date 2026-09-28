@@ -1,0 +1,117 @@
+<article
+  [class]="modo()"
+  [class.encerrada]="cancelada()"
+  [class.com-situacao]="mostraSituacao()"
+  [attr.aria-label]="
+    'Consulta com ' +
+    (consulta().medico?.nome ?? 'médico') +
+    ' às ' +
+    (consulta().data | date: 'HH:mm')
+  "
+>
+  @if (modo() === 'bilhete') {
+    <app-folha-de-calendario class="folha" [data]="consulta().data" />
+  } @else {
+    <time class="hora" [attr.datetime]="consulta().data">{{
+      consulta().data | date: 'HH:mm'
+    }}</time>
+  }
+
+  <div class="quem">
+    @if (destacarPaciente()) {
+      @if (consulta().paciente; as paciente) {
+        <h3>{{ paciente.nome }}</h3>
+      } @else {
+        <h3 class="livre">{{ cancelada() ? 'Sem paciente' : 'Horário livre' }}</h3>
+      }
+    } @else {
+      <h3>{{ consulta().medico?.nome ?? 'Médico não informado' }}</h3>
+      <span class="especialidade" [class]="classeDaEspecialidade()">{{ especialidade() }}</span>
+    }
+  </div>
+
+  <div class="detalhes">
+    @if (modo() === 'bilhete') {
+      <p class="horario">
+        <app-icone nome="relogio" [tamanho]="15" />
+        {{ consulta().data | date: 'HH:mm' }}
+      </p>
+    }
+    @if (consulta().descricao) {
+      <p class="descricao" [title]="consulta().descricao">{{ consulta().descricao }}</p>
+    }
+    @if (mostrarPaciente() && !destacarPaciente()) {
+      @if (consulta().paciente; as paciente) {
+        <p class="paciente">Paciente: {{ paciente.nome }}</p>
+      } @else if (!cancelada()) {
+        <p class="paciente paciente--livre">Horário livre</p>
+      }
+    }
+    @if (cancelada()) {
+      <p class="motivo">Motivo: {{ consulta().motivo_cancelamento ?? 'não informado' }}</p>
+    }
+    @if (acoes().aviso) {
+      <p class="aviso">{{ acoes().aviso }}</p>
+    }
+  </div>
+
+  @if (mostraSituacao()) {
+    <span class="chip situacao" [class]="classeDoStatus()">{{ rotuloDoStatus() }}</span>
+  }
+
+  @if (temAcoes()) {
+    <div class="acoes">
+      @if (acoes().agendar) {
+        <button
+          type="button"
+          class="botao botao--primario botao--pequeno"
+          [disabled]="ocupado()"
+          (click)="agendar.emit()"
+        >
+          Agendar
+        </button>
+      }
+      @if (acoes().reagendar) {
+        <button
+          type="button"
+          class="botao botao--primario botao--pequeno"
+          [disabled]="ocupado()"
+          (click)="reagendar.emit()"
+        >
+          <app-icone nome="reagendar" [tamanho]="15" />
+          Reagendar
+        </button>
+      }
+      @if (acoes().editar) {
+        <button
+          type="button"
+          class="botao botao--secundario botao--pequeno"
+          [disabled]="ocupado()"
+          (click)="editar.emit()"
+        >
+          Editar
+        </button>
+      }
+      @if (acoes().cancelar) {
+        <button
+          type="button"
+          class="botao botao--perigo botao--pequeno"
+          [disabled]="ocupado()"
+          (click)="cancelar.emit()"
+        >
+          Cancelar
+        </button>
+      }
+      @if (acoes().remover) {
+        <button
+          type="button"
+          class="botao botao--perigo botao--pequeno"
+          [disabled]="ocupado()"
+          (click)="remover.emit()"
+        >
+          Remover
+        </button>
+      }
+    </div>
+  }
+</article>

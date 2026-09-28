@@ -10,8 +10,8 @@ import { ModalComponent } from '../../../../shared/ui/modal/modal.component';
   template: `
     <app-modal titulo="Cancelar consulta" (fechar)="fechar.emit()">
       <p class="resumo">
-        {{ consulta().medico?.nome }} —
-        {{ consulta().data | date: "dd/MM/yyyy 'às' HH:mm" }}
+        Consulta com {{ consulta().medico?.nome ?? 'o médico' }} em
+        {{ consulta().data | date: "EEEE, d 'de' MMMM 'às' HH:mm" }}.
       </p>
       <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
         <div class="campo">
@@ -28,8 +28,10 @@ import { ModalComponent } from '../../../../shared/ui/modal/modal.component';
           }
         </div>
         <div class="acoes-do-modal">
-          <button type="button" class="botao botao--neutro" (click)="fechar.emit()">Voltar</button>
-          <button type="submit" class="botao botao--perigo" [disabled]="enviando()">
+          <button type="button" class="botao botao--secundario" (click)="fechar.emit()">
+            Voltar
+          </button>
+          <button type="submit" class="botao botao--perigo-cheio" [disabled]="enviando()">
             Confirmar cancelamento
           </button>
         </div>

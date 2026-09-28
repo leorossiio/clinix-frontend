@@ -126,7 +126,7 @@ describe('PaginaConsultasComponent', () => {
 
   it('os filtros continuam aplicados ao voltar para a página (CLINIXSM-43)', () => {
     montarComo(TipoUsuario.PACIENTE);
-    TestBed.inject(FiltrosDeConsultasStore).atualizar({ medico: 'inexistente' });
+    TestBed.inject(FiltrosDeConsultasStore).atualizar({ busca: 'inexistente' });
     responderLista();
 
     fixture.destroy();

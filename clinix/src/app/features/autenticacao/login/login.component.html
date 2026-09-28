@@ -1,64 +1,68 @@
-<main class="caixa">
-  <h1>Bem-vindo ao <span class="destaque">CLINIX</span></h1>
-  <p class="subtitulo">Acesso</p>
+<app-painel-de-acesso />
 
-  @if (sessaoExpirada) {
-    <p class="alerta alerta--info">Sua sessão expirou. Entre novamente.</p>
-  }
-  @if (erro()) {
-    <p class="alerta alerta--erro" role="alert">{{ erro() }}</p>
-  }
+<main>
+  <div class="caixa">
+    <h1>Entrar</h1>
+    <p class="subtitulo">Use o e-mail e a senha da sua conta.</p>
 
-  <form [formGroup]="formulario" (ngSubmit)="entrar()" novalidate>
-    <div class="campo">
-      <label for="email">E-mail</label>
-      <input
-        id="email"
-        type="email"
-        formControlName="email"
-        autocomplete="username"
-        [attr.aria-invalid]="campoInvalido('email')"
-        aria-describedby="erro-email"
-      />
-      @if (campoInvalido('email')) {
-        <span id="erro-email" class="campo__erro">Informe um e-mail válido.</span>
-      }
-    </div>
+    @if (sessaoExpirada) {
+      <p class="alerta alerta--info">Sua sessão expirou. Entre novamente.</p>
+    }
+    @if (erro()) {
+      <p class="alerta alerta--erro" role="alert">{{ erro() }}</p>
+    }
 
-    <div class="campo campo-senha">
-      <label for="senha">Senha</label>
-      <input
-        id="senha"
-        [type]="mostrarSenha() ? 'text' : 'password'"
-        formControlName="senha"
-        autocomplete="current-password"
-        [attr.aria-invalid]="campoInvalido('senha')"
-      />
-      <button
-        type="button"
-        class="mostrar-senha"
-        [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'"
-        [attr.aria-pressed]="mostrarSenha()"
-        (click)="mostrarSenha.set(!mostrarSenha())"
-      >
-        {{ mostrarSenha() ? '🙈' : '👁️' }}
-      </button>
-      @if (campoInvalido('senha')) {
-        <span class="campo__erro">Informe a senha.</span>
-      }
-    </div>
+    <form [formGroup]="formulario" (ngSubmit)="entrar()" novalidate>
+      <div class="campo">
+        <label for="email">E-mail</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          autocomplete="username"
+          [attr.aria-invalid]="campoInvalido('email')"
+          aria-describedby="erro-email"
+        />
+        @if (campoInvalido('email')) {
+          <span id="erro-email" class="campo__erro">Informe um e-mail válido.</span>
+        }
+      </div>
 
-    <div class="acoes">
+      <div class="campo campo-senha">
+        <label for="senha">Senha</label>
+        <input
+          id="senha"
+          [type]="mostrarSenha() ? 'text' : 'password'"
+          formControlName="senha"
+          autocomplete="current-password"
+          [attr.aria-invalid]="campoInvalido('senha')"
+        />
+        <button
+          type="button"
+          class="mostrar-senha botao botao--discreto botao--icone"
+          [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'"
+          [attr.aria-pressed]="mostrarSenha()"
+          (click)="mostrarSenha.set(!mostrarSenha())"
+        >
+          <app-icone [nome]="mostrarSenha() ? 'olho-fechado' : 'olho'" />
+        </button>
+        @if (campoInvalido('senha')) {
+          <span class="campo__erro">Informe a senha.</span>
+        }
+      </div>
+
       <button type="submit" class="botao botao--primario botao--bloco" [disabled]="enviando()">
         {{ enviando() ? 'Entrando…' : 'Entrar' }}
       </button>
-      <a routerLink="/cadastro" class="botao botao--secundario botao--bloco"
-        >Criar conta de paciente</a
-      >
-    </div>
-  </form>
+    </form>
 
-  <p class="rodape-da-caixa">
-    <a routerLink="/termos">Termos de Uso</a> · <a routerLink="/privacidade">Privacidade</a>
-  </p>
+    <p class="alternativa">
+      Ainda não tem conta? <a routerLink="/cadastro">Criar conta de paciente</a>
+    </p>
+
+    <p class="legal">
+      Ao entrar, você concorda com os <a routerLink="/termos">Termos de uso</a> e a
+      <a routerLink="/privacidade">Política de privacidade</a>.
+    </p>
+  </div>
 </main>

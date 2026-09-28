@@ -1,78 +1,115 @@
-<h1 class="titulo-de-pagina">Usuários</h1>
+<header class="cabecalho-de-pagina">
+  <div>
+    <h1>Usuários</h1>
+    <p>Pacientes, médicos e administradores com acesso ativo.</p>
+  </div>
+</header>
 
-<section class="painel">
-  <div class="campo busca">
-    <label for="busca">Buscar</label>
+<div class="barra">
+  <label class="busca">
+    <span class="somente-leitor-de-tela">Buscar usuários</span>
+    <app-icone nome="busca" [tamanho]="17" />
     <input
-      id="busca"
+      class="controle"
       type="search"
       placeholder="Nome, e-mail, perfil, especialidade ou CRM"
       [ngModel]="busca()"
       (ngModelChange)="busca.set($event)"
     />
-  </div>
+  </label>
+  @if (!carregando()) {
+    <span class="contagem" aria-live="polite">
+      {{ visiveis().length }} {{ visiveis().length === 1 ? 'usuário' : 'usuários' }}
+    </span>
+  }
+</div>
 
-  @if (carregando()) {
-    <div class="carregando" role="status">Carregando usuários…</div>
-  } @else {
-    <div class="tabela-rolavel">
-      <table>
-        <caption class="somente-leitor-de-tela">
-          Usuários ativos ({{
-            visiveis().length
-          }})
-        </caption>
-        <thead>
+@if (carregando()) {
+  <div class="superficie carregando" role="status" aria-label="Carregando usuários">
+    @for (item of [1, 2, 3, 4]; track item) {
+      <div class="linha-esqueleto">
+        <span class="esqueleto avatar-esqueleto"></span>
+        <span class="esqueleto" style="width: 30%"></span>
+        <span class="esqueleto" style="width: 14%"></span>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="superficie tabela-rolavel">
+    <table>
+      <caption class="somente-leitor-de-tela">
+        Usuários ativos
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Nome</th>
+          <th scope="col">Perfil</th>
+          <th scope="col">Especialidade</th>
+          <th scope="col">CRM</th>
+          <th scope="col"><span class="somente-leitor-de-tela">Ações</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (usuario of visiveis(); track usuario.id_usuario) {
           <tr>
-            <th scope="col">Nome</th>
-            <th scope="col">Perfil</th>
-            <th scope="col">E-mail</th>
-            <th scope="col">CRM</th>
-            <th scope="col">Especialidade</th>
-            <th scope="col" class="coluna-acoes">Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (usuario of visiveis(); track usuario.id_usuario) {
-            <tr>
-              <td>{{ usuario.nome }}</td>
-              <td>{{ perfil(usuario) }}</td>
-              <td>{{ usuario.email }}</td>
-              <td>{{ usuario.crm ?? '—' }}</td>
-              <td>{{ especialidade(usuario) }}</td>
-              <td class="coluna-acoes">
-                <div class="acoes">
+            <td>
+              <div class="pessoa">
+                <span class="avatar" aria-hidden="true">{{ iniciaisDe(usuario) }}</span>
+                <div>
+                  <strong>{{ usuario.nome }}</strong>
+                  <span class="email">{{ usuario.email }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="chip" [class]="'perfil--' + usuario.tipo_usuario">{{
+                perfil(usuario)
+              }}</span>
+            </td>
+            <td>
+              @if (ehMedico(usuario)) {
+                <span class="especialidade" [class]="'especialidade--' + usuario.especialidade">
+                  {{ especialidade(usuario) }}
+                </span>
+              } @else {
+                <span class="vazio-celula">—</span>
+              }
+            </td>
+            <td class="crm">{{ usuario.crm ?? '—' }}</td>
+            <td class="coluna-acoes">
+              <div class="acoes">
+                <button
+                  type="button"
+                  class="botao botao--discreto botao--icone"
+                  [attr.aria-label]="'Editar ' + usuario.nome"
+                  [title]="'Editar ' + usuario.nome"
+                  (click)="emEdicao.set(usuario)"
+                >
+                  <app-icone nome="editar" [tamanho]="17" />
+                </button>
+                @if (usuario.id_usuario !== idDoAdminLogado) {
                   <button
                     type="button"
-                    class="botao botao--neutro botao--icone"
-                    [attr.aria-label]="'Editar ' + usuario.nome"
-                    (click)="emEdicao.set(usuario)"
+                    class="botao botao--perigo botao--icone"
+                    [attr.aria-label]="'Excluir ' + usuario.nome"
+                    [title]="'Excluir ' + usuario.nome"
+                    (click)="excluir(usuario)"
                   >
-                    ✏️
+                    <app-icone nome="excluir" [tamanho]="17" />
                   </button>
-                  @if (usuario.id_usuario !== idDoAdminLogado) {
-                    <button
-                      type="button"
-                      class="botao botao--perigo botao--icone"
-                      [attr.aria-label]="'Excluir ' + usuario.nome"
-                      (click)="excluir(usuario)"
-                    >
-                      🗑️
-                    </button>
-                  }
-                </div>
-              </td>
-            </tr>
-          } @empty {
-            <tr>
-              <td colspan="6" class="vazio">Nenhum usuário encontrado.</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-  }
-</section>
+                }
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="sem-resultados">Nenhum usuário corresponde à busca.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
 
 @if (emEdicao(); as usuario) {
   <app-modal-editar-usuario

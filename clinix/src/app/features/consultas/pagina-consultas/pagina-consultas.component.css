@@ -1,85 +1,148 @@
-.filtros {
-  margin-bottom: 32px;
+.secao + .secao {
+  margin-top: 44px;
 }
 
-.filtros__topo {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+.secao > h2,
+.secao__topo {
   margin-bottom: 16px;
 }
 
-.filtros__topo h2,
-.resultados__titulo {
-  margin: 0;
-  font-size: 1.1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.filtros__grade {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0 16px;
-}
-
-.resultados__titulo {
-  padding-bottom: 10px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid var(--cor-primaria);
-  text-align: center;
-}
-
-.resultados__titulo small {
-  font-weight: 400;
-  color: var(--cor-texto-suave);
-}
-
-.grade {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-}
-
-.vazio {
+.secao__topo {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: baseline;
   gap: 12px;
-  padding: 32px 0;
-  text-align: center;
-  color: var(--cor-texto-suave);
 }
 
-.vantagens {
+.contagem {
+  color: var(--tinta-fraca);
+  font-size: 0.9rem;
+}
+
+.dica {
+  color: var(--tinta-suave);
+}
+
+/* ── Suas consultas ─────────────────────────────────────────────────── */
+
+.bilhetes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ── Filtros ────────────────────────────────────────────────────────── */
+
+.filtros {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 24px;
-  margin-top: 56px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
 }
 
-.vantagens > div {
-  max-width: 280px;
-  padding: 20px;
-  background: var(--cor-superficie);
-  border: 1px solid var(--cor-primaria);
-  border-radius: 16px;
-  text-align: center;
+.filtros .controle {
+  width: auto;
+  min-height: 40px;
+  padding-top: 7px;
+  padding-bottom: 7px;
 }
 
-.vantagens img {
-  height: 72px;
+.busca {
+  position: relative;
+  flex: 1 1 280px;
+  display: flex;
+  align-items: center;
 }
 
-.vantagens h3 {
-  margin: 8px 0 4px;
-  font-size: 1rem;
+.busca app-icone {
+  position: absolute;
+  left: 12px;
+  color: var(--tinta-fraca);
+  pointer-events: none;
 }
 
-.vantagens p {
+.busca .controle {
+  width: 100%;
+  padding-left: 38px;
+}
+
+.periodo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.periodo label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--tinta-suave);
+}
+
+/* ── Agenda por dia ─────────────────────────────────────────────────── */
+
+.dia + .dia {
+  margin-top: 28px;
+}
+
+.dia__titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.linhas {
   margin: 0;
-  color: var(--cor-texto-suave);
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.linhas li + li {
+  border-top: 1px solid var(--linha);
+}
+
+.linhas li:hover {
+  background: #fafbfd;
+}
+
+/* ── Carregamento ───────────────────────────────────────────────────── */
+
+.carregando {
+  display: grid;
+  gap: 10px;
+}
+
+.linha-esqueleto {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 18px 20px;
+}
+
+.linha-esqueleto .esqueleto {
+  height: 14px;
+}
+
+@media (max-width: 760px) {
+  .bilhetes {
+    grid-template-columns: 1fr;
+  }
+  .filtros > .controle,
+  .periodo {
+    flex: 1 1 100%;
+  }
+  .periodo label {
+    flex: 1;
+  }
+  .periodo .controle {
+    flex: 1;
+  }
 }

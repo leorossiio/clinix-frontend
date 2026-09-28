@@ -1,33 +1,52 @@
 /*
- * Estilos globais do Clinix: tokens de design e componentes visuais
- * reutilizados (botões, campos, cartões, etiquetas de status).
- * Componentes só definem o próprio layout; cores e espaçamentos vêm daqui.
+ * Sistema visual do Clinix.
+ *
+ * Paleta derivada da marca: o menta ("hortelã") do logo e um anil sóbrio,
+ * sucessor do azul elétrico da primeira versão. Tipografia: Bricolage
+ * Grotesque para títulos, dias e horários; Figtree para a interface.
+ *
+ * Componentes definem só o próprio layout; cores, tipos, raios e estados
+ * vêm daqui.
  */
 
 :root {
-  --cor-primaria: #2d2dff;
-  --cor-primaria-escura: #1c1ce0;
-  --cor-primaria-profunda: #00009c;
-  --cor-primaria-suave: #eef0ff;
-  --cor-sucesso: #1e7e34;
-  --cor-sucesso-escura: #166128;
-  --cor-perigo: #c62828;
-  --cor-perigo-escura: #a11f1f;
-  --cor-alerta: #b45309;
-  --cor-neutra: #5f6368;
+  /* Marca */
+  --tinta: #16233f;
+  --tinta-suave: #4b5872;
+  --tinta-fraca: #7a8499;
+  --anil: #3444d1;
+  --anil-escuro: #2633a8;
+  --anil-claro: #ebedfc;
+  --hortela: #2e9e90;
+  --hortela-escura: #16695f;
+  --hortela-clara: #e4f4f1;
 
-  --cor-texto: #1f2430;
-  --cor-texto-suave: #5c6270;
-  --cor-borda: #d9dce3;
-  --cor-fundo: #f5f6fb;
-  --cor-superficie: #ffffff;
+  /* Superfícies */
+  --nevoa: #f4f6fa;
+  --papel: #ffffff;
+  --linha: #e2e6ee;
+  --linha-forte: #cfd5e1;
 
-  --fonte: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --raio: 12px;
-  --raio-pequeno: 8px;
-  --sombra: 0 8px 20px rgba(17, 24, 39, 0.08);
-  --sombra-forte: 0 12px 32px rgba(17, 24, 39, 0.18);
-  --transicao: 150ms ease-in-out;
+  /* Estados */
+  --rosa: #c2304f;
+  --rosa-escura: #a3223f;
+  --rosa-clara: #fbeaee;
+  --ardosia: #465266;
+  --ardosia-clara: #edf0f4;
+  --ambar-clara: #fdf3e2;
+  --ambar-escura: #8a5a0b;
+
+  /* Tipografia */
+  --fonte-titulo: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --fonte-texto: 'Figtree', 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+
+  /* Forma: raios diferentes por nível de hierarquia */
+  --raio-controle: 10px;
+  --raio-bloco: 16px;
+  --raio-janela: 20px;
+  --sombra-elevada: 0 1px 2px rgba(22, 35, 63, 0.06), 0 12px 32px -8px rgba(22, 35, 63, 0.22);
+  --anel-foco: 0 0 0 3px rgba(52, 68, 209, 0.28);
+  --transicao: 140ms ease-out;
 }
 
 *,
@@ -46,10 +65,12 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: var(--fonte);
-  color: var(--cor-texto);
-  background: var(--cor-fundo);
-  line-height: 1.5;
+  font-family: var(--fonte-texto);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--tinta);
+  background: var(--nevoa);
+  -webkit-font-smoothing: antialiased;
 }
 
 app-root {
@@ -61,19 +82,40 @@ app-root {
 h1,
 h2,
 h3 {
-  line-height: 1.25;
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--tinta);
+}
+
+h1 {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+}
+
+h2 {
+  font-size: 1.25rem;
+}
+
+h3 {
+  font-size: 1.05rem;
+}
+
+p {
+  margin: 0;
 }
 
 a {
-  color: var(--cor-primaria);
+  color: var(--anil);
+  text-underline-offset: 3px;
 }
 
 :focus-visible {
-  outline: 3px solid var(--cor-primaria);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--anel-foco);
 }
 
-/* Conteúdo lido apenas por leitores de tela. */
 .somente-leitor-de-tela {
   position: absolute;
   width: 1px;
@@ -83,98 +125,117 @@ a {
   white-space: nowrap;
 }
 
-/* ── Layout ─────────────────────────────────────────────────────────────── */
+/* ── Página ─────────────────────────────────────────────────────────── */
 
 .pagina {
   flex: 1;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 24px 16px 48px;
+  padding: 40px 24px 64px;
 }
 
-.painel {
-  background: var(--cor-superficie);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio);
-  box-shadow: var(--sombra);
-  padding: 24px;
+.cabecalho-de-pagina {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin-bottom: 32px;
 }
 
-.titulo-de-pagina {
-  margin: 8px 0 24px;
-  font-size: 2rem;
-  color: var(--cor-primaria);
-  text-align: center;
+.cabecalho-de-pagina p {
+  margin-top: 6px;
+  color: var(--tinta-suave);
 }
 
-/* ── Botões ─────────────────────────────────────────────────────────────── */
+.superficie {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-bloco);
+}
+
+/* ── Botões ─────────────────────────────────────────────────────────── */
 
 .botao {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  min-height: 40px;
-  padding: 8px 18px;
-  border: 2px solid transparent;
-  border-radius: var(--raio-pequeno);
-  font: inherit;
-  font-weight: 600;
-  font-size: 0.9rem;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid transparent;
+  border-radius: var(--raio-controle);
+  font: 600 0.9rem/1 var(--fonte-texto);
+  white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
   transition:
     background-color var(--transicao),
-    color var(--transicao),
-    border-color var(--transicao);
+    border-color var(--transicao),
+    color var(--transicao);
 }
 
 .botao:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
+.botao svg {
+  flex-shrink: 0;
+}
+
+/* Ação principal da tela ou do contexto: no máximo uma por grupo. */
 .botao--primario {
-  background: var(--cor-primaria);
+  background: var(--anil);
   color: #fff;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.18);
 }
 .botao--primario:hover:not(:disabled) {
-  background: var(--cor-primaria-escura);
+  background: var(--anil-escuro);
 }
 
 .botao--secundario {
-  background: transparent;
-  color: var(--cor-primaria);
-  border-color: var(--cor-primaria);
+  background: var(--papel);
+  border-color: var(--linha-forte);
+  color: var(--tinta);
 }
 .botao--secundario:hover:not(:disabled) {
-  background: var(--cor-primaria);
-  color: #fff;
+  background: var(--nevoa);
+  border-color: var(--tinta-fraca);
 }
 
-.botao--sucesso {
-  background: var(--cor-sucesso);
-  color: #fff;
+.botao--discreto {
+  background: transparent;
+  color: var(--anil);
 }
-.botao--sucesso:hover:not(:disabled) {
-  background: var(--cor-sucesso-escura);
+.botao--discreto:hover:not(:disabled) {
+  background: var(--anil-claro);
 }
 
+/* Destrutivo discreto: cancelar ou remover não devem gritar na lista. */
 .botao--perigo {
-  background: var(--cor-perigo);
-  color: #fff;
+  background: transparent;
+  color: var(--rosa);
 }
 .botao--perigo:hover:not(:disabled) {
-  background: var(--cor-perigo-escura);
+  background: var(--rosa-clara);
+  color: var(--rosa-escura);
 }
 
-.botao--neutro {
-  background: #e8eaef;
-  color: var(--cor-texto);
+/* Destrutivo confirmado, usado dentro de modais. */
+.botao--perigo-cheio {
+  background: var(--rosa);
+  color: #fff;
 }
-.botao--neutro:hover:not(:disabled) {
-  background: #dadde4;
+.botao--perigo-cheio:hover:not(:disabled) {
+  background: var(--rosa-escura);
+}
+
+.botao--pequeno {
+  height: 34px;
+  padding: 0 12px;
+  font-size: 0.85rem;
 }
 
 .botao--bloco {
@@ -182,126 +243,203 @@ a {
 }
 
 .botao--icone {
-  min-height: 36px;
-  padding: 6px 10px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
 }
 
-/* ── Formulários ────────────────────────────────────────────────────────── */
+/* ── Campos ─────────────────────────────────────────────────────────── */
 
 .campo {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-bottom: 16px;
+  gap: 6px;
+  margin-bottom: 18px;
 }
 
 .campo label {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--cor-texto-suave);
+  color: var(--tinta-suave);
 }
 
 .campo input,
 .campo select,
-.campo textarea {
+.campo textarea,
+.controle {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-pequeno);
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid var(--linha-forte);
+  border-radius: var(--raio-controle);
   font: inherit;
-  color: inherit;
-  background: #fafbfd;
-  transition: border-color var(--transicao);
+  color: var(--tinta);
+  background: var(--papel);
+  transition:
+    border-color var(--transicao),
+    box-shadow var(--transicao);
+}
+
+.campo textarea {
+  resize: vertical;
+}
+
+.campo input::placeholder,
+.controle::placeholder {
+  color: var(--tinta-fraca);
+}
+
+.campo input:hover,
+.campo select:hover,
+.campo textarea:hover,
+.controle:hover {
+  border-color: var(--tinta-fraca);
 }
 
 .campo input:focus,
 .campo select:focus,
-.campo textarea:focus {
-  border-color: var(--cor-primaria);
+.campo textarea:focus,
+.controle:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(45, 45, 255, 0.2);
+  border-color: var(--anil);
+  box-shadow: var(--anel-foco);
 }
 
-.campo input[aria-invalid='true'] {
-  border-color: var(--cor-perigo);
+.campo [aria-invalid='true'] {
+  border-color: var(--rosa);
 }
 
 .campo__erro {
   font-size: 0.8rem;
-  color: var(--cor-perigo);
+  color: var(--rosa-escura);
 }
 
 .campo__ajuda {
   font-size: 0.8rem;
-  color: var(--cor-texto-suave);
+  color: var(--tinta-fraca);
 }
 
 .alerta {
   padding: 10px 14px;
-  border-radius: var(--raio-pequeno);
+  border-radius: var(--raio-controle);
   font-size: 0.9rem;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .alerta--erro {
-  background: #fdecec;
-  color: var(--cor-perigo-escura);
+  background: var(--rosa-clara);
+  color: var(--rosa-escura);
 }
 
 .alerta--info {
-  background: var(--cor-primaria-suave);
-  color: var(--cor-primaria-profunda);
+  background: var(--anil-claro);
+  color: var(--anil-escuro);
 }
 
-/* ── Status da consulta ─────────────────────────────────────────────────── */
+/* ── Chips: situação da consulta ────────────────────────────────────── */
 
-.status {
-  display: inline-block;
-  padding: 4px 12px;
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 10px;
   border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #fff;
-  background: var(--cor-neutra);
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
-.status--disponivel {
-  background: var(--cor-neutra);
+.chip--disponivel {
+  background: var(--hortela-clara);
+  color: var(--hortela-escura);
 }
-.status--agendada {
-  background: var(--cor-alerta);
+.chip--agendada {
+  background: var(--anil-claro);
+  color: var(--anil-escuro);
 }
-.status--concluida {
-  background: var(--cor-sucesso);
+.chip--concluida {
+  background: var(--ardosia-clara);
+  color: var(--ardosia);
 }
-.status--cancelada {
-  background: var(--cor-perigo);
+.chip--cancelada {
+  background: var(--rosa-clara);
+  color: var(--rosa-escura);
+}
+.chip--destaque {
+  background: var(--ambar-clara);
+  color: var(--ambar-escura);
 }
 
-/* ── Carregamento ───────────────────────────────────────────────────────── */
+/* ── Especialidades: cada uma com sua cor, usada como marcador ──────── */
 
-.carregando {
+.especialidade {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+}
+
+.especialidade::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cor-especialidade, var(--tinta-fraca));
+}
+
+.especialidade--0 {
+  --cor-especialidade: #d6456a;
+}
+.especialidade--1 {
+  --cor-especialidade: #e0922a;
+}
+.especialidade--2 {
+  --cor-especialidade: #2f8fd8;
+}
+.especialidade--3 {
+  --cor-especialidade: #8a5cd6;
+}
+.especialidade--4 {
+  --cor-especialidade: #0f8fa8;
+}
+
+/* ── Carregamento e estados vazios ──────────────────────────────────── */
+
+.esqueleto {
+  border-radius: 8px;
+  background: linear-gradient(90deg, #e9ecf2 0%, #f3f5f9 50%, #e9ecf2 100%);
+  background-size: 200% 100%;
+  animation: brilho 1.2s ease-in-out infinite;
+}
+
+@keyframes brilho {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+.vazio {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
-  padding: 32px 0;
-  color: var(--cor-texto-suave);
+  padding: 28px;
+  color: var(--tinta-suave);
 }
 
-.carregando::before {
-  content: '';
-  width: 44px;
-  height: 44px;
-  border: 5px solid #e3e5f0;
-  border-top-color: var(--cor-primaria);
-  border-radius: 50%;
-  animation: girar 0.9s linear infinite;
+.vazio strong {
+  color: var(--tinta);
+  font-size: 1rem;
 }
 
-@keyframes girar {
-  to {
-    transform: rotate(360deg);
+@media (max-width: 640px) {
+  .pagina {
+    padding: 24px 16px 48px;
   }
 }
 

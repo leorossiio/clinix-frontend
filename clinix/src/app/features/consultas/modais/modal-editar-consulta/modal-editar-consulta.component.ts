@@ -23,7 +23,9 @@ import { paraDatetimeLocal, paraInstanteIso } from '../../../../shared/utils/dat
           <input id="descricao" formControlName="descricao" maxlength="255" />
         </div>
         <div class="acoes-do-modal">
-          <button type="button" class="botao botao--neutro" (click)="fechar.emit()">Voltar</button>
+          <button type="button" class="botao botao--secundario" (click)="fechar.emit()">
+            Voltar
+          </button>
           <button type="submit" class="botao botao--primario" [disabled]="enviando()">
             Salvar
           </button>
