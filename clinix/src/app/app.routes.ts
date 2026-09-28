@@ -1,29 +1,90 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './core/guards/auth.guard';
-import { LoginComponent } from './features/usuarios/components/login/login.component';
-import { CadastroPacienteComponent } from './features/usuarios/components/cadastro-paciente/cadastro-paciente.component';
-import { HomeComponent } from './features/home/components/home.component';
-import { Error403Component } from './features/errors/features/errors/components/error403/error403.component';
-import { Error404Component } from './features/errors/features/errors/components/error404/error404.component'
-import { ListaUsuariosComponent } from './features/usuarios/components/lista-usuarios/lista-usuarios.component';
-import { SobreComponent } from './features/informacoes/components/sobre/sobre.component';
-import { TermosComponent } from './features/informacoes/components/termos/termos.component';
-import { PrivacidadeComponent } from './features/informacoes/components/privacidade/privacidade.component';
+import { autenticadoGuard, perfilGuard, visitanteGuard } from './core/autenticacao/guards';
+import { TipoUsuario } from './core/modelos/usuario';
+import { LayoutPrincipalComponent } from './shared/layout/layout-principal/layout-principal.component';
 
+/**
+ * Cada página é carregada sob demanda (lazy loading): o paciente não baixa o
+ * código da administração de usuários, por exemplo.
+ */
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'cadastro-paciente', component: CadastroPacienteComponent },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   {
-    path: 'usuarios',
-    component: ListaUsuariosComponent,
-    canActivate: [AuthGuard],
-    data: { tiposPermitidos: [1, 2] }
+    path: 'login',
+    title: 'Entrar | Clinix',
+    canActivate: [visitanteGuard],
+    loadComponent: () =>
+      import('./features/autenticacao/login/login.component').then((m) => m.LoginComponent),
   },
-  { path: 'sobre', component: SobreComponent, canActivate: [AuthGuard] },
-  { path: 'termos', component: TermosComponent, canActivate: [AuthGuard] },
-  { path: 'privacidade', component: PrivacidadeComponent, canActivate: [AuthGuard] },
-  { path: '403', component: Error403Component },
-  { path: '**', component: Error404Component }
+  {
+    path: 'cadastro',
+    title: 'Cadastro | Clinix',
+    canActivate: [visitanteGuard],
+    loadComponent: () =>
+      import('./features/autenticacao/cadastro-paciente/cadastro-paciente.component').then(
+        (m) => m.CadastroPacienteComponent,
+      ),
+  },
+  {
+    path: '',
+    component: LayoutPrincipalComponent,
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'consultas' },
+      {
+        path: 'consultas',
+        title: 'Consultas | Clinix',
+        canActivate: [autenticadoGuard],
+        loadComponent: () =>
+          import('./features/consultas/pagina-consultas/pagina-consultas.component').then(
+            (m) => m.PaginaConsultasComponent,
+          ),
+      },
+      {
+        path: 'usuarios',
+        title: 'Usuários | Clinix',
+        canActivate: [autenticadoGuard, perfilGuard(TipoUsuario.ADMIN)],
+        loadComponent: () =>
+          import('./features/usuarios/lista-usuarios/lista-usuarios.component').then(
+            (m) => m.ListaUsuariosComponent,
+          ),
+      },
+      // Páginas institucionais são públicas: precisam ser lidas antes do cadastro.
+      {
+        path: 'sobre',
+        title: 'Sobre | Clinix',
+        loadComponent: () =>
+          import('./features/institucional/sobre/sobre.component').then((m) => m.SobreComponent),
+      },
+      {
+        path: 'termos',
+        title: 'Termos de uso | Clinix',
+        loadComponent: () =>
+          import('./features/institucional/termos/termos.component').then((m) => m.TermosComponent),
+      },
+      {
+        path: 'privacidade',
+        title: 'Política de privacidade | Clinix',
+        loadComponent: () =>
+          import('./features/institucional/privacidade/privacidade.component').then(
+            (m) => m.PrivacidadeComponent,
+          ),
+      },
+    ],
+  },
+  // Endereços da versão anterior, mantidos para não quebrar favoritos.
+  { path: 'home', redirectTo: 'consultas' },
+  { path: 'cadastro-paciente', redirectTo: 'cadastro' },
+  {
+    path: '403',
+    title: 'Acesso negado | Clinix',
+    loadComponent: () =>
+      import('./features/erros/acesso-negado.component').then((m) => m.AcessoNegadoComponent),
+  },
+  {
+    path: '**',
+    title: 'Página não encontrada | Clinix',
+    loadComponent: () =>
+      import('./features/erros/pagina-nao-encontrada.component').then(
+        (m) => m.PaginaNaoEncontradaComponent,
+      ),
+  },
 ];

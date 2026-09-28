@@ -1,0 +1,148 @@
+.secao + .secao {
+  margin-top: 44px;
+}
+
+.secao > h2,
+.secao__topo {
+  margin-bottom: 16px;
+}
+
+.secao__topo {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.contagem {
+  color: var(--tinta-fraca);
+  font-size: 0.9rem;
+}
+
+.dica {
+  color: var(--tinta-suave);
+}
+
+/* ── Suas consultas ─────────────────────────────────────────────────── */
+
+.bilhetes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ── Filtros ────────────────────────────────────────────────────────── */
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.filtros .controle {
+  width: auto;
+  min-height: 40px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.busca {
+  position: relative;
+  flex: 1 1 280px;
+  display: flex;
+  align-items: center;
+}
+
+.busca app-icone {
+  position: absolute;
+  left: 12px;
+  color: var(--tinta-fraca);
+  pointer-events: none;
+}
+
+.busca .controle {
+  width: 100%;
+  padding-left: 38px;
+}
+
+.periodo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.periodo label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--tinta-suave);
+}
+
+/* ── Agenda por dia ─────────────────────────────────────────────────── */
+
+.dia + .dia {
+  margin-top: 28px;
+}
+
+.dia__titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.linhas {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.linhas li + li {
+  border-top: 1px solid var(--linha);
+}
+
+.linhas li:hover {
+  background: #fafbfd;
+}
+
+/* ── Carregamento ───────────────────────────────────────────────────── */
+
+.carregando {
+  display: grid;
+  gap: 10px;
+}
+
+.linha-esqueleto {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 18px 20px;
+}
+
+.linha-esqueleto .esqueleto {
+  height: 14px;
+}
+
+@media (max-width: 760px) {
+  .bilhetes {
+    grid-template-columns: 1fr;
+  }
+  .filtros > .controle,
+  .periodo {
+    flex: 1 1 100%;
+  }
+  .periodo label {
+    flex: 1;
+  }
+  .periodo .controle {
+    flex: 1;
+  }
+}

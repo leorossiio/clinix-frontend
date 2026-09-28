@@ -1,0 +1,153 @@
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  margin-bottom: 20px;
+}
+
+.busca {
+  position: relative;
+  flex: 0 1 460px;
+  display: flex;
+  align-items: center;
+}
+
+.busca app-icone {
+  position: absolute;
+  left: 12px;
+  color: var(--tinta-fraca);
+  pointer-events: none;
+}
+
+.busca .controle {
+  padding-left: 38px;
+}
+
+.contagem {
+  color: var(--tinta-fraca);
+  font-size: 0.9rem;
+}
+
+.tabela-rolavel {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+th {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--linha);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--tinta-fraca);
+  text-align: left;
+  white-space: nowrap;
+}
+
+td {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--linha);
+  white-space: nowrap;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: #fafbfd;
+}
+
+.pessoa {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pessoa strong {
+  display: block;
+  font-weight: 600;
+}
+
+.email {
+  color: var(--tinta-fraca);
+  font-size: 0.85rem;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--nevoa);
+  border: 1px solid var(--linha);
+  color: var(--tinta-suave);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+/* Perfil: paciente neutro, médico na cor da marca, administrador em anil. */
+.perfil--0 {
+  background: var(--ardosia-clara);
+  color: var(--ardosia);
+}
+.perfil--1 {
+  background: var(--hortela-clara);
+  color: var(--hortela-escura);
+}
+.perfil--2 {
+  background: var(--anil-claro);
+  color: var(--anil-escuro);
+}
+
+.crm {
+  font-variant-numeric: tabular-nums;
+  color: var(--tinta-suave);
+}
+
+.vazio-celula {
+  color: var(--tinta-fraca);
+}
+
+.coluna-acoes {
+  width: 1%;
+}
+
+.acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.sem-resultados {
+  padding: 32px 20px;
+  color: var(--tinta-suave);
+}
+
+.carregando {
+  padding: 8px 0;
+}
+
+.linha-esqueleto {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 20px;
+}
+
+.linha-esqueleto .esqueleto {
+  height: 14px;
+}
+
+.avatar-esqueleto {
+  width: 36px;
+  height: 36px !important;
+  border-radius: 50%;
+}

@@ -1,0 +1,38 @@
+.erro {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  max-width: 560px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.erro > a {
+  text-decoration: none;
+}
+
+.conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 8vh;
+}
+
+.codigo {
+  font-family: var(--fonte-titulo);
+  font-size: 5.5rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--linha-forte);
+}
+
+p {
+  color: var(--tinta-suave);
+}
+
+.botao {
+  margin-top: 12px;
+}

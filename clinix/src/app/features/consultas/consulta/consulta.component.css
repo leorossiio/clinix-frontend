@@ -1,0 +1,175 @@
+:host {
+  display: block;
+}
+
+article {
+  display: grid;
+  align-items: center;
+}
+
+h3 {
+  font-family: var(--fonte-texto);
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+.quem {
+  grid-area: quem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.detalhes {
+  grid-area: detalhes;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 0.9rem;
+}
+
+.descricao {
+  color: var(--tinta-suave);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.paciente {
+  color: var(--tinta);
+}
+
+h3.livre,
+.paciente--livre {
+  color: var(--hortela-escura);
+}
+
+.motivo {
+  color: var(--rosa-escura);
+}
+
+.aviso {
+  color: var(--ambar-escura);
+  font-size: 0.82rem;
+}
+
+.situacao {
+  grid-area: situacao;
+  justify-self: start;
+}
+
+.acoes {
+  grid-area: acoes;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+/* ── Linha da agenda ─────────────────────────────────────────────────── */
+
+.linha {
+  grid-template-columns: 64px minmax(0, 1.1fr) minmax(0, 1.4fr) 104px minmax(160px, auto);
+  grid-template-areas: 'hora quem detalhes situacao acoes';
+  gap: 4px 20px;
+  padding: 14px 20px;
+}
+
+/* Horários livres (visão do paciente): sem coluna de situação. */
+.linha:not(.com-situacao) {
+  grid-template-columns: 64px minmax(0, 1.1fr) minmax(0, 1.4fr) auto;
+  grid-template-areas: 'hora quem detalhes acoes';
+}
+
+.hora {
+  grid-area: hora;
+  font-family: var(--fonte-titulo);
+  font-size: 1.2rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.linha.encerrada .hora,
+.linha.encerrada h3 {
+  color: var(--tinta-fraca);
+}
+
+/* ── Bilhete do paciente ─────────────────────────────────────────────── */
+
+.bilhete {
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  grid-template-areas:
+    'folha quem situacao'
+    'folha detalhes detalhes'
+    'folha acoes acoes';
+  align-items: start;
+  gap: 6px 18px;
+  height: 100%;
+  padding: 18px 20px;
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio-bloco);
+}
+
+.folha {
+  grid-area: folha;
+}
+
+.bilhete h3 {
+  font-family: var(--fonte-titulo);
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+
+.horario {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.bilhete .descricao {
+  white-space: normal;
+}
+
+.bilhete .situacao {
+  justify-self: end;
+}
+
+.bilhete .acoes {
+  margin-top: 4px;
+}
+
+.bilhete.encerrada .folha {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+@media (max-width: 760px) {
+  .linha,
+  .linha:not(.com-situacao) {
+    grid-template-columns: 52px minmax(0, 1fr);
+    grid-template-areas:
+      'hora quem'
+      'hora detalhes'
+      '. situacao'
+      '. acoes';
+    gap: 6px 14px;
+    padding: 14px 16px;
+  }
+  .linha .hora {
+    align-self: start;
+    font-size: 1.05rem;
+  }
+  .linha .acoes {
+    justify-content: flex-start;
+  }
+  .linha .descricao {
+    white-space: normal;
+  }
+}
