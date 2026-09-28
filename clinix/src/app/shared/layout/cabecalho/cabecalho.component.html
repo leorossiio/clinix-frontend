@@ -1,0 +1,24 @@
+<header class="cabecalho">
+  <a routerLink="/consultas" class="marca">
+    <img src="assets/imgs/logo.png" alt="Clinix — página inicial" />
+  </a>
+
+  @if (usuario()) {
+    <nav aria-label="Navegação principal">
+      <a routerLink="/consultas" routerLinkActive="ativo" ariaCurrentWhenActive="page">Consultas</a>
+      @if (ehAdmin()) {
+        <a routerLink="/usuarios" routerLinkActive="ativo" ariaCurrentWhenActive="page">Usuários</a>
+      }
+    </nav>
+
+    <div class="conta">
+      <span class="saudacao">
+        Olá, <strong>{{ primeiroNome() }}</strong>
+        <small>{{ perfil() }}</small>
+      </span>
+      <button type="button" class="sair" (click)="sair()">Sair</button>
+    </div>
+  } @else {
+    <a routerLink="/login" class="sair">Entrar</a>
+  }
+</header>

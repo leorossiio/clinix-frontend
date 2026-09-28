@@ -1,0 +1,84 @@
+.cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 12px 40px;
+  background: var(--cor-primaria);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.marca img {
+  display: block;
+  height: 64px;
+  width: auto;
+}
+
+nav {
+  display: flex;
+  gap: 24px;
+}
+
+nav a {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+
+nav a:hover,
+nav a.ativo {
+  border-bottom-color: #fff;
+}
+
+.conta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.saudacao {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.2;
+}
+
+.saudacao small {
+  opacity: 0.85;
+}
+
+.sair {
+  padding: 8px 18px;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background var(--transicao),
+    color var(--transicao);
+}
+
+.sair:hover {
+  background: #fff;
+  color: var(--cor-primaria);
+}
+
+@media (max-width: 768px) {
+  .cabecalho {
+    flex-direction: column;
+    padding: 16px;
+    gap: 12px;
+  }
+  .saudacao {
+    align-items: center;
+  }
+}

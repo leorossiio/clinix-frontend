@@ -1,13 +1,55 @@
-html, body {
+/*
+ * Estilos globais do Clinix: tokens de design e componentes visuais
+ * reutilizados (botões, campos, cartões, etiquetas de status).
+ * Componentes só definem o próprio layout; cores e espaçamentos vêm daqui.
+ */
+
+:root {
+  --cor-primaria: #2d2dff;
+  --cor-primaria-escura: #1c1ce0;
+  --cor-primaria-profunda: #00009c;
+  --cor-primaria-suave: #eef0ff;
+  --cor-sucesso: #1e7e34;
+  --cor-sucesso-escura: #166128;
+  --cor-perigo: #c62828;
+  --cor-perigo-escura: #a11f1f;
+  --cor-alerta: #b45309;
+  --cor-neutra: #5f6368;
+
+  --cor-texto: #1f2430;
+  --cor-texto-suave: #5c6270;
+  --cor-borda: #d9dce3;
+  --cor-fundo: #f5f6fb;
+  --cor-superficie: #ffffff;
+
+  --fonte: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --raio: 12px;
+  --raio-pequeno: 8px;
+  --sombra: 0 8px 20px rgba(17, 24, 39, 0.08);
+  --sombra-forte: 0 12px 32px rgba(17, 24, 39, 0.18);
+  --transicao: 150ms ease-in-out;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
   height: 100%;
   margin: 0;
-  padding: 0;
 }
 
 body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  font-family: var(--fonte);
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+  line-height: 1.5;
 }
 
 app-root {
@@ -16,6 +58,258 @@ app-root {
   flex: 1;
 }
 
-.conteudo-esticado{
-  min-height: 100vh;
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+}
+
+a {
+  color: var(--cor-primaria);
+}
+
+:focus-visible {
+  outline: 3px solid var(--cor-primaria);
+  outline-offset: 2px;
+}
+
+/* Conteúdo lido apenas por leitores de tela. */
+.somente-leitor-de-tela {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+
+.pagina {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.painel {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+  padding: 24px;
+}
+
+.titulo-de-pagina {
+  margin: 8px 0 24px;
+  font-size: 2rem;
+  color: var(--cor-primaria);
+  text-align: center;
+}
+
+/* ── Botões ─────────────────────────────────────────────────────────────── */
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 18px;
+  border: 2px solid transparent;
+  border-radius: var(--raio-pequeno);
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--transicao),
+    color var(--transicao),
+    border-color var(--transicao);
+}
+
+.botao:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.botao--primario {
+  background: var(--cor-primaria);
+  color: #fff;
+}
+.botao--primario:hover:not(:disabled) {
+  background: var(--cor-primaria-escura);
+}
+
+.botao--secundario {
+  background: transparent;
+  color: var(--cor-primaria);
+  border-color: var(--cor-primaria);
+}
+.botao--secundario:hover:not(:disabled) {
+  background: var(--cor-primaria);
+  color: #fff;
+}
+
+.botao--sucesso {
+  background: var(--cor-sucesso);
+  color: #fff;
+}
+.botao--sucesso:hover:not(:disabled) {
+  background: var(--cor-sucesso-escura);
+}
+
+.botao--perigo {
+  background: var(--cor-perigo);
+  color: #fff;
+}
+.botao--perigo:hover:not(:disabled) {
+  background: var(--cor-perigo-escura);
+}
+
+.botao--neutro {
+  background: #e8eaef;
+  color: var(--cor-texto);
+}
+.botao--neutro:hover:not(:disabled) {
+  background: #dadde4;
+}
+
+.botao--bloco {
+  width: 100%;
+}
+
+.botao--icone {
+  min-height: 36px;
+  padding: 6px 10px;
+}
+
+/* ── Formulários ────────────────────────────────────────────────────────── */
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.campo label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cor-texto-suave);
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-pequeno);
+  font: inherit;
+  color: inherit;
+  background: #fafbfd;
+  transition: border-color var(--transicao);
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  border-color: var(--cor-primaria);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(45, 45, 255, 0.2);
+}
+
+.campo input[aria-invalid='true'] {
+  border-color: var(--cor-perigo);
+}
+
+.campo__erro {
+  font-size: 0.8rem;
+  color: var(--cor-perigo);
+}
+
+.campo__ajuda {
+  font-size: 0.8rem;
+  color: var(--cor-texto-suave);
+}
+
+.alerta {
+  padding: 10px 14px;
+  border-radius: var(--raio-pequeno);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.alerta--erro {
+  background: #fdecec;
+  color: var(--cor-perigo-escura);
+}
+
+.alerta--info {
+  background: var(--cor-primaria-suave);
+  color: var(--cor-primaria-profunda);
+}
+
+/* ── Status da consulta ─────────────────────────────────────────────────── */
+
+.status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--cor-neutra);
+}
+
+.status--disponivel {
+  background: var(--cor-neutra);
+}
+.status--agendada {
+  background: var(--cor-alerta);
+}
+.status--concluida {
+  background: var(--cor-sucesso);
+}
+.status--cancelada {
+  background: var(--cor-perigo);
+}
+
+/* ── Carregamento ───────────────────────────────────────────────────────── */
+
+.carregando {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0;
+  color: var(--cor-texto-suave);
+}
+
+.carregando::before {
+  content: '';
+  width: 44px;
+  height: 44px;
+  border: 5px solid #e3e5f0;
+  border-top-color: var(--cor-primaria);
+  border-radius: 50%;
+  animation: girar 0.9s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
