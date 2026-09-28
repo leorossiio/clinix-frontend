@@ -20,7 +20,11 @@ cd clinix-frontend/clinix && npm install && npm start
 
 Usuários de demonstração (senha `clinix123`): `paciente@clinix.dev`, `medica@clinix.dev`, `medico@clinix.dev`, `admin@clinix.dev`.
 
-A URL da API fica em `src/environments/environment.ts` (desenvolvimento) e `environment.prod.ts` (produção).
+A URL da API fica em `src/environments/environment.ts` (desenvolvimento), `environment.prod.ts` (produção) e `environment.docker.ts` (imagem Docker).
+
+### Com Docker
+
+O repositório `clinix-infra` sobe frontend, API, PostgreSQL e a pilha de observabilidade com `docker compose up`. A imagem do frontend (`clinix/Dockerfile`) faz o build do Angular e serve com nginx, que também repassa `/api` para a API: mesma origem, sem CORS. O nginx gera um `x-request-id` para cada requisição, e a API o reaproveita nos logs e traces.
 
 ## Scripts
 
